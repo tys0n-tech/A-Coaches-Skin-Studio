@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const { spawn } = require('node:child_process');
+const { pathToFileURL } = require('node:url');
 const AdmZip = require('adm-zip');
 const coachModels = require('./coach-models.json');
 
@@ -15,6 +16,12 @@ let projectPaths = { texture: '', model: '' };
 let glassTexturePath = '';
 const allowedTextureExt = new Set(['.png', '.jpg', '.jpeg', '.webp', '.dds']);
 const MAX_BYTES = 80 * 1024 * 1024;
+const localPage = path.join(__dirname, '..', 'dist', 'index.html');
+const developmentPage = 'http://127.0.0.1:5173';
+
+function usesDevelopmentPage() {
+  return !app.isPackaged && process.env.COACH_STUDIO_LOCAL_BUILD !== '1';
+}
 
 function ensureFile(file, extensions, maxBytes = MAX_BYTES) {
   const p = path.resolve(file || '');
@@ -70,11 +77,13 @@ function createWindow() {
     width: 1540, height: 940, minWidth: 1140, minHeight: 730,
     backgroundColor: '#eef0f4', show: true,
     title: `Coaches Skin Studio v${app.getVersion()}`,
-    webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: false }
+    webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true }
   });
   win.removeMenu();
-  if (!app.isPackaged && process.env.COACH_STUDIO_LOCAL_BUILD !== '1') win.loadURL('http://127.0.0.1:5173');
-  else win.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  win.webContents.on('will-navigate', event => event.preventDefault());
+  if (usesDevelopmentPage()) win.loadURL(developmentPage);
+  else win.loadFile(localPage);
   // Show the window even when the renderer fails; otherwise users see nothing.
   win.webContents.on('did-fail-load', (_event, code, description, url, isMainFrame) => {
     if (!isMainFrame) return;
@@ -93,8 +102,13 @@ async function pickOne(title, filters) {
   const result = await dialog.showOpenDialog(win, { title, properties: ['openFile'], filters });
   return result.canceled ? null : result.filePaths[0];
 }
-const safeCall = (fn) => async (...args) => {
-  try { return { ok: true, data: await fn(...args) }; }
+const safeCall = (fn) => async (event, ...args) => {
+  try {
+    const allowedPage = usesDevelopmentPage() ? developmentPage + '/' : pathToFileURL(localPage).href;
+    if (event.sender !== win?.webContents || event.senderFrame !== event.sender.mainFrame ||
+        event.senderFrame.url !== allowedPage) throw new Error('Untrusted application window');
+    return { ok: true, data: await fn(event, ...args) };
+  }
   catch (err) { return { ok: false, error: String(err.message || err) }; }
 };
 

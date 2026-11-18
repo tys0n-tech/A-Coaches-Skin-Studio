@@ -1,11 +1,11 @@
 @echo off
 setlocal EnableExtensions
 chcp 65001 >nul 2>nul
-title Coaches Skin Studio - Launcher v0.2.5
+title Coaches Skin Studio - Launcher v0.2.6
 
 cls
 echo ================================================================
-echo              COACHES SKIN STUDIO  v0.2.5
+echo              COACHES SKIN STUDIO  v0.2.6
 echo                  Windows Launcher
  echo ================================================================
 echo.
@@ -34,23 +34,23 @@ if errorlevel 1 goto npm_broken
 
 echo.
 echo [3/4] Checking dependencies...
-if exist "node_modules\electron\dist\electron.exe" if exist "node_modules\vite\package.json" if exist "node_modules\concurrently\package.json" if exist "node_modules\wait-on\package.json" goto dependencies_ok
+if exist "node_modules\.bin\electron.cmd" if exist "node_modules\.bin\vite.cmd" goto dependencies_ok
 
 echo [INFO] First launch: installing packages from npm.
 echo [INFO] Internet access is needed. Watch for errors below.
-call npm.cmd install --no-audit --no-fund
+call npm.cmd ci --no-audit --no-fund
 if errorlevel 1 goto install_failed
 :dependencies_ok
 
 echo.
 echo [4/4] Starting Coaches Skin Studio...
-echo [INFO] The desktop window should open after the dev server starts.
+echo [INFO] Electron may download its runtime on first launch.
 echo [INFO] Do not close this console while the app is running.
 echo.
 if not exist "%APP_DIR%dist\index.html" call npm.cmd run build
 if errorlevel 1 goto finish
 set "COACH_STUDIO_LOCAL_BUILD=1"
-"%APP_DIR%node_modules\electron\dist\electron.exe" .
+call "%APP_DIR%node_modules\.bin\electron.cmd" .
 set "APP_EXIT_CODE=%ERRORLEVEL%"
 echo.
 echo ================================================================
