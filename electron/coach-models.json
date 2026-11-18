@@ -1,0 +1,13 @@
+{
+  "scania": [
+    { "id": "scania-137", "file": "Scania_Touring_13.7m_6x2.glb", "label": "13.7 ม. · 6×2", "skin": "Lignite Tour 949-16" },
+    { "id": "scania-129", "file": "Scania_Touring_12.9m_4x2.glb", "label": "12.9 ม. · 4×2" }
+  ],
+  "volvo": [
+    { "id": "volvo", "file": "volvo.glb" }
+  ],
+  "man": [
+    { "id": "man-139", "file": "MAN_Lions_Coach_13.9m_6x2.glb", "label": "13.9 ม. · 6×2", "skin": "ภัสสรชัยทัวร์" },
+    { "id": "man-121", "file": "MAN_Lions_Coach_12.1m_4x2.glb", "label": "12.1 ม. · 4×2", "skin": "กรุงเทพฯ–มุกดาหาร 927-41" }
+  ]
+}
