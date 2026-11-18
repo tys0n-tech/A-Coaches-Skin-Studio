@@ -5,8 +5,15 @@ const AdmZip = require('adm-zip');
 function createPaintjob(model, filename, bodyDDS, glassDDS, resources) {
   const name = path.parse(filename).name.replace(/[\x00-\x1f"\\]/g, ' ').trim().slice(0, 100) || 'Custom Coach Livery';
   const token = 'css' + crypto.createHash('sha256').update(model.id + '/' + name).digest('hex').slice(0, 10);
+  // SCS unit-name components allow at most 12 characters. Keep archive paths stable.
+  const unitToken = 'cs' + token.slice(3);
   const definitionFolder = `def/vehicle/bus/${model.vehicle}`;
-  const paintUnit = `${token}.${model.vehicle}.paint_job`;
+  const paintUnit = `${unitToken}.${model.vehicle}.paint_job`;
+  for (const name of [paintUnit, `${unitToken}.${model.vehicle}.warnsticker`, `${model.cabin}.${model.vehicle}.cabin`]) {
+    if (!name.split('.').every(part => /^[a-z0-9_]{1,12}$/.test(part))) {
+      throw new Error('Invalid SCS unit name: ' + name);
+    }
+  }
   let zip = new AdmZip();
   let textureFolder = `vehicle/bus/upgrade/paintjob/coach_studio/${token}`;
   let overrides = '';
@@ -40,7 +47,7 @@ function createPaintjob(model, filename, bodyDDS, glassDDS, resources) {
     overrides = `    overrides[]: "/${addonPath}"\n`;
     zip.addFile(addonPath, Buffer.from(`SiiNunit
 {
-accessory_addon_data : ${token}.${model.vehicle}.warnsticker
+accessory_addon_data : ${unitToken}.${model.vehicle}.warnsticker
 {
     name: "${name} - Window decals"
     price: 0

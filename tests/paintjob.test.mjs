@@ -77,3 +77,34 @@ test('all five window profiles match their own cabin and include valid game mode
     assert.ok(addon.includes(model.windowModel + '.pmd'));
   }
 });
+
+test('all exported unit declarations and suitability references follow SCS token grammar', () => {
+  // Regression: css1860bb7f00 was 13 characters, so ETS2 rejected both definitions.
+  for (const model of Object.values(models).flat()) {
+    for (const glass of [null, body]) {
+      const { zip } = createPaintjob(model, 'Scania-137h6-Lignite-Tour-949-16 2.png', body, glass, resources);
+      const units = new Set();
+      const references = [];
+      for (const entry of zip.getEntries().filter(entry => entry.entryName.endsWith('.sii'))) {
+        const definition = entry.getData().toString();
+        for (const [, unit] of definition.matchAll(/^\w+\s*:\s*([.\w]+)\s*$/gm)) units.add(unit);
+        for (const [, unit] of definition.matchAll(/suitable_for\[\]:\s*"([.\w]+)"/g)) references.push(unit);
+      }
+      for (const unit of [...units, ...references]) {
+        assert.ok(unit.replace(/^\./, '').split('.').every(part => /^[a-z0-9_]{1,12}$/.test(part)), unit);
+      }
+      const paint = [...units].find(unit => unit.endsWith('.paint_job'));
+      assert.ok(paint);
+      if (glass) assert.ok(references.includes(paint));
+    }
+  }
+});
+
+test('corrected exports keep existing mod filenames and accessory paths', () => {
+  const model = models.scania.find(model => model.id === 'scania-137');
+  const result = createPaintjob(model, 'Scania-137h6-Lignite-Tour-949-16 2.png', body, body, resources);
+  assert.equal(result.filename, 'css1860bb7f00-scania-137.scs');
+  const file = result.zip.getEntry('def/vehicle/bus/scania.touring_23/paint_job/css1860bb7f00.sii');
+  assert.ok(file);
+  assert.ok(file.getData().toString().includes('cs1860bb7f00.scania.touring_23.paint_job'));
+});
