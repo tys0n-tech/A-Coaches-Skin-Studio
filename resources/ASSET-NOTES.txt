@@ -1,0 +1,10 @@
+Coaches Skin Studio resources
+
+Models and panel templates correspond to ETS2 Coaches DLC vehicles.
+Game vehicle models and textures originate from SCS Software.
+The local models were converted for paintjob previews.
+Existing Thai paint designs were provided in this workspace by Tyson.
+These resources are for creating compatible paintjobs for ETS2 with Coaches DLC.
+
+texconv.exe is Microsoft's DirectXTex command-line image converter.
+Its license is included in tools/DirectXTex-LICENSE.txt.

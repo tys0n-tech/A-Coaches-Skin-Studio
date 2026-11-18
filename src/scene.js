@@ -487,6 +487,12 @@ export class CoachViewport {
       return { width: newTex.image?.width || newTex.image?.[0]?.width || 0, height: newTex.image?.height || 0, ext };
     } finally { URL.revokeObjectURL(url); }
   }
+  setView(direction) {
+    const positions = { left: [-19, 3, 0], right: [19, 3, 0], front: [0, 3, -19], rear: [0, 3, 19] };
+    this.camera.position.set(...positions[direction]);
+    this.controls.target.set(0, 2, 0);
+    this.controls.update();
+  }
   resetCamera() {
     this.camera.position.set(...(this.currentMode === 'imported' ? [-16, 6.4, -9] : [18, 9.5, 19]));
     this.controls.target.set(0, 2, 0);

@@ -1,13 +1,57 @@
 {
   "scania": [
-    { "id": "scania-137", "file": "Scania_Touring_13.7m_6x2.glb", "label": "13.7 ม. · 6×2", "skin": "Lignite Tour 949-16" },
-    { "id": "scania-129", "file": "Scania_Touring_12.9m_4x2.glb", "label": "12.9 ม. · 4×2" }
+    {
+      "id": "scania-137",
+      "file": "Scania_Touring_13.7m_6x2.glb",
+      "label": "13.7 ม. · 6×2",
+      "skin": "Lignite Tour 949-16",
+      "vehicle": "scania.touring_23",
+      "cabin": "137h6",
+      "template": "TEMPLATE Scania Touring 13.7m 6x2 - panels.png",
+      "glass": true
+    },
+    {
+      "id": "scania-129",
+      "file": "Scania_Touring_12.9m_4x2.glb",
+      "label": "12.9 ม. · 4×2",
+      "vehicle": "scania.touring_23",
+      "cabin": "129h4",
+      "template": "TEMPLATE Scania Touring 12.9m 4x2 - panels.png",
+      "glass": false
+    }
   ],
   "volvo": [
-    { "id": "volvo", "file": "volvo.glb" }
+    {
+      "id": "volvo",
+      "file": "volvo.glb",
+      "vehicle": "volvo.9700_23",
+      "cabin": "143d6",
+      "template": "TEMPLATE Volvo 9700 DD 14.3m - panels.png",
+      "glass": false,
+      "label": "14.3 ม. · 6×2/4",
+      "skin": "Lotus Pibun"
+    }
   ],
   "man": [
-    { "id": "man-139", "file": "MAN_Lions_Coach_13.9m_6x2.glb", "label": "13.9 ม. · 6×2", "skin": "ภัสสรชัยทัวร์" },
-    { "id": "man-121", "file": "MAN_Lions_Coach_12.1m_4x2.glb", "label": "12.1 ม. · 4×2", "skin": "กรุงเทพฯ–มุกดาหาร 927-41" }
+    {
+      "id": "man-139",
+      "file": "MAN_Lions_Coach_13.9m_6x2.glb",
+      "label": "13.9 ม. · 6×2",
+      "skin": "ภัสสรชัยทัวร์",
+      "vehicle": "man.lions_24",
+      "cabin": "139h6",
+      "template": "TEMPLATE MAN Lions Coach 13.9m 6x2 - panels.png",
+      "glass": false
+    },
+    {
+      "id": "man-121",
+      "file": "MAN_Lions_Coach_12.1m_4x2.glb",
+      "label": "12.1 ม. · 4×2",
+      "skin": "กรุงเทพฯ–มุกดาหาร 927-41",
+      "vehicle": "man.lions_24",
+      "cabin": "121h4",
+      "template": "TEMPLATE MAN Lions Coach 12.1m 4x2 - panels.png",
+      "glass": false
+    }
   ]
 }

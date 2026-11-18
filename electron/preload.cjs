@@ -3,6 +3,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 const channels = new Set(['texture-changed']);
 contextBridge.exposeInMainWorld('studioAPI', {
   openTexture: () => ipcRenderer.invoke('dialog:texture'),
+  saveCoachTemplate: (id) => ipcRenderer.invoke('coach:template', id),
+  exportCoach: (options) => ipcRenderer.invoke('coach:export', options),
   openGlassTexture: () => ipcRenderer.invoke('dialog:glass-texture'),
   readGlassTextureAt: (filePath) => ipcRenderer.invoke('file:glass-texture', filePath),
   openModel: () => ipcRenderer.invoke('dialog:model'),

@@ -11,6 +11,23 @@ let modelSequence = 0;
 const viewport = new CoachViewport($('sceneCanvas'));
 let glassRequest = 0;
 
+function updateWorkflow() {
+  const entry = state.localModel;
+  const ready = Boolean(entry && state.modelPath);
+  const glassSupported = ready && Boolean(entry.glass);
+  $('glassTools').hidden = !glassSupported;
+  $('modelStatus').textContent = ready ? 'พร้อม · ' + entry.label : 'กำลังเตรียมโมเดล';
+  $('designStatus').textContent = state.texture ? state.texture.filename : 'บันทึกเทมเพลตแล้วใส่ PNG ของคุณ';
+  $('reviewStatus').textContent = ready ? 'ดูด้านซ้ายและขวา แล้วตรวจรอยต่อ' : 'รอโมเดล';
+  $('exportStatus').textContent = state.texture && ready ? 'พร้อมสร้างไฟล์ .scs' : 'เลือกรถและเพิ่มลายก่อน';
+  $('saveTemplate').disabled = !ready;
+  const exportReady = state.texture && (ready || state.templatePath);
+  $('exportBtn').disabled = !exportReady || $('glassPreviewStatus').textContent === 'กำลังโหลดลายกระจก';
+  $('vehicleSupport').textContent = ready
+    ? 'ตัวถัง 4096 × 2048' + (glassSupported ? ' · ลายกระจกข้าง' : '')
+    : 'กำลังโหลดรุ่นรถ';
+}
+
 async function showGlass() {
   const request = ++glassRequest;
   const model = modelSequence;
@@ -37,7 +54,7 @@ async function showGlass() {
     if (isCurrent()) $('glassPreviewStatus').textContent = '';
     throw error;
   } finally {
-    if (request === glassRequest) $('exportBtn').disabled = false;
+    if (request === glassRequest) updateWorkflow();
   }
 }
 
@@ -52,6 +69,7 @@ async function chooseGlass() {
 }
 
 function toast(message, error = false) {
+  updateWorkflow();
   clearTimeout(toastTimeout);
   $('toast').textContent = message;
   $('toast').classList.toggle('error', error);
@@ -112,6 +130,7 @@ function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
   showVariants(c.id);
   state.coachId = c.id;
   state.modelPath = '';
+  updateWorkflow();
   state.slots = [];
   state.mappings = [];
   state.mappingMode = 'original';
@@ -300,7 +319,17 @@ async function chooseTexconv() {
 async function exportMod() {
   try {
     if (!state.texturePath) throw new Error('กรุณาเลือกลาย PNG หรือ DDS ก่อน');
-    if (!state.templatePath) throw new Error('กรุณาเลือกม็อดต้นแบบ Coaches .scs ที่ใช้งานได้จริงก่อน');
+    if (!state.templatePath && (!state.localModel || !state.modelPath)) throw new Error('กรุณาเลือกรุ่นรถก่อน');
+    $('exportBtn').disabled = true;
+    if (!state.templatePath) {
+      const includeGlass = Boolean(state.localModel.glass && (state.glass || state.generatedGlass));
+      const output = await invoke('exportCoach', {
+        modelId: state.localModel.id, includeGlass,
+        glassArtwork: includeGlass ? state.generatedGlass : null
+      });
+      if (output) toast(`ส่งออกสำเร็จ: ${output.path} · วางไฟล์ใน Documents/Euro Truck Simulator 2/mod แล้วเปิดใน Mod Manager`);
+      return;
+    }
     if (!$('ddsSelect').value) throw new Error('กรุณาเลือกไฟล์ DDS ที่ต้องการแทนที่');
     const glassTargetDDS = $('glassDDS').value;
     const hasSeparateGlass = state.glass && !state.glass.bodyLayout;
@@ -309,6 +338,7 @@ async function exportMod() {
       glassArtwork: glassTargetDDS ? state.generatedGlass : null });
     if (output) toast(`ส่งออกสำเร็จ: ${output.path} · ต้องทดสอบในเกมก่อนใช้งานจริง`);
   } catch (e) { displayError(e); }
+  finally { updateWorkflow(); }
 }
 async function saveProject() {
   try {
@@ -382,12 +412,30 @@ function showHelp() {
   const overlay = document.createElement('div');
   overlay.id = 'helpModal';
   overlay.style.cssText = 'position:fixed;inset:0;background:#1a25347d;display:grid;place-items:center;z-index:100;padding:24px;';
-  overlay.innerHTML = `<div style="background:#fff;border-radius:18px;padding:25px;width:min(580px,94vw);box-shadow:0 30px 90px #17233335;line-height:1.9"><div style="font-weight:800;font-size:22px;letter-spacing:-.6px;margin-bottom:10px">เริ่มต้นใช้งาน Coaches Skin Studio</div><p>1. เลือกรถและรุ่นย่อยทางซ้ายเพื่อเปิดโมเดล 3D ที่ติดตั้งไว้</p><p>2. เพิ่มลาย PNG ของคุณ แล้วเลือกวัสดุตัวถังและ UV ทางด้านล่าง</p><p>3. โปรแกรมจะตรวจไฟล์ PNG ที่คุณเลือก เมื่อแก้ไฟล์เดิมแล้วกด Save โปรแกรมจะรีโหลด 3D ให้</p><p>4. Export .scs ต้องมี working skin template สำหรับ Coaches และใช้ texconv.exe ในการแปลง PNG เป็น DDS</p><button id="dismissHelp" style="border:0;border-radius:9px;background:#205cb1;color:#fff;padding:11px 17px;font-weight:700">เข้าใจแล้ว</button></div>`;
+  overlay.innerHTML = `<div style="background:#fff;border-radius:18px;padding:25px;width:min(580px,94vw);box-shadow:0 30px 90px #17233335;line-height:1.9"><div style="font-weight:800;font-size:22px;letter-spacing:-.6px;margin-bottom:10px">เริ่มต้นใช้งาน Coaches Skin Studio</div><p>1. เลือกรถและรุ่นย่อยทางซ้าย โมเดลทั้ง 5 รุ่นพร้อมใช้งาน</p><p>2. บันทึกเทมเพลตรุ่นนี้ วาดลายใน Figma แล้วเพิ่ม PNG ขนาด 4096 × 2048</p><p>3. โปรแกรมจะตรวจไฟล์ PNG ที่คุณเลือก เมื่อแก้ไฟล์เดิมแล้วกด Save โปรแกรมจะรีโหลด 3D ให้</p><p>4. ใช้ปุ่มดูซ้าย ขวา หน้า ท้ายตรวจรอยต่อ แล้วกด Export .scs โปรแกรมมีเครื่องมือแปลงภาพในตัว</p><button id="dismissHelp" style="border:0;border-radius:9px;background:#205cb1;color:#fff;padding:11px 17px;font-weight:700">เข้าใจแล้ว</button></div>`;
   overlay.addEventListener('click', e => { if (e.target === overlay || e.target.id === 'dismissHelp') overlay.remove(); });
   document.body.append(overlay);
 }
 
 document.querySelectorAll('.coach-option').forEach(button => button.addEventListener('click', () => selectCoach(button.dataset.coach)));
+$('saveTemplate').addEventListener('click', async () => {
+  try {
+    const output = await invoke('saveCoachTemplate', state.localModel.id);
+    if (output) toast(`บันทึกเทมเพลต 4096 × 2048 แล้ว · ${output.path}`);
+  } catch (error) { displayError(error); }
+});
+$('useBuiltin').addEventListener('click', () => {
+  state.templatePath = '';
+  $('templateLabel').textContent = 'สร้างลายใหม่จากรุ่นที่เลือก';
+  $('ddsSelect').replaceChildren(new Option('เลือกให้อัตโนมัติ', ''));
+  $('ddsSelect').disabled = true;
+  $('glassDDS').replaceChildren(new Option('เลือกให้อัตโนมัติ', ''));
+  $('glassDDS').disabled = true;
+  toast('ใช้การสร้างมอดจากรุ่นรถที่เลือก');
+});
+for (const direction of ['left', 'right', 'front', 'rear']) {
+  document.querySelector(`[data-view="${direction}"]`).addEventListener('click', () => viewport.setView(direction));
+}
 $('coachVariantSelect').addEventListener('change', event => selectCoach(state.coachId, { variantId: event.target.value }));
 $('importTexture').addEventListener('click', chooseTexture);
 $('chooseGlass').addEventListener('click', chooseGlass);

@@ -1,18 +1,13 @@
-# QA Checklist (ยังต้องทดสอบบน Windows)
+# การตรวจ v0.3.0
 
-- [ ] RUN_WINDOWS.bat ติดตั้ง npm packages และเปิด Electron ได้
-- [ ] Scania / Volvo / MAN illustration เปลี่ยนได้และหมุนด้วยเมาส์ได้
-- [ ] Import PNG แล้ว render ลายบนตัวอย่าง coach (geometry illustrative)
-- [ ] Save PNG ไฟล์เดิมแล้วดูว่า scene auto reload
-- [ ] Import sample GLB ที่มี UV และ Mesh ที่รู้จัก
-- [ ] เลือก Mesh และ map ภาพบน UV จริง
-- [ ] Import DXT1 / DXT5 DDS ในเครื่อง Windows GPU ที่รองรับ
-- [ ] Open/Save .cssproj แล้ว path texture/model กลับมาเหมือนเดิม
-- [ ] Import template ZIP .scs ที่มี DDS จริง แล้วเลือกรายการ DDS
-- [ ] Export PNG ผ่าน Texconv เป็น BC3, ตรวจ output ZIP และ DDS header
-- [ ] เปรียบเทียบ filenames/SII/TOBJ ใน ZIP ที่สร้างกับเทมเพลต
-- [ ] ติดตั้ง .scs ที่สร้างใน ETS2 แล้วเปิดเมนูปรับแต่งรถ DLC Coaches รุ่นเป้าหมาย
-- [ ] ตรวจตำแหน่งลายหน้า/หลัง/ซ้าย/ขวา/roof และ chassis ต่าง ๆ
-- [ ] BUILD_EXE_WINDOWS.bat สร้าง portable Windows EXE ได้
+- ผ่านการโหลดโมเดลที่รวมในแอปครบ 5 รุ่นจาก resources
+- ผ่านการบันทึก PNG เทมเพลตตรงกับไฟล์ต้นฉบับทั้ง 5 รุ่น
+- ผ่านการเพิ่ม PNG 4096 × 2048 และแสดงบนวัสดุตัวถัง
+- ผ่านการใช้ปุ่มมุมซ้าย ขวา หน้า และท้าย
+- ผ่านการซ่อนเครื่องมือกระจกเมื่อเลือกรุ่นอื่น และแสดงเมื่อเลือก Scania 13.7 ม.
+- ผ่านการส่งออกมอดอัตโนมัติครบ 5 รุ่นด้วย texconv ที่รวมในตัว
+- ผ่านการตรวจ DDS ส่วนตัวถัง 4096 × 2048 และกระจก 4096 × 1024
+- ผ่านการตรวจ cabin ที่เหมาะสมของแต่ละรุ่นและพาธภายในแพ็ก
+- ผ่านการตรวจแยกเท็กซ์เจอร์และวัสดุระหว่างลายกระจกต่างชื่อ
 
-Source syntax checks by `node --check` were passed when preparing the release source. Runtime/game compatibility has not been verified without game files and Windows build environment.
+ตรวจการติดตั้ง เปลี่ยนลาย และถอดมอดใน ETS2 อีกครั้ง การทดสอบแพ็กและพรีวิวใช้ยืนยันโครงสร้างกับขั้นตอนการใช้งาน ส่วนภาพจริงขึ้นกับวัสดุและระบบแสงของเกม

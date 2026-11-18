@@ -6,6 +6,7 @@ const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 const AdmZip = require('adm-zip');
 const coachModels = require('./coach-models.json');
+const { createPaintjob } = require('./create-paintjob.cjs');
 
 let win;
 let watchedPath = '';
@@ -18,6 +19,24 @@ const allowedTextureExt = new Set(['.png', '.jpg', '.jpeg', '.webp', '.dds']);
 const MAX_BYTES = 80 * 1024 * 1024;
 const localPage = path.join(__dirname, '..', 'dist', 'index.html');
 const developmentPage = 'http://127.0.0.1:5173';
+const resources = app.isPackaged ? path.join(process.resourcesPath, 'studio-resources') : path.join(app.getAppPath(), 'resources');
+
+function findModel(id) {
+  const entry = Object.values(coachModels).flat().find(model => model.id === id);
+  if (!entry) throw new Error('เลือกรุ่นรถก่อน');
+  return entry;
+}
+
+async function writeMod(savePath, zip) {
+  const bytes = zip.toBuffer();
+  const temp = path.join(path.dirname(savePath), `.${path.basename(savePath)}.${Date.now()}.tmp`);
+  try {
+    fs.writeFileSync(temp, bytes, { flag: 'wx' });
+    fs.renameSync(temp, savePath);
+  } finally {
+    if (fs.existsSync(temp)) fs.unlinkSync(temp);
+  }
+}
 
 function usesDevelopmentPage() {
   return !app.isPackaged && process.env.COACH_STUDIO_LOCAL_BUILD !== '1';
@@ -155,11 +174,44 @@ app.whenReady().then(() => {
     return data;
   }));
   ipcMain.handle('file:coach-model', safeCall(async (_e, id) => {
-    const entry = Object.values(coachModels).flat().find(model => model.id === id);
-    if (!entry) return null;
+    const entry = findModel(id);
     const folder = app.isPackaged ? path.dirname(app.getPath('exe')) : app.getAppPath();
     const model = path.join(folder, 'local-models', entry.file);
-    return fs.existsSync(model) ? payloadFor(model, new Set(['.glb'])) : null;
+    const bundled = path.join(resources, 'models', entry.file);
+    const file = fs.existsSync(bundled) ? bundled : model;
+    return fs.existsSync(file) ? payloadFor(file, new Set(['.glb'])) : null;
+  }));
+  ipcMain.handle('coach:template', safeCall(async (_e, id) => {
+    const entry = findModel(id);
+    const source = path.join(resources, 'templates', entry.template);
+    const save = await dialog.showSaveDialog(win, {
+      title: 'Save coach design template', defaultPath: entry.template,
+      filters: [{ name: 'PNG template', extensions: ['png'] }]
+    });
+    if (save.canceled) return null;
+    fs.copyFileSync(source, save.filePath);
+    return { path: save.filePath };
+  }));
+  ipcMain.handle('coach:export', safeCall(async (_e, options) => {
+    const model = findModel(options?.modelId);
+    if (!projectPaths.texture) throw new Error('เพิ่มไฟล์ลายรถก่อนส่งออก');
+    const body = await convertDDS(projectPaths.texture);
+    if (body.readUInt32LE(16) !== 4096 || body.readUInt32LE(12) !== 2048) {
+      throw new Error('ลายรถต้องมีขนาด 4096 × 2048 ตามเทมเพลต');
+    }
+    let glass = null;
+    if (options.includeGlass) {
+      if (!model.glass) throw new Error('กระจกข้างรองรับ Scania 13.7 ม.');
+      glass = await convertDDS(glassTexturePath, options.glassArtwork ? decodePNG(options.glassArtwork) : null);
+    }
+    const result = createPaintjob(model, projectPaths.texture, body, glass, resources);
+    const save = await dialog.showSaveDialog(win, {
+      title: 'Export Coaches skin mod (.scs)', defaultPath: result.filename,
+      filters: [{ name: 'ETS2 mod', extensions: ['scs'] }]
+    });
+    if (save.canceled) return null;
+    await writeMod(save.filePath, result.zip);
+    return { path: save.filePath, name: result.name };
   }));
   ipcMain.handle('dialog:game', safeCall(async () => {
     const res = await dialog.showOpenDialog(win, { title: 'Select your Euro Truck Simulator 2 install folder', properties: ['openDirectory'] });
@@ -244,7 +296,7 @@ app.whenReady().then(() => {
     const save = await dialog.showSaveDialog(win, { title: 'Export Coaches skin mod (.scs)', defaultPath: suggested, filters: [{ name: 'ETS2 mod ZIP', extensions: ['scs'] }] });
     if (save.canceled) return null;
     if (path.resolve(save.filePath).toLowerCase() === path.resolve(templatePath).toLowerCase()) throw new Error('Save as a NEW file (do not overwrite your template)');
-    fs.writeFileSync(save.filePath, zip.toBuffer());
+    await writeMod(save.filePath, zip);
     return { path: save.filePath };
   }));
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
@@ -269,7 +321,8 @@ async function convertDDS(file, generatedPNG = null) {
     if (source && path.extname(source).toLowerCase() === '.dds') {
       newDDS = fs.readFileSync(source);
     } else {
-      const tool = texconvPath || 'texconv.exe';
+      const bundled = path.join(resources, 'tools', 'texconv.exe');
+      const tool = texconvPath || (fs.existsSync(bundled) ? bundled : 'texconv.exe');
       const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'coaches-skin-'));
       try {
         const inputFile = source || path.join(tmp, 'generated-window.png');

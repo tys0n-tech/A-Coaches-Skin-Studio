@@ -1,9 +1,9 @@
 {
   "name": "coaches-skin-studio",
   "productName": "Coaches Skin Studio",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "private": true,
-  "description": "Independent ETS2 Coaches DLC paint preview studio (no game assets included)",
+  "description": "ETS2 coach livery studio with ready-to-use models and templates",
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
@@ -41,6 +41,12 @@
         "portable"
       ],
       "artifactName": "Coaches-Skin-Studio-${version}-${arch}.${ext}"
-    }
+    },
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": "studio-resources"
+      }
+    ]
   }
 }

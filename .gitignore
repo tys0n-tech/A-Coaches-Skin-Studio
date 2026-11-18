@@ -1,9 +1,11 @@
 node_modules/
 dist/
 release/
+release-*/
 local-models/
 *.glb
 *.dds
 *.scs
 *.cssproj
 *.log
+!resources/models/*.glb

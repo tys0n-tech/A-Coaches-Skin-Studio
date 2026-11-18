@@ -13,7 +13,7 @@ test('three actual Coaches DLC models are defined', () => {
   const code = read('src/scene.js');
   for (const item of ['Scania Touring', 'Volvo 9700 DD', 'MAN Lion']) assert.ok(code.includes(item));
 });
-test('source ZIP does not include copyrighted DLC models or binaries', () => {
+test('application code directories contain no model or executable assets', () => {
   const banned = /\.(pmd|pmg|pma|scs|glb|exe)$/i;
   for (const folder of ['src','electron','docs']) {
     for (const filename of fs.readdirSync(new URL(folder + '/', root))) assert.ok(!banned.test(filename), filename);

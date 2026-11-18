@@ -11,3 +11,16 @@
 .window-actions button:disabled { opacity: .55; cursor: default; }
 .window-tools .tiny-note { margin: 4px 0; overflow-wrap: anywhere; }
 .export-config { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+
+.workflow {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.workflow div {display:flex;flex-direction:column;gap:6px;padding:12px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;min-width:0}
+.workflow strong {font-size:12px;color:#245f9c}
+.workflow span {font-size:10px;color:#65768a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.view-buttons {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.view-buttons button {border:1px solid #d6e0ec;background:#fff;border-radius:8px;padding:8px 12px;color:#3b5f88}
+.view-buttons span {font-size:10px;color:#6c7f95}
+.advanced-export {padding:14px;border:1px solid #dfe6ef;border-radius:10px;background:#fff}
+.advanced-export summary {cursor:pointer;color:#496582;font-size:12px}
+.advanced-export .export-config {border:0;padding:15px 0}
+button:disabled {cursor:default;opacity:.5}
+#glassTools[hidden] {display:none}

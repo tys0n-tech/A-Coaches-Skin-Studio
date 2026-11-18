@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
-  <title>Coaches Skin Studio v0.2.6</title>
+  <title>Coaches Skin Studio v0.3.0</title>
 </head>
 <body>
   <div id="app">
@@ -28,6 +28,8 @@
           <label for="coachVariantSelect">รุ่นย่อย</label>
           <select id="coachVariantSelect"></select>
         </div>
+        <p id="vehicleSupport" class="tiny-note"></p>
+        <button id="saveTemplate" class="small-outline" disabled>บันทึกเทมเพลตรุ่นนี้</button>
         <div class="rule"></div>
         <div class="section-heading"><span>ASSETS</span><span class="tag light">Local files</span></div>
         <button class="import-card" id="importModel"><span class="import-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></span><span><strong>นำเข้าโมเดล 3D</strong><small>GLB · ใช้ UV จริงจากโมเดล</small></span><span class="import-arrow">↗</span></button>
@@ -41,10 +43,20 @@
         <div class="left-note"><span class="note-top"><span class="note-bullet"></span>ใช้งานได้โดยไม่เปิดเกม</span><span>นำภาพจาก Figma หรือ Photoshop มาใช้ และแก้ไฟล์เดิมเพื่อให้โปรแกรมรีโหลดอัตโนมัติ</span></div>
       </aside>
       <main class="main-area">
+        <nav class="workflow" aria-label="ขั้นตอนทำลายรถ">
+          <div><strong>เลือกรถ</strong><span id="modelStatus">กำลังเตรียมโมเดล</span></div>
+          <div><strong>ใส่ลาย</strong><span id="designStatus">เริ่มจากเทมเพลต</span></div>
+          <div><strong>ตรวจลาย</strong><span id="reviewStatus">ตรวจทั้งสองฝั่ง</span></div>
+          <div><strong>ส่งออก</strong><span id="exportStatus">เพิ่มลายก่อน</span></div>
+        </nav>
         <div class="stage-header"><div><div class="overline">3D LIVE VIEWPORT</div><h1 id="vehicleTitle">Scania Touring</h1><p id="vehicleSubtitle">Reference preview · Not original DLC mesh</p></div><div class="stage-controls"><button class="control-icon" id="resetCamera" title="รีเซ็ตมุมกล้อง"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v6h6"/></svg></button><button class="control-icon" id="toggleWire" title="เปิด/ปิด Wireframe"><svg viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10"/></svg></button></div></div>
         <div class="scene-wrap"><canvas id="sceneCanvas"></canvas><span class="scene-pill"><span class="live-dot"></span><span id="previewBadge">ILLUSTRATIVE PREVIEW</span></span><span class="scene-hint">ลากเพื่อหมุน · Scroll เพื่อซูม · คลิกขวาเพื่อเลื่อน</span><span class="scene-bottom" id="sceneSource">REFERENCE MODEL</span></div>
-        <div class="lower-grid"><section class="preview-panel"><div class="panel-title"><div><span class="overline">TEXTURE</span><h3>ผังลายภาพ</h3></div><span class="tag" id="resolution">Demo texture</span></div><div class="texture-display" id="textureDisplay"><div class="default-texture"><div class="tex-stripe"></div><span>COACHES<br/><b>SKIN STUDIO</b></span></div></div><div class="panel-foot"><span id="textureFileName">demo-livery.png</span><span class="auto-reload"><span class="live-dot"></span>Auto reload เปิดอยู่</span></div></section>
-        <section class="settings-panel"><div class="panel-title"><div><span class="overline">MAPPING</span><h3>การแสดงลาย</h3></div></div><div class="setting-row"><label for="meshSelect">การลงลาย</label><select id="meshSelect" disabled><option>นำเข้า GLB ก่อน</option></select></div><div id="mappingRows" class="mapping-rows" hidden></div><p class="tiny-note" id="meshHelp">โมเดลตัวอย่างใช้การฉายภาพแบบ 2D บนด้านข้างรถ ไม่ใช่ UV จริงของ DLC</p><div class="window-tools">
+        <div class="view-buttons" aria-label="มุมตรวจลาย">
+          <button data-view="left">ด้านซ้าย</button><button data-view="right">ด้านขวา</button>
+          <button data-view="front">ด้านหน้า</button><button data-view="rear">ด้านท้าย</button>
+          <span>ใช้พรีวิวตรวจตำแหน่งและรอยต่อ · ตรวจสีและแสงอีกครั้งในเกม</span>
+        </div><div class="lower-grid"><section class="preview-panel"><div class="panel-title"><div><span class="overline">TEXTURE</span><h3>ผังลายภาพ</h3></div><span class="tag" id="resolution">Demo texture</span></div><div class="texture-display" id="textureDisplay"><div class="default-texture"><div class="tex-stripe"></div><span>COACHES<br/><b>SKIN STUDIO</b></span></div></div><div class="panel-foot"><span id="textureFileName">demo-livery.png</span><span class="auto-reload"><span class="live-dot"></span>Auto reload เปิดอยู่</span></div></section>
+        <section class="settings-panel"><div class="panel-title"><div><span class="overline">MAPPING</span><h3>การแสดงลาย</h3></div></div><div class="setting-row"><label for="meshSelect">การลงลาย</label><select id="meshSelect" disabled><option>นำเข้า GLB ก่อน</option></select></div><div id="mappingRows" class="mapping-rows" hidden></div><p class="tiny-note" id="meshHelp">โมเดลตัวอย่างใช้การฉายภาพแบบ 2D บนด้านข้างรถ ไม่ใช่ UV จริงของ DLC</p><div class="window-tools" id="glassTools" hidden>
           <div class="section-heading">กระจกข้าง · Scania 13.7 ม.</div>
           <label class="tiny-note"><input type="checkbox" id="glassFromBody" checked /> ใช้ลาย PNG ตัวถังต่อขึ้นกระจก</label>
           <div class="window-actions">
@@ -55,11 +67,13 @@
           <p class="tiny-note" id="glassTextureLabel">PNG เต็มเฟรม 4096 × 2048 หรือผังกระจก 4096 × 1024 / 2048 × 512</p>
           <p class="tiny-note" id="glassPreviewStatus" role="status"></p>
         </div><div class="setting-row split"><label for="brightness">ความสว่างสตูดิโอ</label><span id="brightnessValue">2.0</span></div><input type="range" id="brightness" min="0.2" max="4" step="0.1" value="2.0"/><div class="mapping-foot"><span class="status-dot"></span><span id="mappingStatus">Demo model · skin projection</span></div></section></div>
-        <div class="export-section"><div><span class="overline">PACKAGE EXPORT</span><h3>Export เป็น ETS2 .scs</h3><p>ส่งออกลายตัวถังและกระจกในไฟล์เดียว เทมเพลตต้องมีชิ้นกระจกที่ผูกกับลายรถอยู่แล้ว</p></div><button class="blue-btn" id="exportBtn">Export .scs <span>↗</span></button></div>
-        <div class="export-config"><div class="config-field"><label>1 · เทมเพลตม็อดที่ใช้ได้จริง</label><button id="chooseTemplate" class="secondary-btn">เลือก .scs / .zip</button><small id="templateLabel">ยังไม่ได้เลือก</small></div><div class="config-field"><label>2 · Texture ที่จะแทนที่</label><select id="ddsSelect" disabled><option>เลือกเทมเพลตก่อน</option></select></div><div class="config-field"><label>3 · Texconv (สำหรับ PNG → DDS)</label><button id="chooseTexconv" class="secondary-btn">เลือก texconv.exe</button><small id="texconvLabel">หากมีใน PATH จะใช้ได้เลย</small></div><div class="config-field"><label for="glassDDS">DDS กระจกในเทมเพลต</label><select id="glassDDS" disabled><option value="">เฉพาะลายตัวถัง</option></select></div></div>
+        <div class="export-section"><div><span class="overline">PACKAGE EXPORT</span><h3>Export เป็น ETS2 .scs</h3><p>ใส่ PNG ขนาด 4096 × 2048 แล้วสร้างมอดสำหรับรุ่นที่เลือก รวมลายกระจกข้าง Scania 13.7 ม. ได้ในไฟล์เดียว</p></div><button class="blue-btn" id="exportBtn">Export .scs <span>↗</span></button></div>
+        <p class="tiny-note">นำ .scs ไปวางใน Documents/Euro Truck Simulator 2/mod เปิด Mod Manager แล้วเลือกลายในอู่แต่งรถ</p>
+        <details class="advanced-export"><summary>แก้แพ็ก .scs เดิมและตั้งค่าเครื่องมือเอง</summary>        <div class="export-config"><div class="config-field"><label>1 · เทมเพลตม็อดที่ใช้ได้จริง</label><button id="chooseTemplate" class="secondary-btn">เลือก .scs / .zip</button><small id="templateLabel">สร้างลายใหม่จากรุ่นที่เลือก</small></div><div class="config-field"><label>2 · Texture ที่จะแทนที่</label><select id="ddsSelect" disabled><option>เลือกเทมเพลตก่อน</option></select></div><div class="config-field"><label>3 · Texconv (สำหรับ PNG → DDS)</label><button id="chooseTexconv" class="secondary-btn">เลือก texconv.exe</button><small id="texconvLabel">มีเครื่องมือแปลงภาพในตัว</small></div><div class="config-field"><label for="glassDDS">DDS กระจกในเทมเพลต</label><select id="glassDDS" disabled><option value="">เฉพาะลายตัวถัง</option></select></div></div>
+        <button id="useBuiltin" class="secondary-btn">กลับไปสร้างลายใหม่</button></details>
 
       </main>
-      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong>ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>นำโมเดลที่คุณเป็นเจ้าของจากเกมไปแปลงเป็น GLB พร้อม UV Mapping</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>เพิ่ม PNG จาก Figma แล้วดูบนโมเดล 3D โดยไม่เปิด ETS2</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>เลือกม็อดต้นแบบที่ใช้ได้อยู่แล้ว แทน DDS แล้วค่อยทดสอบในเกม</p></div></div><div class="rule"></div><div class="warning-note"><b>ข้อจำกัดของเวอร์ชันนี้</b><p>การ Export ต้องใช้เทมเพลต .scs ที่เข้ากับรถและเวอร์ชันเกม</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.2.6</span></aside>
+      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong>ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>เลือกรถและรุ่นย่อย โปรแกรมมีโมเดลพร้อมใช้ทั้ง 5 รุ่น</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>บันทึกเทมเพลตรุ่นที่เลือก วาดลายใน Figma แล้วเพิ่ม PNG กลับเข้ามา</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>ตรวจมุมซ้าย ขวา หน้า ท้าย แล้วกด Export .scs เพื่อนำเข้าเกม</p></div></div><div class="rule"></div><div class="warning-note"><b>ข้อจำกัดของเวอร์ชันนี้</b><p>ส่งออกลายตัวถังได้ทั้ง 5 รุ่น ลายกระจกข้างรองรับ Scania 13.7 ม.</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.3.0</span></aside>
     </div>
     <div class="toast" id="toast" aria-live="polite"></div>
   </div>
