@@ -112,6 +112,7 @@ function startWatcher(file) {
 }
 function createWindow() {
   win = new BrowserWindow({
+    icon: path.join(resources, 'branding', 'app.ico'),
     width: 1540, height: 940, minWidth: 1140, minHeight: 730,
     backgroundColor: '#eef0f4', show: true,
     title: `Coaches Skin Studio v${app.getVersion()}`,
@@ -151,6 +152,7 @@ const safeCall = (fn) => async (event, ...args) => {
 };
 
 app.whenReady().then(() => {
+  if (process.platform === 'win32') app.setAppUserModelId('com.kaeosopha.coaches.skinstudio');
   createWindow();
   ipcMain.handle('dialog:texture', safeCall(async () => {
     const file = await pickOne('Choose coach skin image', [{ name: 'Skin texture', extensions: ['png', 'jpg', 'jpeg', 'webp', 'dds'] }]);

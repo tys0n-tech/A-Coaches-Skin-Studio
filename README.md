@@ -1,5 +1,7 @@
 # Coaches Skin Studio
 
+<img src="public/branding/app.png" alt="A-Coaches Skin Studio" width="144" />
+
 โปรแกรมออกแบบและพรีวิวลายรถบัส ETS2 Coaches พร้อมโมเดล เทมเพลต และเครื่องมือแปลงภาพในตัว
 
 ดาวน์โหลด **Windows x64 ZIP** จาก [Releases](https://github.com/tys0n-tech/A-Coaches-Skin-Studio/releases) แตกไฟล์ทั้งโฟลเดอร์ แล้วเปิด **Coaches Skin Studio.exe**
@@ -39,3 +41,7 @@
 - ใช้ผังกระจกเฟรมเต็ม 4096 × 2048 ต่อเนื่องกับตัวถัง
 - แสดงสถานะโหลดแทนโมเดลกล่องขณะเปลี่ยนรถ และแสดงเฉพาะรุ่นที่เลือกล่าสุด
 - เพิ่มปุ่มโหลดอีกครั้งเมื่อไม่พบหรือเปิดโมเดลไม่สำเร็จ
+
+## v0.4.1
+
+เพิ่มโลโก้ A-Coaches Skin Studio ที่ให้มาเป็นไอคอนโปรแกรม Windows ไอคอนหน้าต่าง และโลโก้ในโปรแกรม

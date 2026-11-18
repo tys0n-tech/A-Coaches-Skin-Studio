@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
-  <title>Coaches Skin Studio v0.4.0</title>
+  <link rel="icon" type="image/png" href="./branding/app.png" />
+  <title>Coaches Skin Studio v0.4.1</title>
 </head>
 <body>
   <div id="app">
     <header class="topbar">
-      <div class="brand"><div class="mark">C<span>.</span></div><div class="brand-copy"><strong>Coaches Skin Studio</strong><small>ETS2 Coaches · Desktop preview</small></div></div>
+      <div class="brand"><img class="mark" src="./branding/app.png" alt="A-Coaches Skin Studio logo" width="40" height="40" /><div class="brand-copy"><strong>Coaches Skin Studio</strong><small>ETS2 Coaches · Desktop preview</small></div></div>
       <div class="app-label"><span class="live-dot"></span><span id="modeText">Preview mode</span></div>
       <div class="top-actions"><button class="text-btn" id="openProject">เปิดโปรเจ็กต์</button><button class="text-btn" id="saveProject">บันทึกโปรเจ็กต์</button><button class="icon-btn" id="helpBtn" title="คู่มือ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2.5-2.5 4.5M12 17h.01"/></svg></button></div>
     </header>
@@ -73,7 +74,7 @@
         <button id="useBuiltin" class="secondary-btn">กลับไปสร้างลายใหม่</button></details>
 
       </main>
-      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong>ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>เลือกรถและรุ่นย่อย โปรแกรมมีโมเดลพร้อมใช้ทั้ง 5 รุ่น</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>บันทึกเทมเพลตรุ่นที่เลือก วาดลายใน Figma แล้วเพิ่ม PNG กลับเข้ามา</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>ตรวจมุมซ้าย ขวา หน้า ท้าย แล้วกด Export .scs เพื่อนำเข้าเกม</p></div></div><div class="rule"></div><div class="warning-note"><b>ข้อจำกัดของเวอร์ชันนี้</b><p>ส่งออกตัวถังและกระจกข้างได้ครบ 5 รุ่น รวมกระจกสองชั้น Volvo</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.4.0</span></aside>
+      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong>ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>เลือกรถและรุ่นย่อย โปรแกรมมีโมเดลพร้อมใช้ทั้ง 5 รุ่น</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>บันทึกเทมเพลตรุ่นที่เลือก วาดลายใน Figma แล้วเพิ่ม PNG กลับเข้ามา</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>ตรวจมุมซ้าย ขวา หน้า ท้าย แล้วกด Export .scs เพื่อนำเข้าเกม</p></div></div><div class="rule"></div><div class="warning-note"><b>ข้อจำกัดของเวอร์ชันนี้</b><p>ส่งออกตัวถังและกระจกข้างได้ครบ 5 รุ่น รวมกระจกสองชั้น Volvo</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.4.1</span></aside>
     </div>
     <div class="toast" id="toast" aria-live="polite"></div>
   </div>
