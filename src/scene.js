@@ -40,10 +40,11 @@ export async function windowArtwork(file, profile, legacyScania = false) {
   const source = await createImageBitmap(new Blob([Uint8Array.from(atob(file.base64), char => char.charCodeAt(0))], { type: 'image/png' }));
   try {
     const canvas = document.createElement('canvas');
-    canvas.width = profile.width;
-    canvas.height = profile.height;
+    const fullFrame = [4096, 8192].includes(source.width) && source.height * 2 === source.width;
+    canvas.width = fullFrame ? source.width : profile.width;
+    canvas.height = fullFrame ? source.height : profile.height;
     const context = canvas.getContext('2d');
-    if (source.width === profile.width && source.height === profile.height) {
+    if (fullFrame) {
       context.drawImage(source, 0, 0);
     } else if (legacyScania && source.width === source.height * 4) {
       const sides = [
@@ -66,7 +67,7 @@ export async function windowArtwork(file, profile, legacyScania = false) {
         context.restore();
       }
     } else {
-      throw new Error('ใช้ PNG เฟรมเต็ม 4096 × 2048 ตามผังกระจกรุ่นที่เลือก');
+      throw new Error('ใช้ PNG เฟรมเต็ม 4096 × 2048 หรือ 8192 × 4096 ตามผังกระจกรุ่นที่เลือก');
     }
     const mask = document.createElement('canvas');
     mask.width = canvas.width;

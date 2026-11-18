@@ -30,7 +30,7 @@ function updateWorkflow() {
   const exportReady = state.texture && (ready || state.templatePath);
   $('exportBtn').disabled = !exportReady || $('glassPreviewStatus').textContent === 'กำลังโหลดลายกระจก';
   $('vehicleSupport').textContent = ready
-    ? 'ตัวถัง 4096 × 2048' + (glassSupported ? ' · ลายกระจกข้าง' : '')
+    ? 'ตัวถัง 4K / 8K' + (glassSupported ? ' · ลายกระจกข้าง' : '')
     : 'กำลังโหลดรุ่นรถ';
 }
 
@@ -130,7 +130,7 @@ function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
   state.loading = true;
   state.loadError = '';
   state.glass = null;
-  $('glassTextureLabel').textContent = 'PNG เฟรมเต็ม 4096 × 2048 ตามผังรุ่นที่เลือก';
+  $('glassTextureLabel').textContent = 'PNG เฟรมเต็ม 4K หรือ 8K ตามผังรุ่นที่เลือก';
   clearTexture();
   const c = viewport.setCoach(id);
   $('glassPreviewStatus').textContent = '';

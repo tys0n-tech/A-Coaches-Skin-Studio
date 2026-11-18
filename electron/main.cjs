@@ -7,6 +7,7 @@ const { pathToFileURL } = require('node:url');
 const AdmZip = require('adm-zip');
 const coachModels = require('./coach-models.json');
 const { createPaintjob } = require('./create-paintjob.cjs');
+const { convertTextureDDS, isLiverySize } = require('./texture-conversion.cjs');
 
 let win;
 let watchedPath = '';
@@ -69,10 +70,10 @@ async function windowArtworkPayload(file) {
   }
   const width = png ? bytes.readUInt32BE(16) : bytes.readUInt32LE(16);
   const height = png ? bytes.readUInt32BE(20) : bytes.readUInt32LE(12);
-  const bodyLayout = width === 4096 && height === 2048;
+  const bodyLayout = isLiverySize(width, height);
   const windowLayout = (width === 2048 && height === 512) || (width === 4096 && height === 1024);
   if (!bodyLayout && !windowLayout) {
-    throw new Error(`ไฟล์ ${width} × ${height} ไม่ตรงกับผัง ให้ Export เฟรมเต็ม 4096 × 2048 เป็น PNG หรือใช้ผังกระจก 4096 × 1024 / 2048 × 512`);
+    throw new Error(`ไฟล์ ${width} × ${height} ไม่ตรงกับผัง ให้ Export เฟรมเต็ม 4096 × 2048 หรือ 8192 × 4096 เป็น PNG หรือใช้ผังกระจก 4096 × 1024 / 2048 × 512`);
   }
   if (!png) {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'coach-window-'));
@@ -217,16 +218,16 @@ app.whenReady().then(() => {
     const model = findModel(options?.modelId);
     if (!projectPaths.texture) throw new Error('เพิ่มไฟล์ลายรถก่อนส่งออก');
     const body = await convertDDS(projectPaths.texture);
-    if (body.readUInt32LE(16) !== 4096 || body.readUInt32LE(12) !== 2048) {
-      throw new Error('ลายรถต้องมีขนาด 4096 × 2048 ตามเทมเพลต');
+    if (!isLiverySize(body.readUInt32LE(16), body.readUInt32LE(12))) {
+      throw new Error('ลายรถต้องมีขนาด 4096 × 2048 หรือ 8192 × 4096 ตามเทมเพลต');
     }
     let glass = null;
     if (options.includeGlass) {
       if (!model.glass) throw new Error('ไม่พบผังกระจกรุ่นนี้');
       glass = await convertDDS(glassTexturePath, options.glassArtwork ? decodePNG(options.glassArtwork) : null);
     }
-    if (glass && (glass.readUInt32LE(16) !== 4096 || glass.readUInt32LE(12) !== 2048)) {
-      throw new Error('ลายกระจกต้องเป็นเฟรมเต็ม 4096 × 2048');
+    if (glass && !isLiverySize(glass.readUInt32LE(16), glass.readUInt32LE(12))) {
+      throw new Error('ลายกระจกต้องเป็นเฟรมเต็ม 4096 × 2048 หรือ 8192 × 4096');
     }
     const result = createPaintjob(model, projectPaths.texture, body, glass, resources);
     const save = await dialog.showSaveDialog(win, {
@@ -340,30 +341,8 @@ function decodePNG(dataUrl) {
 }
 
 async function convertDDS(file, generatedPNG = null) {
-    let newDDS;
-    const source = generatedPNG ? null : ensureFile(file, allowedTextureExt);
-    if (source && path.extname(source).toLowerCase() === '.dds') {
-      newDDS = fs.readFileSync(source);
-    } else {
-      const bundled = path.join(resources, 'tools', 'texconv.exe');
-      const tool = texconvPath || (fs.existsSync(bundled) ? bundled : 'texconv.exe');
-      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'coaches-skin-'));
-      try {
-        const inputFile = source || path.join(tmp, 'generated-window.png');
-        if (generatedPNG) fs.writeFileSync(inputFile, generatedPNG);
-        const args = ['-f', 'BC3_UNORM', '-m', '0', '-y', '-o', tmp, inputFile];
-        await new Promise((resolve, reject) => {
-          const child = spawn(tool, args, { windowsHide: true });
-          let stderr = '';
-          child.on('error', reject);
-          child.stderr.on('data', chunk => { stderr += String(chunk).slice(0, 2000); });
-          child.on('close', code => code === 0 ? resolve() : reject(new Error(`texconv failed (${code}): ${stderr}`)));
-        });
-        const generated = path.join(tmp, `${path.parse(inputFile).name}.dds`);
-        if (!fs.existsSync(generated)) throw new Error('texconv returned without DDS output');
-        newDDS = fs.readFileSync(generated);
-      } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
-    }
-    if (newDDS.length < 128 || newDDS.subarray(0, 4).toString('ascii') !== 'DDS ') throw new Error('DDS output is invalid');
-    return newDDS;
+  const source = generatedPNG ? null : ensureFile(file, allowedTextureExt);
+  const bundled = path.join(resources, 'tools', 'texconv.exe');
+  const tool = texconvPath || (fs.existsSync(bundled) ? bundled : 'texconv.exe');
+  return convertTextureDDS(source, generatedPNG, tool);
 }

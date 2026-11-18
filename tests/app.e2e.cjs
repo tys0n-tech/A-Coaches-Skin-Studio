@@ -8,6 +8,7 @@ const catalog = require(path.join(appDir, 'electron/coach-models.json'));
 const output = path.join(require('node:os').tmpdir(), 'coaches-studio-qa-' + process.pid);
 fs.mkdirSync(output, { recursive: true });
 const paint = process.env.COACH_STUDIO_TEST_PAINT || path.join(output, 'Test-Paint.png');
+const resolution = process.env.COACH_STUDIO_TEST_8K === '1' ? 8192 : 4096;
 const errors = [];
 let openFile = paint;
 let selected;
@@ -44,8 +45,8 @@ app.whenReady().then(async () => {
   await contains('sceneSource', 'Scania_Touring_13.7m_6x2.glb');
   if (!process.env.COACH_STUDIO_TEST_PAINT) {
     const data = await run(`(() => {
-      const canvas = document.createElement('canvas'); canvas.width=4096; canvas.height=2048;
-      const ctx = canvas.getContext('2d');
+      const canvas = document.createElement('canvas'); canvas.width=${resolution}; canvas.height=${resolution / 2};
+      const ctx = canvas.getContext('2d'); ctx.scale(${resolution / 4096},${resolution / 4096});
       ctx.fillStyle='#cf176a'; ctx.fillRect(300,200,3000,450); ctx.fillRect(300,1450,3000,450);
       ctx.fillStyle='#2ba9d8'; ctx.fillRect(250,550,3200,100); ctx.fillRect(250,1450,3200,100);
       return canvas.toDataURL('image/png').split(',')[1];
@@ -91,8 +92,8 @@ app.whenReady().then(async () => {
       for (const entry of entries.filter(entry => entry.entryName.endsWith('.dds'))) {
         const data = entry.getData();
         assert.equal(data.toString('ascii', 0, 4), 'DDS ');
-        assert.equal(data.readUInt32LE(16), 4096);
-        assert.equal(data.readUInt32LE(12), 2048);
+        assert.equal(data.readUInt32LE(16), resolution);
+        assert.equal(data.readUInt32LE(12), resolution / 2);
       }
       const texture = entries.find(entry => entry.entryName.endsWith('/' + model.windowModel + '.dds'));
       assert.ok(texture);
