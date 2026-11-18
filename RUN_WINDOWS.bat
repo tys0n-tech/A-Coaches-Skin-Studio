@@ -1,11 +1,11 @@
 @echo off
 setlocal EnableExtensions
 chcp 65001 >nul 2>nul
-title Coaches Skin Studio - Launcher v0.4.3
+title Coaches Skin Studio - Launcher v0.4.4
 
 cls
 echo ================================================================
-echo              COACHES SKIN STUDIO  v0.4.3
+echo              COACHES SKIN STUDIO  v0.4.4
 echo                  Windows Launcher
  echo ================================================================
 echo.

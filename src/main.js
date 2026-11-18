@@ -1,6 +1,6 @@
 import './style.css';
 import coachModels from '../electron/coach-models.json';
-import { CoachViewport, COACHES, windowArtwork } from './scene.js';
+import { CoachViewport, COACHES, windowArtwork, bodyArtwork } from './scene.js';
 
 const $ = id => document.getElementById(id);
 const api = window.studioAPI;
@@ -40,6 +40,8 @@ async function showGlass() {
   const supported = Boolean(state.localModel?.glass && state.modelPath && viewport.windowProfile);
   const isCurrent = () => request === glassRequest && model === modelSequence;
   state.generatedGlass = null;
+  const restoreBody = Boolean(state.generatedBody || state.bodyOverlayActive);
+  state.generatedBody = null;
   let file = state.glass;
   const useBodyTexture = !file && $('glassFromBody').checked && /\.png$/i.test(state.texture?.filename || '');
   $('glassPreviewStatus').textContent = supported && (file || useBodyTexture) ? 'กำลังโหลดลายกระจก' : '';
@@ -51,9 +53,25 @@ async function showGlass() {
       state.generatedGlass = dataUrl;
       if (dataUrl) file = { filename: state.localModel.windowModel + '.png', base64: dataUrl.split(',')[1] };
     }
+    if (supported && state.glass?.bodyLayout && state.texture) {
+      const base = /\.dds$/i.test(state.texture.filename) ? await invoke('readCompositionTexture') : state.texture;
+      if (!isCurrent()) return;
+      const png = await bodyArtwork(base, state.glass, viewport.windowProfile);
+      if (!isCurrent()) return;
+      state.bodyOverlayActive = true;
+      await viewport.updateTexture({filename:'seam-body.png',base64:png.split(',')[1]});
+      if (!isCurrent()) return;
+      state.generatedBody = png;
+      applyMappings();
+    } else if (restoreBody && state.texture) {
+      await viewport.updateTexture(state.texture);
+      if (!isCurrent()) return;
+      state.bodyOverlayActive = false;
+      applyMappings();
+    }
     const shown = await viewport.setGlassArtwork(file, isCurrent, supported);
     if (isCurrent()) {
-      $('glassPreviewStatus').textContent = shown ? (useBodyTexture ? 'ใช้ลาย PNG เดิมบนกระจกข้าง' : 'กำลังแสดงบนกระจกข้าง') :
+      $('glassPreviewStatus').textContent = shown ? (useBodyTexture ? 'ใช้ลาย PNG เดิมบนกระจกข้าง' : (state.generatedBody ? 'ต่อลายกระจกลงตัวถังแล้ว' : 'กำลังแสดงบนกระจกข้าง')) :
         file ? 'เลือกรุ่นรถให้ตรงกับผังกระจก' : '';
     }
   } catch (error) {
@@ -111,6 +129,8 @@ function clearTexture() {
   ++applySequence;
   state.texture = null;
   state.generatedGlass = null;
+  state.generatedBody = null;
+  state.bodyOverlayActive = false;
   state.texturePath = '';
   viewport.clearTexture();
   renderTextureSource();
@@ -181,6 +201,9 @@ async function useTexture(file, automatic = false) {
   if (!file) return;
   if (file.error) throw new Error(file.error);
   const sequence = ++applySequence;
+  ++glassRequest;
+  state.generatedBody = null;
+  state.bodyOverlayActive = false;
   const res = await viewport.updateTexture(file);
   if (!res || sequence !== applySequence) return;
   state.texture = file;
@@ -358,7 +381,7 @@ async function exportMod() {
     if (!state.templatePath) {
       const includeGlass = Boolean(state.localModel.glass && (state.glass || state.generatedGlass));
       const output = await invoke('exportCoach', {
-        modelId: state.localModel.id, includeGlass,
+        modelId: state.localModel.id, includeGlass, bodyArtwork: state.generatedBody,
         glassArtwork: includeGlass ? state.generatedGlass : null
       });
       if (output) toast(`ส่งออกสำเร็จ: ${output.path} · วางไฟล์ใน Documents/Euro Truck Simulator 2/mod แล้วเปิดใน Mod Manager`);
@@ -368,7 +391,7 @@ async function exportMod() {
     const glassTargetDDS = $('glassDDS').value;
     const hasSeparateGlass = state.glass && !state.glass.bodyLayout;
     if (glassTargetDDS && !hasSeparateGlass && !state.generatedGlass) throw new Error('กรุณาเลือกไฟล์ PNG โปร่งใสหรือ DDS สำหรับกระจก');
-    const output = await invoke('exportMod', { targetDDS: $('ddsSelect').value, glassTargetDDS,
+    const output = await invoke('exportMod', { bodyArtwork: state.generatedBody, targetDDS: $('ddsSelect').value, glassTargetDDS,
       glassArtwork: glassTargetDDS ? state.generatedGlass : null });
     if (output) toast(`ส่งออกสำเร็จ: ${output.path} · ต้องทดสอบในเกมก่อนใช้งานจริง`);
   } catch (e) { displayError(e); }

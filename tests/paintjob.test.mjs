@@ -108,3 +108,14 @@ test('corrected exports keep existing mod filenames and accessory paths', () => 
   assert.ok(file);
   assert.ok(file.getData().toString().includes('cs1860bb7f00.scania.touring_23.paint_job'));
 });
+
+test('window faces point outward so opposite-side decals can be culled', () => {
+  for (const model of Object.values(models).flat()) {
+    const profile=JSON.parse(fs.readFileSync(new URL('../resources/windows/'+model.windowProfile,import.meta.url)));
+    for(let index=0;index<profile.position.length;index+=9) {
+      const p=profile.position.slice(index,index+9);
+      const crossX=(p[4]-p[1])*(p[8]-p[2])-(p[5]-p[2])*(p[7]-p[1]);
+      assert.ok(crossX*Math.sign((p[0]+p[3]+p[6])/3)>0,model.id+' has an inward window face');
+    }
+  }
+});

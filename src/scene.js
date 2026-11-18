@@ -36,8 +36,54 @@ function readDDS(bytes) {
   return texture;
 }
 
+function glassMask(profile, width, height) {
+  const mask = document.createElement('canvas');
+  mask.width = width; mask.height = height;
+  const draw = mask.getContext('2d');
+  draw.beginPath();
+  for (let index = 0; index < profile.uv.length; index += 6) {
+    draw.moveTo(profile.uv[index] * width, profile.uv[index + 1] * height);
+    draw.lineTo(profile.uv[index + 2] * width, profile.uv[index + 3] * height);
+    draw.lineTo(profile.uv[index + 4] * width, profile.uv[index + 5] * height);
+    draw.closePath();
+  }
+  draw.fill();
+  return mask;
+}
+
+function bitmapPNG(file) {
+  return createImageBitmap(new Blob([Uint8Array.from(atob(file.base64), char => char.charCodeAt(0))], { type: 'image/png' }));
+}
+
+// A full-frame window design may cross the sill. Paint the portion outside
+// the window islands onto the body, using the same normalized atlas coordinates.
+export async function bodyArtwork(body, glass, profile) {
+  const images = [];
+  try {
+    images.push(await bitmapPNG(body));
+    images.push(await bitmapPNG(glass));
+    const [base, overlay] = images;
+    for (const image of images) {
+      if (![4096,8192].includes(image.width) || image.height*2 !== image.width) throw new Error('ใช้ PNG ตัวถังและกระจกแบบเฟรมเต็ม 4K หรือ 8K');
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(base.width, overlay.width);
+    canvas.height = canvas.width/2;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(base,0,0,canvas.width,canvas.height);
+    const spill = document.createElement('canvas');
+    spill.width = canvas.width; spill.height = canvas.height;
+    const draw = spill.getContext('2d');
+    draw.drawImage(overlay,0,0,spill.width,spill.height);
+    draw.globalCompositeOperation='destination-out';
+    draw.drawImage(glassMask(profile,spill.width,spill.height),0,0);
+    ctx.drawImage(spill,0,0);
+    return canvas.toDataURL('image/png');
+  } finally { for (const image of images) image.close(); }
+}
+
 export async function windowArtwork(file, profile, legacyScania = false) {
-  const source = await createImageBitmap(new Blob([Uint8Array.from(atob(file.base64), char => char.charCodeAt(0))], { type: 'image/png' }));
+  const source = await bitmapPNG(file);
   try {
     const canvas = document.createElement('canvas');
     const fullFrame = [4096, 8192].includes(source.width) && source.height * 2 === source.width;
@@ -69,18 +115,7 @@ export async function windowArtwork(file, profile, legacyScania = false) {
     } else {
       throw new Error('ใช้ PNG เฟรมเต็ม 4096 × 2048 หรือ 8192 × 4096 ตามผังกระจกรุ่นที่เลือก');
     }
-    const mask = document.createElement('canvas');
-    mask.width = canvas.width;
-    mask.height = canvas.height;
-    const draw = mask.getContext('2d');
-    draw.beginPath();
-    for (let index = 0; index < profile.uv.length; index += 6) {
-      draw.moveTo(profile.uv[index] * mask.width, profile.uv[index + 1] * mask.height);
-      draw.lineTo(profile.uv[index + 2] * mask.width, profile.uv[index + 3] * mask.height);
-      draw.lineTo(profile.uv[index + 4] * mask.width, profile.uv[index + 5] * mask.height);
-      draw.closePath();
-    }
-    draw.fill();
+    const mask = glassMask(profile, canvas.width, canvas.height);
     context.globalCompositeOperation = 'destination-in';
     context.drawImage(mask, 0, 0);
     return canvas.toDataURL('image/png');
@@ -253,7 +288,7 @@ export class CoachViewport {
         map.dispose();
         return;
       }
-      const material = new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false, alphaTest: .06, side: THREE.DoubleSide });
+      const material = new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false, alphaTest: .06, side: THREE.FrontSide });
       this.windowOverlay = new THREE.Mesh(geometry, material);
       this.windowOverlay.renderOrder = 5;
       this.root.add(this.windowOverlay);

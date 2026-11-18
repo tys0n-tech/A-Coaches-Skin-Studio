@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 const channels = new Set(['texture-changed']);
 contextBridge.exposeInMainWorld('studioAPI', {
+  readCompositionTexture: () => ipcRenderer.invoke('file:composition-texture'),
   openTexture: () => ipcRenderer.invoke('dialog:texture'),
   saveCoachTemplate: (id) => ipcRenderer.invoke('coach:template', id),
   exportCoach: (options) => ipcRenderer.invoke('coach:export', options),

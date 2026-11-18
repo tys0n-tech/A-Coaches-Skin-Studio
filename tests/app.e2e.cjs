@@ -2,6 +2,7 @@ const { app, BrowserWindow, dialog } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const {pixelBC3}=require('./dds-pixel.cjs');
 const appDir = path.resolve(__dirname, '..');
 const AdmZip = require(path.join(appDir, 'node_modules/adm-zip'));
 const catalog = require(path.join(appDir, 'electron/coach-models.json'));
@@ -102,7 +103,35 @@ app.whenReady().then(async () => {
       await click('chooseGlass');
       await contains('glassTextureLabel', model.id + '-window.png');
       await until(() => run("!document.getElementById('exportBtn').disabled"));
-      assert.equal(await run("document.getElementById('glassPreviewStatus').textContent"), 'กำลังแสดงบนกระจกข้าง');
+      assert.equal(await run("document.getElementById('glassPreviewStatus').textContent"), 'ต่อลายกระจกลงตัวถังแล้ว');
+      if(model.id==='scania-137') {
+        openFile=path.join(output,model.id+'-body.dds');
+        fs.writeFileSync(openFile,entries.find(entry=>entry.entryName.endsWith('/nca137_body.dds')).getData());
+        await click('importTexture');await contains('textureFileName',model.id+'-body.dds');
+        await until(()=>run("!document.getElementById('exportBtn').disabled"));
+      }
+      // A separate full-frame glass design can cross onto the body atlas.
+      const spill = await run(`(() => {
+        const c=document.createElement('canvas'); c.width=${resolution};c.height=${resolution/2};
+        const d=c.getContext('2d');d.fillStyle='rgb(23,199,71)';d.fillRect(c.width/2-16,c.height/2-16,32,32);
+        return c.toDataURL('image/png').split(',')[1];
+      })()`);
+      openFile=path.join(output,model.id+'-spill.png');fs.writeFileSync(openFile,Buffer.from(spill,'base64'));
+      await click('chooseGlass');
+      await contains('glassTextureLabel',model.id+'-spill.png');
+      await until(()=>run("!document.getElementById('exportBtn').disabled"));
+      await run("document.getElementById('toast').textContent=''");await click('exportBtn');await contains('toast','ส่งออกสำเร็จ');
+      const composed=new AdmZip(path.join(output,model.id+'.scs'));
+      const composedBody=composed.getEntries().find(entry=>entry.entryName.endsWith('/nca137_body.dds')).getData();
+      const color=pixelBC3(composedBody,resolution/2,resolution/4);
+      assert.ok(color.every((value,index)=>Math.abs(value-[23,199,71][index])<6),'Glass spill missing from body DDS: '+color);
+      await click('clearGlass');
+      await until(()=>run("!document.getElementById('exportBtn').disabled"));
+      await run("document.getElementById('toast').textContent=''");await click('exportBtn');await contains('toast','ส่งออกสำเร็จ');
+      const restored=new AdmZip(path.join(output,model.id+'.scs'));
+      const restoredBody=restored.getEntries().find(entry=>/\/(nca137_body|paint)\.dds$/.test(entry.entryName)).getData();
+      const originalBody=entries.find(entry=>entry.entryName.endsWith('/nca137_body.dds')).getData();
+      assert.deepEqual(restoredBody,originalBody,'Clearing glass must restore the original body export');
       openFile = paint;
       await run(`document.querySelector('[data-view="left"]').click()`);
       await new Promise(resolve => setTimeout(resolve, 200));

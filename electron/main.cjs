@@ -168,6 +168,10 @@ app.whenReady().then(() => {
     startWatcher(data.path);
     return data;
   }));
+  ipcMain.handle('file:composition-texture', safeCall(async () => {
+    if (!projectPaths.texture) throw new Error('เพิ่มภาพตัวถังก่อน');
+    return windowArtworkPayload(projectPaths.texture);
+  }));
   ipcMain.handle('dialog:glass-texture', safeCall(async () => {
     const file = await pickOne('Choose transparent window artwork', [{ name: 'Window artwork', extensions: ['png', 'dds'] }]);
     if (!file) return null;
@@ -217,7 +221,7 @@ app.whenReady().then(() => {
   ipcMain.handle('coach:export', safeCall(async (_e, options) => {
     const model = findModel(options?.modelId);
     if (!projectPaths.texture) throw new Error('เพิ่มไฟล์ลายรถก่อนส่งออก');
-    const body = await convertDDS(projectPaths.texture);
+    const body = await convertDDS(projectPaths.texture, options?.bodyArtwork ? decodePNG(options.bodyArtwork) : null);
     if (!isLiverySize(body.readUInt32LE(16), body.readUInt32LE(12))) {
       throw new Error('ลายรถต้องมีขนาด 4096 × 2048 หรือ 8192 × 4096 ตามเทมเพลต');
     }
@@ -314,7 +318,7 @@ app.whenReady().then(() => {
         !glassTarget.toLowerCase().endsWith('.dds') || glassTarget === entryName)) {
       throw new Error('Choose a separate window DDS entry and transparent window artwork');
     }
-    const newDDS = await convertDDS(projectPaths.texture);
+    const newDDS = await convertDDS(projectPaths.texture, options?.bodyArtwork ? decodePNG(options.bodyArtwork) : null);
     zip.updateFile(entryName, newDDS);
     if (glassTarget) zip.updateFile(glassTarget, await convertDDS(glassTexturePath, generatedGlass));
     const suggested = `${path.parse(templatePath).name}-edited.scs`;
