@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import path from 'node:path';
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
@@ -31,22 +31,49 @@ test('each coach exports its own cabin and paint namespace', () => {
 });
 
 test('different glass liveries have separate textures and model material paths', () => {
-  const model = models.scania.find(model => model.id === 'scania-137');
-  const first = createPaintjob(model, 'First Paint.png', body, body, resources);
-  const second = createPaintjob(model, 'Second Paint.png', body, body, resources);
-  const paths = zip => zip.getEntries().map(entry => entry.entryName);
-  assert.equal(paths(first.zip).filter(name => paths(second.zip).includes(name)).filter(name => name !== 'manifest.sii' && name !== 'description.txt').length, 0);
-  for (const { zip } of [first, second]) {
-    const names = new Set(paths(zip));
-    for (const entry of zip.getEntries()) {
-      if (!/\.(sii|pmd|tobj|mat)$/.test(entry.entryName)) continue;
-      const content = entry.getData().toString('latin1');
-      for (const [, dependency] of content.matchAll(/\/(automat\/[\w/]+\.mat|vehicle\/bus\/upgrade\/css[\w/]+\.(?:pmd|tobj|dds)|def\/vehicle\/[\w./]+\.sii)/g)) {
-        assert.ok(names.has(dependency), `${entry.entryName} references missing ${dependency}`);
+  for (const model of Object.values(models).flat()) {
+    const first = createPaintjob(model, 'First Paint.png', body, body, resources);
+    const second = createPaintjob(model, 'Second Paint.png', body, body, resources);
+    const paths = zip => zip.getEntries().map(entry => entry.entryName);
+    assert.equal(paths(first.zip).filter(name => paths(second.zip).includes(name)).filter(name => name !== 'manifest.sii' && name !== 'description.txt').length, 0);
+    for (const { zip } of [first, second]) {
+      const names = new Set(paths(zip));
+      for (const entry of zip.getEntries()) {
+        if (!/\.(sii|pmd|tobj|mat)$/.test(entry.entryName)) continue;
+        const content = entry.getData().toString('latin1');
+        for (const [, dependency] of content.matchAll(/\/(automat\/[\w/]+\.mat|vehicle\/bus\/upgrade\/css[\w/]+\.(?:pmd|tobj|dds)|def\/vehicle\/[\w./]+\.sii)/g)) {
+          assert.ok(names.has(dependency), `${entry.entryName} references missing ${dependency}`);
+        }
       }
+      const tobj = zip.getEntries().find(entry => entry.entryName.endsWith('/nca137_body.tobj')).getData();
+      assert.equal(tobj.readUInt32LE(40), tobj.length - 48);
+      assert.ok(names.has(tobj.subarray(49).toString()));
     }
-    const tobj = zip.getEntries().find(entry => entry.entryName.endsWith('/nca137_body.tobj')).getData();
-    assert.equal(tobj.readUInt32LE(40), tobj.length - 48);
-    assert.ok(names.has(tobj.subarray(49).toString()));
+  }
+});
+
+test('all five window profiles match their own cabin and include valid game models', () => {
+  for (const model of Object.values(models).flat()) {
+    assert.equal(model.glass, true);
+    const profile = JSON.parse(fs.readFileSync(new URL('../resources/windows/' + model.windowProfile, import.meta.url)));
+    assert.equal(profile.id, model.id);
+    assert.equal(profile.width, 4096);
+    assert.equal(profile.height, 2048);
+    assert.equal(profile.position.length / 3, profile.uv.length / 2);
+    assert.ok(profile.position.length > 900);
+    assert.ok(profile.position.every(Number.isFinite));
+    assert.ok(profile.uv.every(value => Number.isFinite(value) && value >= -.01 && value <= 1.01));
+    for (const side of [-1, 1]) {
+      assert.ok(profile.position.filter((value, index) => index % 3 === 0 && side * value > 1.13).length > 150);
+    }
+    if (model.id === 'volvo') {
+      const height = profile.position.filter((value, index) => index % 3 === 1);
+      assert.ok(height.some(y => y > 3.5) && height.some(y => y < 2));
+    }
+    const { zip } = createPaintjob(model, 'Window test.png', body, body, resources);
+    assert.ok(zip.getEntries().some(entry => entry.entryName.endsWith('/' + model.windowModel + '.pmg')));
+    const addon = zip.getEntries().find(entry => entry.entryName.includes('/warnsticker/')).getData().toString();
+    assert.ok(addon.includes(`${model.cabin}.${model.vehicle}.cabin`));
+    assert.ok(addon.includes(model.windowModel + '.pmd'));
   }
 });

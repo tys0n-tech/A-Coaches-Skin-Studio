@@ -12,7 +12,7 @@ function createPaintjob(model, filename, bodyDDS, glassDDS, resources) {
   let overrides = '';
   if (glassDDS) {
     if (!model.glass) throw new Error('รถรุ่นนี้รองรับการส่งออกเฉพาะลายตัวถัง');
-    const bundled = new AdmZip(path.join(resources, 'mod-templates', 'scania137-glass.zip'));
+    const bundled = new AdmZip(path.join(resources, 'mod-templates', model.windowTemplate));
     const originalFolder = 'vehicle/bus/upgrade/tyson_nca_window';
     const renamedFolder = ('vehicle/bus/upgrade/' + token).padEnd(originalFolder.length, '_');
     const materialPaths = new Map();
@@ -35,7 +35,7 @@ function createPaintjob(model, filename, bodyDDS, glassDDS, resources) {
       }
     }
     textureFolder = renamedFolder;
-    zip.addFile(renamedFolder + '/scania137_window.dds', glassDDS);
+    zip.addFile(renamedFolder + '/' + model.windowModel + '.dds', glassDDS);
     const addonPath = `${definitionFolder}/accessory/warnsticker/${token}.sii`;
     overrides = `    overrides[]: "/${addonPath}"\n`;
     zip.addFile(addonPath, Buffer.from(`SiiNunit
@@ -46,7 +46,7 @@ accessory_addon_data : ${token}.${model.vehicle}.warnsticker
     price: 0
     unlock: 0
     part_type: aftermarket
-    exterior_model: "/${renamedFolder}/scania137_window.pmd"
+    exterior_model: "/${renamedFolder}/${model.windowModel}.pmd"
     suitable_for[]: "${model.cabin}.${model.vehicle}.cabin"
     suitable_for[]: "${paintUnit}"
 }

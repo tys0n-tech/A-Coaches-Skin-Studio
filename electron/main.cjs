@@ -53,7 +53,13 @@ function payloadFor(file, extensions) {
   const p = ensureFile(file, extensions);
   return { path: p, filename: path.basename(p), bytes: fs.statSync(p).size, base64: fs.readFileSync(p).toString('base64') };
 }
-function windowArtworkPayload(file) {
+function modelPayload(file) {
+  const data = payloadFor(file, new Set(['.glb']));
+  const entry = Object.values(coachModels).flat().find(model => model.file === data.filename);
+  return { ...data, windowProfile: entry?.windowProfile
+    ? JSON.parse(fs.readFileSync(path.join(resources, 'windows', entry.windowProfile), 'utf8')) : null };
+}
+async function windowArtworkPayload(file) {
   const data = payloadFor(file, new Set(['.png', '.dds']));
   const bytes = Buffer.from(data.base64, 'base64');
   const png = path.extname(file).toLowerCase() === '.png';
@@ -63,12 +69,25 @@ function windowArtworkPayload(file) {
   }
   const width = png ? bytes.readUInt32BE(16) : bytes.readUInt32LE(16);
   const height = png ? bytes.readUInt32BE(20) : bytes.readUInt32LE(12);
-  const bodyLayout = png && width === 4096 && height === 2048;
+  const bodyLayout = width === 4096 && height === 2048;
   const windowLayout = (width === 2048 && height === 512) || (width === 4096 && height === 1024);
   if (!bodyLayout && !windowLayout) {
     throw new Error(`ไฟล์ ${width} × ${height} ไม่ตรงกับผัง ให้ Export เฟรมเต็ม 4096 × 2048 เป็น PNG หรือใช้ผังกระจก 4096 × 1024 / 2048 × 512`);
   }
-  return { ...data, bodyLayout };
+  if (!png) {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'coach-window-'));
+    try {
+      const tool = texconvPath || path.join(resources, 'tools', 'texconv.exe');
+      await new Promise((resolve, reject) => {
+        const child = spawn(tool, ['-ft', 'png', '-m', '1', '-y', '-o', tmp, data.path], { windowsHide: true });
+        child.on('error', reject);
+        child.on('close', code => code === 0 ? resolve() : reject(new Error('แปลงลายกระจก DDS ไม่สำเร็จ')));
+      });
+      data.base64 = fs.readFileSync(path.join(tmp, path.parse(file).name + '.png')).toString('base64');
+      data.filename = path.parse(file).name + '.png';
+    } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+  }
+  return { ...data, bodyLayout, width, height };
 }
 function stopWatcher() {
   if (watchedPath) fs.unwatchFile(watchedPath);
@@ -149,7 +168,7 @@ app.whenReady().then(() => {
   ipcMain.handle('dialog:glass-texture', safeCall(async () => {
     const file = await pickOne('Choose transparent window artwork', [{ name: 'Window artwork', extensions: ['png', 'dds'] }]);
     if (!file) return null;
-    const data = windowArtworkPayload(file);
+    const data = await windowArtworkPayload(file);
     glassTexturePath = data.path;
     return data;
   }));
@@ -158,7 +177,7 @@ app.whenReady().then(() => {
       glassTexturePath = '';
       return null;
     }
-    const data = windowArtworkPayload(file);
+    const data = await windowArtworkPayload(file);
     glassTexturePath = data.path;
     return data;
   }));
@@ -166,10 +185,10 @@ app.whenReady().then(() => {
     const file = await pickOne('Choose converted coach model (.glb)', [{ name: 'glTF Binary', extensions: ['glb'] }]);
     if (!file) return null;
     projectPaths.model = file;
-    return payloadFor(file, new Set(['.glb']));
+    return modelPayload(file);
   }));
   ipcMain.handle('file:model', safeCall(async (_e, file) => {
-    const data = payloadFor(file, new Set(['.glb']));
+    const data = modelPayload(file);
     projectPaths.model = data.path;
     return data;
   }));
@@ -179,7 +198,7 @@ app.whenReady().then(() => {
     const model = path.join(folder, 'local-models', entry.file);
     const bundled = path.join(resources, 'models', entry.file);
     const file = fs.existsSync(bundled) ? bundled : model;
-    return fs.existsSync(file) ? payloadFor(file, new Set(['.glb'])) : null;
+    return fs.existsSync(file) ? modelPayload(file) : null;
   }));
   ipcMain.handle('coach:template', safeCall(async (_e, id) => {
     const entry = findModel(id);
@@ -201,8 +220,11 @@ app.whenReady().then(() => {
     }
     let glass = null;
     if (options.includeGlass) {
-      if (!model.glass) throw new Error('กระจกข้างรองรับ Scania 13.7 ม.');
+      if (!model.glass) throw new Error('ไม่พบผังกระจกรุ่นนี้');
       glass = await convertDDS(glassTexturePath, options.glassArtwork ? decodePNG(options.glassArtwork) : null);
+    }
+    if (glass && (glass.readUInt32LE(16) !== 4096 || glass.readUInt32LE(12) !== 2048)) {
+      throw new Error('ลายกระจกต้องเป็นเฟรมเต็ม 4096 × 2048');
     }
     const result = createPaintjob(model, projectPaths.texture, body, glass, resources);
     const save = await dialog.showSaveDialog(win, {

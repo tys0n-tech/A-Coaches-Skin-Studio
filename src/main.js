@@ -1,6 +1,6 @@
 import './style.css';
 import coachModels from '../electron/coach-models.json';
-import { CoachViewport, COACHES, scaniaWindowArtworkFromBody } from './scene.js';
+import { CoachViewport, COACHES, windowArtwork } from './scene.js';
 
 const $ = id => document.getElementById(id);
 const api = window.studioAPI;
@@ -8,12 +8,18 @@ const state = { coachId: 'scania', localModel: null, texturePath: '', modelPath:
 let toastTimeout = null;
 let applySequence = 0;
 let modelSequence = 0;
+let modelLoadQueue = Promise.resolve();
 const viewport = new CoachViewport($('sceneCanvas'));
 let glassRequest = 0;
 
 function updateWorkflow() {
   const entry = state.localModel;
-  const ready = Boolean(entry && state.modelPath);
+  const ready = Boolean(entry && state.modelPath && !state.loading);
+  $('sceneLoading').hidden = !state.loading && !state.loadError;
+  $('sceneLoadingText').textContent = state.loadError || ('กำลังโหลด ' + (entry?.label || 'โมเดลรถ'));
+  $('retryModel').hidden = !state.loadError;
+  $('importTexture').disabled = Boolean(state.loading);
+  $('sceneCanvas').setAttribute('aria-busy', String(Boolean(state.loading)));
   const glassSupported = ready && Boolean(entry.glass);
   $('glassTools').hidden = !glassSupported;
   $('modelStatus').textContent = ready ? 'พร้อม · ' + entry.label : 'กำลังเตรียมโมเดล';
@@ -31,7 +37,7 @@ function updateWorkflow() {
 async function showGlass() {
   const request = ++glassRequest;
   const model = modelSequence;
-  const supported = state.localModel?.id === 'scania-137' && Boolean(state.modelPath);
+  const supported = Boolean(state.localModel?.glass && state.modelPath && viewport.windowProfile);
   const isCurrent = () => request === glassRequest && model === modelSequence;
   state.generatedGlass = null;
   let file = state.glass;
@@ -39,16 +45,16 @@ async function showGlass() {
   $('glassPreviewStatus').textContent = supported && (file || useBodyTexture) ? 'กำลังโหลดลายกระจก' : '';
   $('exportBtn').disabled = true;
   try {
-    if (supported && (file?.bodyLayout || useBodyTexture)) {
-      const dataUrl = await scaniaWindowArtworkFromBody(file || state.texture);
+    if (supported && (file || useBodyTexture)) {
+      const dataUrl = await windowArtwork(file || state.texture, viewport.windowProfile, state.localModel.id === 'scania-137');
       if (!isCurrent()) return;
       state.generatedGlass = dataUrl;
-      if (dataUrl) file = { filename: 'scania137_window.png', base64: dataUrl.split(',')[1] };
+      if (dataUrl) file = { filename: state.localModel.windowModel + '.png', base64: dataUrl.split(',')[1] };
     }
     const shown = await viewport.setGlassArtwork(file, isCurrent, supported);
     if (isCurrent()) {
       $('glassPreviewStatus').textContent = shown ? (useBodyTexture ? 'ใช้ลาย PNG เดิมบนกระจกข้าง' : 'กำลังแสดงบนกระจกข้าง') :
-        file ? 'พรีวิวได้กับโมเดล Scania 13.7 ม. ในโปรแกรม' : '';
+        file ? 'เลือกรุ่นรถให้ตรงกับผังกระจก' : '';
     }
   } catch (error) {
     if (isCurrent()) $('glassPreviewStatus').textContent = '';
@@ -60,8 +66,9 @@ async function showGlass() {
 
 async function chooseGlass() {
   try {
+    const request = modelSequence;
     const file = await invoke('openGlassTexture');
-    if (!file) return;
+    if (!file || request !== modelSequence) return;
     state.glass = file;
     $('glassTextureLabel').textContent = file.filename;
     await showGlass();
@@ -120,6 +127,10 @@ function showVariants(id) {
 function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
   const request = ++modelSequence;
   state.localModel = null;
+  state.loading = true;
+  state.loadError = '';
+  state.glass = null;
+  $('glassTextureLabel').textContent = 'PNG เฟรมเต็ม 4096 × 2048 ตามผังรุ่นที่เลือก';
   clearTexture();
   const c = viewport.setCoach(id);
   $('glassPreviewStatus').textContent = '';
@@ -138,26 +149,30 @@ function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
   document.querySelectorAll('.coach-option').forEach(b => b.classList.toggle('selected', b.dataset.coach === id));
   $('vehicleTitle').textContent = c.name;
   $('propertyModel').textContent = c.name;
-  $('vehicleSubtitle').textContent = 'Reference illustration · Not original DLC mesh';
-  $('propertySource').textContent = 'Illustration';
-  $('sceneSource').textContent = 'REFERENCE MODEL';
-  $('previewBadge').textContent = 'ILLUSTRATIVE PREVIEW';
-  $('modeText').textContent = 'Illustrative mode';
+  $('vehicleSubtitle').textContent = 'กำลังโหลดโมเดลพร้อมผัง UV ของรุ่นที่เลือก';
+  $('propertySource').textContent = 'กำลังโหลด';
+  $('sceneSource').textContent = 'LOADING MODEL';
+  $('previewBadge').textContent = 'LOADING MODEL';
+  $('modeText').textContent = 'กำลังโหลดโมเดล';
   $('meshSelect').replaceChildren(new Option('นำเข้า GLB ก่อน', ''));
   $('meshSelect').disabled = true;
-  $('meshHelp').textContent = 'โมเดลตัวอย่างใช้การฉายภาพแบบ 2D บนด้านข้างรถ ไม่ใช่ UV จริงของ DLC';
-  $('mappingStatus').textContent = 'Demo model · skin projection';
+  $('meshHelp').textContent = 'เลือกวัสดุและ UV ได้หลังโหลดโมเดลเสร็จ';
+  $('mappingStatus').textContent = 'กำลังเตรียมวัสดุ';
   $('mappingRows').hidden = true;
   $('mappingRows').replaceChildren();
   if (loadLocalModel && api && model) {
-    invoke('readCoachModel', model.id).then(file => {
+    modelLoadQueue = modelLoadQueue.catch(() => {}).then(async () => {
       if (request !== modelSequence) return;
-      if (file) return useModel(file, request);
-      state.localModel = null;
-      renderTextureSource();
-      toast('ไม่พบไฟล์โมเดลในเครื่อง · ใช้ปุ่มนำเข้าโมเดล 3D', true);
+      await invoke('readGlassTextureAt', '');
+      const file = await invoke('readCoachModel', model.id);
+      if (request !== modelSequence) return;
+      if (!file) throw new Error('ไม่พบโมเดล ' + model.file);
+      await useModel(file, request);
     }).catch(error => {
-      if (request === modelSequence) displayError(error);
+      if (request !== modelSequence) return;
+      state.loading = false;
+      state.loadError = error.message;
+      displayError(error);
     });
   }
 }
@@ -244,9 +259,10 @@ async function useModel(file, request) {
   const legacyVolvo = state.coachId === 'volvo' && /^Volvo[_ -]9700/i.test(file.filename);
   const slots = await viewport.importGLB(file.base64, () => request === modelSequence, legacyVolvo);
   if (!slots) return;
+  viewport.windowProfile = file.windowProfile || null;
   state.modelPath = file.path;
   state.localModel = (coachModels[state.coachId] || []).find(model => model.file === file.filename) || null;
-  $('exportGlassUV').disabled = state.localModel?.id !== 'scania-137';
+  $('exportGlassUV').disabled = !viewport.windowProfile;
   showVariants(state.coachId);
   renderTextureSource();
   const coach = COACHES.find(item => item.id === state.coachId);
@@ -268,14 +284,32 @@ async function useModel(file, request) {
   $('meshHelp').textContent = 'เลือกวัสดุได้หลายรายการพร้อมกัน และเลือก UV ให้แต่ละรายการ';
   showMapping();
   await showGlass();
+  if (request !== modelSequence) return;
+  state.loading = false;
+  state.loadError = '';
   toast(`โหลดโมเดลแล้ว · ${file.filename}`);
 }
 
 async function chooseTexture() { try { await useTexture(await invoke('openTexture')); } catch (e) { displayError(e); } }
 async function chooseModel() {
-  const request = ++modelSequence;
-  try { await useModel(await invoke('openModel'), request); } catch (error) { displayError(error); }
+  try {
+    const file = await invoke('openModel');
+    if (!file) return;
+    const request = ++modelSequence;
+    state.loading = true;
+    state.loadError = '';
+    clearTexture();
+    state.glass = null;
+    updateWorkflow();
+    modelLoadQueue = modelLoadQueue.catch(() => {}).then(() => useModel(file, request)).catch(error => {
+      if (request !== modelSequence) return;
+      state.loading = false;
+      state.loadError = error.message;
+      displayError(error);
+    });
+  } catch (error) { displayError(error); }
 }
+
 async function chooseTemplate() {
   try {
     const data = await invoke('openTemplate');
@@ -297,7 +331,7 @@ async function chooseTemplate() {
     for (const file of data.ddsFiles) select.add(new Option(file, file));
     select.disabled = false;
     for (const file of data.ddsFiles) glassSelect.add(new Option(file, file));
-    const windowEntry = data.ddsFiles.find(file => file.endsWith('/scania137_window.dds'));
+    const windowEntry = data.ddsFiles.find(file => /\/(?:scania137_window|windows_[\w_]+)\.dds$/.test(file));
     if (windowEntry) {
       glassSelect.value = windowEntry;
       const bodyEntry = data.ddsFiles.find(file => file.endsWith('/nca137_body.dds'));
@@ -360,13 +394,18 @@ async function openProject() {
       const model = p.model ? await invoke('readModelAt', p.model)
         : localModel ? await invoke('readCoachModel', localModel.id) : null;
       await useModel(model, request);
-    } catch (e) { errors.push(`โหลดโมเดลไม่สำเร็จ ${e.message}`); }
+    } catch (e) {
+      if (request !== modelSequence) return;
+      state.loading = false;
+      state.loadError = e.message;
+      errors.push(`โหลดโมเดลไม่สำเร็จ ${e.message}`);
+    }
     if (request !== modelSequence) return;
     if (p.glassTexture) {
       try {
         state.glass = await invoke('readGlassTextureAt', p.glassTexture);
         $('glassTextureLabel').textContent = state.glass.filename;
-        if (state.localModel?.id === 'scania-137') await showGlass();
+        if (state.localModel?.glass) await showGlass();
       } catch (e) { errors.push(`โหลดลายกระจกไม่สำเร็จ ${e.message}`); }
     }
     if (p.texture) {
@@ -417,6 +456,7 @@ function showHelp() {
   document.body.append(overlay);
 }
 
+$('retryModel').addEventListener('click', () => selectCoach(state.coachId, { variantId: state.localModel?.id }));
 document.querySelectorAll('.coach-option').forEach(button => button.addEventListener('click', () => selectCoach(button.dataset.coach)));
 $('saveTemplate').addEventListener('click', async () => {
   try {
@@ -442,7 +482,7 @@ $('chooseGlass').addEventListener('click', chooseGlass);
 $('glassFromBody').addEventListener('change', () => showGlass().catch(displayError));
 $('exportGlassUV').addEventListener('click', async () => {
   try {
-    const result = await invoke('exportPng', viewport.exportSideWindowUV(), 'Scania_137_Glass_Body_UV_4096x2048.png');
+    const result = await invoke('exportPng', viewport.exportSideWindowUV(), state.localModel.id + '_Glass_Body_UV_4096x2048.png');
     if (result) toast('บันทึกผังกระจกแล้ว');
   } catch (error) { displayError(error); }
 });

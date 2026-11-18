@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DDSLoader } from 'three/addons/loaders/DDSLoader.js';
-import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 export const COACHES = [
   { id: 'scania', name: 'Scania Touring', descriptor: 'Standard coach · reference geometry', len: 13.5, height: 3.65, axles: 2, decks: 1 },
@@ -37,76 +36,52 @@ function readDDS(bytes) {
   return texture;
 }
 
-// Projection measured from the 137h6 side panels on the original body paint UV layer.
-const SCANIA_BODY_SIDES = [
-  { uScale: .05138158, uOffset: .32312149, vScale: .1024625, vOffset: -.00507171 },
-  { uScale: .05145338, uOffset: .32334534, vScale: -.10246321, vOffset: 1.00640998 }
-];
-
-function scaniaSideWindowGeometry(mesh, useBodyUV = false) {
-  const positions = mesh.getAttribute('position');
-  const normals = mesh.getAttribute('normal');
-  const index = mesh.getIndex();
-  if (!positions || !normals) return null;
-  const vertices = [];
-  const uv = [];
-  for (let i = 0; i + 2 < (index?.count ?? positions.count); i += 3) {
-    const face = index ? [index.getX(i), index.getX(i + 1), index.getX(i + 2)] : [i, i + 1, i + 2];
-    const side = Math.sign(positions.getX(face[0]));
-    const isSideWindow = face.every(vertex =>
-      side * positions.getX(vertex) > 1.13 && positions.getY(vertex) > 2.1 && side * normals.getX(vertex) > .55
-    );
-    if (!isSideWindow) continue;
-    for (const vertex of face) {
-      const x = positions.getX(vertex);
-      const y = positions.getY(vertex);
-      const z = positions.getZ(vertex);
-      // Offset the decal 7 mm along the window normal to keep it clear of the glass.
-      vertices.push(x + .007 * normals.getX(vertex), y + .007 * normals.getY(vertex), z + .007 * normals.getZ(vertex));
-      if (useBodyUV) {
-        const projection = SCANIA_BODY_SIDES[Number(side < 0)];
-        uv.push(z * projection.uScale + projection.uOffset, y * projection.vScale + projection.vOffset);
-      } else {
-        const u = (z + 6.2) / 14;
-        const v = (3.55 - y) / 1.55;
-        uv.push(side > 0 ? u : 1 - u, (v + Number(side < 0)) / 2);
-      }
-    }
-  }
-  if (!vertices.length) return null;
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-  return geometry;
-}
-
-export async function scaniaWindowArtworkFromBody(file) {
+export async function windowArtwork(file, profile, legacyScania = false) {
   const source = await createImageBitmap(new Blob([Uint8Array.from(atob(file.base64), char => char.charCodeAt(0))], { type: 'image/png' }));
   try {
-    if (source.width !== source.height * 2) return null;
     const canvas = document.createElement('canvas');
-    canvas.width = 4096;
-    canvas.height = 1024;
+    canvas.width = profile.width;
+    canvas.height = profile.height;
     const context = canvas.getContext('2d');
-    for (const [index, side] of SCANIA_BODY_SIDES.entries()) {
-      const sign = index === 0 ? 1 : -1;
-      const center = index === 0 ? 0 : 1;
-      const xScale = sign * canvas.width / (14 * side.uScale);
-      const yScale = -canvas.height / (3.1 * side.vScale);
-      // The paint atlas puts mirrors and other parts around the front side panel.
-      // Keep that region available to separate window artwork only.
-      const front = canvas.width * (6.2 - 4.9) / 14;
-      const bottom = canvas.height * (3.55 - 2.335) / 3.1;
-      context.save();
-      context.beginPath();
-      context.rect(index === 0 ? front : 0, index * canvas.height / 2, canvas.width - front, bottom);
-      context.clip();
-      context.setTransform(xScale / source.width, 0, 0, yScale / source.height,
-        (center + sign * 6.2 / 14) * canvas.width - xScale * side.uOffset,
-        (index / 2 + 3.55 / 3.1) * canvas.height - yScale * side.vOffset);
+    if (source.width === profile.width && source.height === profile.height) {
       context.drawImage(source, 0, 0);
-      context.restore();
+    } else if (legacyScania && source.width === source.height * 4) {
+      const sides = [
+        {uScale: .05138158, uOffset: .32312149, vScale: .1024625, vOffset: -.00507171},
+        {uScale: .05145338, uOffset: .32334534, vScale: -.10246321, vOffset: 1.00640998}
+      ];
+      for (const [index, side] of sides.entries()) {
+        const sign = index === 0 ? 1 : -1;
+        const center = index === 0 ? 6.2 / 14 : 1 - 6.2 / 14;
+        const verticalCenter = index / 2 + 3.55 / 3.1;
+        const xScale = 14 * side.uScale / sign * canvas.width;
+        const yScale = -3.1 * side.vScale * canvas.height;
+        context.save();
+        context.beginPath();
+        context.rect(0, index === 0 ? 0 : canvas.height / 2, canvas.width, canvas.height / 2);
+        context.clip();
+        context.setTransform(xScale / source.width, 0, 0, yScale / source.height,
+          side.uOffset * canvas.width - xScale * center, side.vOffset * canvas.height - yScale * verticalCenter);
+        context.drawImage(source, 0, 0);
+        context.restore();
+      }
+    } else {
+      throw new Error('ใช้ PNG เฟรมเต็ม 4096 × 2048 ตามผังกระจกรุ่นที่เลือก');
     }
+    const mask = document.createElement('canvas');
+    mask.width = canvas.width;
+    mask.height = canvas.height;
+    const draw = mask.getContext('2d');
+    draw.beginPath();
+    for (let index = 0; index < profile.uv.length; index += 6) {
+      draw.moveTo(profile.uv[index] * mask.width, profile.uv[index + 1] * mask.height);
+      draw.lineTo(profile.uv[index + 2] * mask.width, profile.uv[index + 3] * mask.height);
+      draw.lineTo(profile.uv[index + 4] * mask.width, profile.uv[index + 5] * mask.height);
+      draw.closePath();
+    }
+    draw.fill();
+    context.globalCompositeOperation = 'destination-in';
+    context.drawImage(mask, 0, 0);
     return canvas.toDataURL('image/png');
   } finally {
     source.close();
@@ -139,77 +114,6 @@ function mesh(geo, material, x = 0, y = 0, z = 0) {
   m.position.set(x, y, z);
   m.castShadow = true; m.receiveShadow = true;
   return m;
-}
-
-function createCoach(info, skinTex) {
-  const root = new THREE.Group();
-  root.name = `Preview illustration — ${info.name}`;
-  const L = info.len, H = info.height, W = 2.55;
-  const floorY = .9, bodyCenter = floorY + (H - floorY)/2;
-  const roundedBody = mesh(new RoundedBoxGeometry(L, H - floorY, W, 6, .22), mat('#f0f2f6'), 0, bodyCenter, 0);
-  roundedBody.name = 'Illustrative body — not game model';
-  root.add(roundedBody);
-  const skinSides = [];
-  for (const side of [1, -1]) {
-    const z = side * (W/2 + .025);
-    const skin = mesh(new THREE.PlaneGeometry(L - .36, H - floorY - .18), new THREE.MeshStandardMaterial({ color: '#ffffff', map: skinTex, side: THREE.DoubleSide, roughness: .56, metalness: .08 }), 0, bodyCenter, z);
-    skin.name = `Procedural side skin ${side === 1 ? 'left' : 'right'}`;
-    if (side === -1) skin.rotation.y = Math.PI;
-    root.add(skin); skinSides.push(skin);
-    const black = mat('#16212d', .18, .22);
-    const glass = new THREE.MeshPhysicalMaterial({ color: '#18283c', metalness: .08, roughness: .19, transparent: true, opacity: .97, clearcoat: 1, clearcoatRoughness: .05, side: THREE.DoubleSide });
-    const rows = info.decks === 2 ? [{ y: 2.45, h: .65 }, { y: 3.44, h: .57 }] : [{ y: H - .92, h: .88 }];
-    for (const r of rows) {
-      const count = info.decks === 2 ? 9 : 8;
-      const zoneLength = L - 1.35;
-      const segment = zoneLength / count;
-      for (let i = 0; i < count; i++) {
-        const x = -zoneLength / 2 + segment * (i + .5);
-        const win = mesh(new THREE.PlaneGeometry(segment - .083, r.h), glass, x, r.y, side * (W / 2 + .05));
-        if (side === -1) win.rotation.y = Math.PI;
-        root.add(win);
-      }
-      root.add(mesh(new THREE.BoxGeometry(L - 1.05, .09, .085), black, 0, r.y - r.h / 2, side * (W / 2 + .055)));
-    }
-    // Bus door and separators (an illustrative shape, never an SCS UV map)
-    const doorX = L * .34;
-    const outline = mesh(new THREE.BoxGeometry(.04, 2.38, .045), black, doorX, 1.78, side * (W / 2 + .072));
-    root.add(outline);
-    const handle = mesh(new THREE.BoxGeometry(.13, .045, .045), mat('#a5aeb7', .7), doorX + .2, 1.6, side * (W/2+.082));
-    root.add(handle);
-  }
-  root.add(mesh(new THREE.BoxGeometry(L - .55, .24, W - .08), mat('#ced4df'), 0, H - .12, 0));
-  root.add(mesh(new THREE.BoxGeometry(L - .15, .18, W - .08), mat('#26313f'), 0, .82, 0));
-  const tyre = mat('#171b22', .03, .87);
-  const rim = mat('#aeb8c4', .9, .22);
-  const hub = mat('#596777', .7, .35);
-  const positions = info.axles === 3 ? [L * .33, -L * .22, -L * .34] : [L * .31, -L * .34];
-  for (const axleX of positions) {
-    for (const side of [1, -1]) {
-      const wheel = mesh(new THREE.CylinderGeometry(.57, .57, .23, 28), tyre, axleX, .67, side * 1.31);
-      wheel.rotation.x = Math.PI / 2;
-      root.add(wheel);
-      const disc = mesh(new THREE.CylinderGeometry(.39, .39, .24, 28), rim, axleX, .67, side * 1.32);
-      disc.rotation.x = Math.PI/2;
-      root.add(disc);
-      const center = mesh(new THREE.CylinderGeometry(.13, .13, .25, 20), hub, axleX, .67, side * 1.33);
-      center.rotation.x = Math.PI/2;
-      root.add(center);
-    }
-  }
-  const front = mesh(new THREE.PlaneGeometry(W - .28, info.decks === 2 ? 1.8 : 1.45), mat('#1a2a3c', .2, .17), L / 2 + .12, info.decks === 2 ? 2.53 : 2.55, 0);
-  front.rotation.y = Math.PI / 2; root.add(front);
-  const rear = mesh(new THREE.PlaneGeometry(W - .33, .9), mat('#243348', .1, .22), -L / 2 - .12, H - 1.18, 0);
-  rear.rotation.y = -Math.PI/2; root.add(rear);
-  for (const side of [-1, 1]) {
-    const light = mesh(new THREE.BoxGeometry(.05, .16, .38), mat('#e3eef7', .06, .1), L/2 + .13, 1.25, side * .83);
-    root.add(light);
-    root.add(mesh(new THREE.BoxGeometry(.05, .18, .29), mat('#bf202c', .2, .23), -L/2 - .13, 1.35, side * .91));
-    const mirror = mesh(new RoundedBoxGeometry(.28, .5, .18, 3, .06), mat('#242d39'), L/2-.55, H-1.53, side*1.48);
-    root.add(mirror);
-  }
-  root.userData.skinSides = skinSides;
-  return root;
 }
 
 export class CoachViewport {
@@ -247,7 +151,7 @@ export class CoachViewport {
     this.previewMaps = new Map();
     this.mappings = [];
     this.textureRequest = 0;
-    this.currentMode = 'illustration';
+    this.currentMode = 'loading';
     this.currentCoach = COACHES[0];
     this.setCoach(COACHES[0].id);
     const resize = () => {
@@ -296,13 +200,16 @@ export class CoachViewport {
     this.windowOverlay.material.dispose();
     this.windowOverlay = null;
   }
-  makeSideWindowGeometry(useBodyUV = false) {
-    const glass = this.modelMeshes.find(slot => slot.name.endsWith(' / body_mat_0007_glass_ex_difspec'));
-    return glass ? scaniaSideWindowGeometry(glass.object.geometry, useBodyUV) : null;
+  makeSideWindowGeometry() {
+    if (!this.windowProfile) return null;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(this.windowProfile.position, 3));
+    geometry.setAttribute('uv', new THREE.Float32BufferAttribute(this.windowProfile.uv, 2));
+    return geometry;
   }
   exportSideWindowUV() {
-    const geometry = this.makeSideWindowGeometry(true);
-    if (!geometry) throw new Error('ไม่พบผังกระจกข้างของ Scania 13.7 ม. ในโมเดล');
+    const geometry = this.makeSideWindowGeometry();
+    if (!geometry) throw new Error('เลือกรุ่นรถที่มีผังกระจกก่อน');
     const canvas = document.createElement('canvas');
     canvas.width = 4096;
     canvas.height = 2048;
@@ -356,24 +263,35 @@ export class CoachViewport {
   }
   clearTexture() {
     this.textureRequest++;
+    this.restoreOriginalMaterials();
     this.skinTexture.dispose();
     this.skinTexture = demoTexture();
   }
   setCoach(id) {
     const coach = COACHES.find(c => c.id === id) || COACHES[0];
-    this.detachModel();
-    this.currentCoach = coach; this.currentMode = 'illustration';
-    this.skinTexture.flipY = true; this.skinTexture.needsUpdate = true;
-    this.root = createCoach(coach, this.skinTexture);
-    this.scene.add(this.root);
-    this.resetCamera();
+    this.clearGlassArtwork();
+    this.windowProfile = null;
+    this.currentCoach = coach;
+    this.currentMode = 'loading';
     return coach;
   }
   async importGLB(base64, isCurrent = () => true, legacyVolvo = false) {
     const bytes = Uint8Array.from(atob(base64), x => x.charCodeAt(0));
     const loader = new GLTFLoader();
     const gltf = await new Promise((resolve, reject) => loader.parse(bytes.buffer, '', resolve, reject));
-    if (!isCurrent()) return null;
+    if (!isCurrent()) {
+      const resources = new Set();
+      gltf.scene.traverse(object => {
+        if (!object.isMesh) return;
+        resources.add(object.geometry);
+        for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+          resources.add(material);
+          for (const value of Object.values(material)) if (value?.isTexture) resources.add(value);
+        }
+      });
+      for (const resource of resources) resource.dispose();
+      return null;
+    }
     const bounds = new THREE.Box3().setFromObject(gltf.scene);
     if (bounds.isEmpty()) throw new Error('No mesh found in GLB');
 
@@ -476,14 +394,12 @@ export class CoachViewport {
         newTex = new THREE.CanvasTexture(canvas);
       }
       newTex.colorSpace = THREE.SRGBColorSpace;
-      newTex.flipY = this.currentMode === 'illustration';
+      newTex.flipY = false;
       newTex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
       newTex.needsUpdate = true;
       if (this.skinTexture) this.skinTexture.dispose();
       this.skinTexture = newTex;
-      if (this.currentMode === 'illustration') {
-        for (const side of this.root.userData.skinSides) { side.material.map = newTex; side.material.needsUpdate = true; }
-      } else this.applyMappings(this.mappings, true);
+      this.applyMappings(this.mappings, true);
       return { width: newTex.image?.width || newTex.image?.[0]?.width || 0, height: newTex.image?.height || 0, ext };
     } finally { URL.revokeObjectURL(url); }
   }
@@ -494,7 +410,7 @@ export class CoachViewport {
     this.controls.update();
   }
   resetCamera() {
-    this.camera.position.set(...(this.currentMode === 'imported' ? [-16, 6.4, -9] : [18, 9.5, 19]));
+    this.camera.position.set(-16, 6.4, -9);
     this.controls.target.set(0, 2, 0);
     this.controls.update();
   }

@@ -1,7 +1,7 @@
 {
   "name": "coaches-skin-studio",
   "productName": "Coaches Skin Studio",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "ETS2 coach livery studio with ready-to-use models and templates",
   "main": "electron/main.cjs",
@@ -11,7 +11,8 @@
     "start": "npm run dev",
     "preview": "vite preview --host 127.0.0.1",
     "dist:win": "npm run build && electron-builder --win portable",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:app": "npm run build && electron tests/app.e2e.cjs"
   },
   "dependencies": {
     "adm-zip": "0.6.1",

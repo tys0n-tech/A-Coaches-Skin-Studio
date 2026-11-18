@@ -8,7 +8,10 @@
       "vehicle": "scania.touring_23",
       "cabin": "137h6",
       "template": "TEMPLATE Scania Touring 13.7m 6x2 - panels.png",
-      "glass": true
+      "glass": true,
+      "windowModel": "windows_scania_137",
+      "windowTemplate": "scania-137-glass.zip",
+      "windowProfile": "scania-137.json"
     },
     {
       "id": "scania-129",
@@ -17,7 +20,10 @@
       "vehicle": "scania.touring_23",
       "cabin": "129h4",
       "template": "TEMPLATE Scania Touring 12.9m 4x2 - panels.png",
-      "glass": false
+      "glass": true,
+      "windowModel": "windows_scania_129",
+      "windowTemplate": "scania-129-glass.zip",
+      "windowProfile": "scania-129.json"
     }
   ],
   "volvo": [
@@ -27,9 +33,12 @@
       "vehicle": "volvo.9700_23",
       "cabin": "143d6",
       "template": "TEMPLATE Volvo 9700 DD 14.3m - panels.png",
-      "glass": false,
+      "glass": true,
       "label": "14.3 ม. · 6×2/4",
-      "skin": "Lotus Pibun"
+      "skin": "Lotus Pibun",
+      "windowModel": "windows_volvo",
+      "windowTemplate": "volvo-glass.zip",
+      "windowProfile": "volvo.json"
     }
   ],
   "man": [
@@ -41,7 +50,10 @@
       "vehicle": "man.lions_24",
       "cabin": "139h6",
       "template": "TEMPLATE MAN Lions Coach 13.9m 6x2 - panels.png",
-      "glass": false
+      "glass": true,
+      "windowModel": "windows_man_139",
+      "windowTemplate": "man-139-glass.zip",
+      "windowProfile": "man-139.json"
     },
     {
       "id": "man-121",
@@ -51,7 +63,10 @@
       "vehicle": "man.lions_24",
       "cabin": "121h4",
       "template": "TEMPLATE MAN Lions Coach 12.1m 4x2 - panels.png",
-      "glass": false
+      "glass": true,
+      "windowModel": "windows_man_121",
+      "windowTemplate": "man-121-glass.zip",
+      "windowProfile": "man-121.json"
     }
   ]
 }

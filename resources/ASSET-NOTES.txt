@@ -8,3 +8,5 @@ These resources are for creating compatible paintjobs for ETS2 with Coaches DLC.
 
 texconv.exe is Microsoft's DirectXTex command-line image converter.
 Its license is included in tools/DirectXTex-LICENSE.txt.
+
+Per-coach side-window overlay meshes preserve the stock warning stickers and use the corresponding cabin attachment transform. Their body-atlas UV projections are shared by the preview and game export.
