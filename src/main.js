@@ -19,16 +19,25 @@ async function showGlass() {
   state.generatedGlass = null;
   let file = state.glass;
   const useBodyTexture = !file && $('glassFromBody').checked && /\.png$/i.test(state.texture?.filename || '');
-  if (supported && (file?.bodyLayout || useBodyTexture)) {
-    const dataUrl = await scaniaWindowArtworkFromBody(file || state.texture);
-    if (!isCurrent()) return;
-    state.generatedGlass = dataUrl;
-    if (dataUrl) file = { filename: 'scania137_window.png', base64: dataUrl.split(',')[1] };
-  }
-  const shown = await viewport.setGlassArtwork(file, isCurrent, supported);
-  if (isCurrent()) {
-    $('glassPreviewStatus').textContent = shown ? (useBodyTexture ? 'ใช้ลาย PNG เดิมบนกระจกข้าง' : 'กำลังแสดงบนกระจกข้าง') :
-      file ? 'พรีวิวได้กับโมเดล Scania 13.7 ม. ในโปรแกรม' : '';
+  $('glassPreviewStatus').textContent = supported && (file || useBodyTexture) ? 'กำลังโหลดลายกระจก' : '';
+  $('exportBtn').disabled = true;
+  try {
+    if (supported && (file?.bodyLayout || useBodyTexture)) {
+      const dataUrl = await scaniaWindowArtworkFromBody(file || state.texture);
+      if (!isCurrent()) return;
+      state.generatedGlass = dataUrl;
+      if (dataUrl) file = { filename: 'scania137_window.png', base64: dataUrl.split(',')[1] };
+    }
+    const shown = await viewport.setGlassArtwork(file, isCurrent, supported);
+    if (isCurrent()) {
+      $('glassPreviewStatus').textContent = shown ? (useBodyTexture ? 'ใช้ลาย PNG เดิมบนกระจกข้าง' : 'กำลังแสดงบนกระจกข้าง') :
+        file ? 'พรีวิวได้กับโมเดล Scania 13.7 ม. ในโปรแกรม' : '';
+    }
+  } catch (error) {
+    if (isCurrent()) $('glassPreviewStatus').textContent = '';
+    throw error;
+  } finally {
+    if (request === glassRequest) $('exportBtn').disabled = false;
   }
 }
 

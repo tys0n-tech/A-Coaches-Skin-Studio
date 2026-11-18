@@ -85,8 +85,8 @@ export async function scaniaWindowArtworkFromBody(file) {
   try {
     if (source.width !== source.height * 2) return null;
     const canvas = document.createElement('canvas');
-    canvas.width = 2048;
-    canvas.height = 512;
+    canvas.width = 4096;
+    canvas.height = 1024;
     const context = canvas.getContext('2d');
     for (const [index, side] of SCANIA_BODY_SIDES.entries()) {
       const sign = index === 0 ? 1 : -1;
@@ -338,6 +338,7 @@ export class CoachViewport {
       }
       map.flipY = false;
       map.colorSpace = THREE.SRGBColorSpace;
+      map.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
       map.needsUpdate = true;
       const geometry = this.makeSideWindowGeometry();
       if (!geometry) {

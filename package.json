@@ -1,7 +1,7 @@
 {
   "name": "coaches-skin-studio",
   "productName": "Coaches Skin Studio",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
   "description": "Independent ETS2 Coaches DLC paint preview studio (no game assets included)",
   "main": "electron/main.cjs",

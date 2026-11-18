@@ -38,8 +38,9 @@ function windowArtworkPayload(file) {
   const width = png ? bytes.readUInt32BE(16) : bytes.readUInt32LE(16);
   const height = png ? bytes.readUInt32BE(20) : bytes.readUInt32LE(12);
   const bodyLayout = png && width === 4096 && height === 2048;
-  if (!bodyLayout && (width !== 2048 || height !== 512)) {
-    throw new Error(`ไฟล์ ${width} × ${height} ไม่ตรงกับผัง ให้ Export เฟรมเต็ม 4096 × 2048 เป็น PNG หรือใช้ผังกระจก 2048 × 512`);
+  const windowLayout = (width === 2048 && height === 512) || (width === 4096 && height === 1024);
+  if (!bodyLayout && !windowLayout) {
+    throw new Error(`ไฟล์ ${width} × ${height} ไม่ตรงกับผัง ให้ Export เฟรมเต็ม 4096 × 2048 เป็น PNG หรือใช้ผังกระจก 4096 × 1024 / 2048 × 512`);
   }
   return { ...data, bodyLayout };
 }
