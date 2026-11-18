@@ -27,6 +27,22 @@ function payloadFor(file, extensions) {
   const p = ensureFile(file, extensions);
   return { path: p, filename: path.basename(p), bytes: fs.statSync(p).size, base64: fs.readFileSync(p).toString('base64') };
 }
+function windowArtworkPayload(file) {
+  const data = payloadFor(file, new Set(['.png', '.dds']));
+  const bytes = Buffer.from(data.base64, 'base64');
+  const png = path.extname(file).toLowerCase() === '.png';
+  if (png ? bytes.length < 33 || bytes.toString('hex', 0, 8) !== '89504e470d0a1a0a' :
+    bytes.length < 128 || bytes.toString('ascii', 0, 4) !== 'DDS ') {
+    throw new Error('ไฟล์ลายกระจกเปิดไม่ได้');
+  }
+  const width = png ? bytes.readUInt32BE(16) : bytes.readUInt32LE(16);
+  const height = png ? bytes.readUInt32BE(20) : bytes.readUInt32LE(12);
+  const bodyLayout = png && width === 4096 && height === 2048;
+  if (!bodyLayout && (width !== 2048 || height !== 512)) {
+    throw new Error(`ไฟล์ ${width} × ${height} ไม่ตรงกับผัง ให้ Export เฟรมเต็ม 4096 × 2048 เป็น PNG หรือใช้ผังกระจก 2048 × 512`);
+  }
+  return { ...data, bodyLayout };
+}
 function stopWatcher() {
   if (watchedPath) fs.unwatchFile(watchedPath);
   watchedPath = '';
@@ -99,7 +115,7 @@ app.whenReady().then(() => {
   ipcMain.handle('dialog:glass-texture', safeCall(async () => {
     const file = await pickOne('Choose transparent window artwork', [{ name: 'Window artwork', extensions: ['png', 'dds'] }]);
     if (!file) return null;
-    const data = payloadFor(file, new Set(['.png', '.dds']));
+    const data = windowArtworkPayload(file);
     glassTexturePath = data.path;
     return data;
   }));
@@ -108,7 +124,7 @@ app.whenReady().then(() => {
       glassTexturePath = '';
       return null;
     }
-    const data = payloadFor(file, new Set(['.png', '.dds']));
+    const data = windowArtworkPayload(file);
     glassTexturePath = data.path;
     return data;
   }));
@@ -181,11 +197,12 @@ app.whenReady().then(() => {
     glassTexturePath = '';
     return { ...data, path: file };
   }));
-  ipcMain.handle('file:exportpng', safeCall(async (_e, dataUrl) => {
+  ipcMain.handle('file:exportpng', safeCall(async (_e, dataUrl, filename = 'coaches-paint.png') => {
     if (typeof dataUrl !== 'string' || !/^data:image\/png;base64,/.test(dataUrl)) throw new Error('Invalid PNG data');
     const bytes = Buffer.from(dataUrl.split(',')[1], 'base64');
     if (bytes.length > MAX_BYTES) throw new Error('PNG is too large');
-    const save = await dialog.showSaveDialog(win, { title: 'Export edited PNG texture', defaultPath: 'coaches-paint.png', filters: [{ name: 'PNG', extensions: ['png'] }] });
+    if (typeof filename !== 'string' || !/^[a-zA-Z0-9_-]+\.png$/.test(filename)) throw new Error('Invalid PNG filename');
+    const save = await dialog.showSaveDialog(win, { title: 'Export PNG', defaultPath: filename, filters: [{ name: 'PNG', extensions: ['png'] }] });
     if (save.canceled) return null;
     fs.writeFileSync(save.filePath, bytes);
     return { path: save.filePath };
@@ -200,13 +217,14 @@ app.whenReady().then(() => {
     if (!targetEntry || targetEntry.isDirectory) throw new Error('Selected DDS entry does not exist in template');
     const glassTarget = String(options?.glassTargetDDS || '');
     const glassEntry = glassTarget && zip.getEntry(glassTarget);
-    if (glassTarget && (!glassTexturePath || !glassEntry || glassEntry.isDirectory ||
+    const generatedGlass = glassTarget && options?.glassArtwork ? decodePNG(options.glassArtwork) : null;
+    if (glassTarget && ((!glassTexturePath && !generatedGlass) || !glassEntry || glassEntry.isDirectory ||
         !glassTarget.toLowerCase().endsWith('.dds') || glassTarget === entryName)) {
       throw new Error('Choose a separate window DDS entry and transparent window artwork');
     }
     const newDDS = await convertDDS(projectPaths.texture);
     zip.updateFile(entryName, newDDS);
-    if (glassTarget) zip.updateFile(glassTarget, await convertDDS(glassTexturePath));
+    if (glassTarget) zip.updateFile(glassTarget, await convertDDS(glassTexturePath, generatedGlass));
     const suggested = `${path.parse(templatePath).name}-edited.scs`;
     const save = await dialog.showSaveDialog(win, { title: 'Export Coaches skin mod (.scs)', defaultPath: suggested, filters: [{ name: 'ETS2 mod ZIP', extensions: ['scs'] }] });
     if (save.canceled) return null;
@@ -218,15 +236,29 @@ app.whenReady().then(() => {
 });
 app.on('window-all-closed', () => { stopWatcher(); if (process.platform !== 'darwin') app.quit(); });
 
-async function convertDDS(file) {
+function decodePNG(dataUrl) {
+  const prefix = 'data:image/png;base64,';
+  if (typeof dataUrl !== 'string' || !dataUrl.startsWith(prefix) || dataUrl.length > MAX_BYTES * 2) {
+    throw new Error('Invalid PNG data');
+  }
+  const data = Buffer.from(dataUrl.slice(prefix.length), 'base64');
+  if (data.length > MAX_BYTES || !data.subarray(0, 8).equals(Buffer.from('89504e470d0a1a0a', 'hex'))) {
+    throw new Error('Invalid PNG data');
+  }
+  return data;
+}
+
+async function convertDDS(file, generatedPNG = null) {
     let newDDS;
-    const inputFile = ensureFile(file, allowedTextureExt);
-    if (path.extname(inputFile).toLowerCase() === '.dds') {
-      newDDS = fs.readFileSync(inputFile);
+    const source = generatedPNG ? null : ensureFile(file, allowedTextureExt);
+    if (source && path.extname(source).toLowerCase() === '.dds') {
+      newDDS = fs.readFileSync(source);
     } else {
       const tool = texconvPath || 'texconv.exe';
       const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'coaches-skin-'));
       try {
+        const inputFile = source || path.join(tmp, 'generated-window.png');
+        if (generatedPNG) fs.writeFileSync(inputFile, generatedPNG);
         const args = ['-f', 'BC3_UNORM', '-m', '0', '-y', '-o', tmp, inputFile];
         await new Promise((resolve, reject) => {
           const child = spawn(tool, args, { windowsHide: true });

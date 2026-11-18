@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld('studioAPI', {
   readTextureAt: (filePath) => ipcRenderer.invoke('file:texture', filePath),
   readCoachModel: (coachId) => ipcRenderer.invoke('file:coach-model', coachId),
   readModelAt: (filePath) => ipcRenderer.invoke('file:model', filePath),
-  exportPng: (dataUrl) => ipcRenderer.invoke('file:exportpng', dataUrl),
+  exportPng: (dataUrl, filename) => ipcRenderer.invoke('file:exportpng', dataUrl, filename),
   onTextureChanged: (callback) => {
     const handler = (_event, data) => callback(data);
     ipcRenderer.on('texture-changed', handler);

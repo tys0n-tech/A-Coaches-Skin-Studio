@@ -37,7 +37,13 @@ function readDDS(bytes) {
   return texture;
 }
 
-function scaniaSideWindowGeometry(mesh) {
+// Projection measured from the 137h6 side panels on the original body paint UV layer.
+const SCANIA_BODY_SIDES = [
+  { uScale: .05138158, uOffset: .32312149, vScale: .1024625, vOffset: -.00507171 },
+  { uScale: .05145338, uOffset: .32334534, vScale: -.10246321, vOffset: 1.00640998 }
+];
+
+function scaniaSideWindowGeometry(mesh, useBodyUV = false) {
   const positions = mesh.getAttribute('position');
   const normals = mesh.getAttribute('normal');
   const index = mesh.getIndex();
@@ -57,9 +63,14 @@ function scaniaSideWindowGeometry(mesh) {
       const z = positions.getZ(vertex);
       // Offset the decal 7 mm along the window normal to keep it clear of the glass.
       vertices.push(x + .007 * normals.getX(vertex), y + .007 * normals.getY(vertex), z + .007 * normals.getZ(vertex));
-      const u = (z + 6.2) / 14;
-      const v = (3.55 - y) / 1.55;
-      uv.push(side > 0 ? u : 1 - u, (v + Number(side < 0)) / 2);
+      if (useBodyUV) {
+        const projection = SCANIA_BODY_SIDES[Number(side < 0)];
+        uv.push(z * projection.uScale + projection.uOffset, y * projection.vScale + projection.vOffset);
+      } else {
+        const u = (z + 6.2) / 14;
+        const v = (3.55 - y) / 1.55;
+        uv.push(side > 0 ? u : 1 - u, (v + Number(side < 0)) / 2);
+      }
     }
   }
   if (!vertices.length) return null;
@@ -67,6 +78,39 @@ function scaniaSideWindowGeometry(mesh) {
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
   geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
   return geometry;
+}
+
+export async function scaniaWindowArtworkFromBody(file) {
+  const source = await createImageBitmap(new Blob([Uint8Array.from(atob(file.base64), char => char.charCodeAt(0))], { type: 'image/png' }));
+  try {
+    if (source.width !== source.height * 2) return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 512;
+    const context = canvas.getContext('2d');
+    for (const [index, side] of SCANIA_BODY_SIDES.entries()) {
+      const sign = index === 0 ? 1 : -1;
+      const center = index === 0 ? 0 : 1;
+      const xScale = sign * canvas.width / (14 * side.uScale);
+      const yScale = -canvas.height / (3.1 * side.vScale);
+      // The paint atlas puts mirrors and other parts around the front side panel.
+      // Keep that region available to separate window artwork only.
+      const front = canvas.width * (6.2 - 4.9) / 14;
+      const bottom = canvas.height * (3.55 - 2.335) / 3.1;
+      context.save();
+      context.beginPath();
+      context.rect(index === 0 ? front : 0, index * canvas.height / 2, canvas.width - front, bottom);
+      context.clip();
+      context.setTransform(xScale / source.width, 0, 0, yScale / source.height,
+        (center + sign * 6.2 / 14) * canvas.width - xScale * side.uOffset,
+        (index / 2 + 3.55 / 3.1) * canvas.height - yScale * side.vOffset);
+      context.drawImage(source, 0, 0);
+      context.restore();
+    }
+    return canvas.toDataURL('image/png');
+  } finally {
+    source.close();
+  }
 }
 const mat = (color, metalness = .1, roughness = .52, opacity = 1) => new THREE.MeshStandardMaterial({ color, metalness, roughness, transparent: opacity < 1, opacity });
 
@@ -252,11 +296,37 @@ export class CoachViewport {
     this.windowOverlay.material.dispose();
     this.windowOverlay = null;
   }
+  makeSideWindowGeometry(useBodyUV = false) {
+    const glass = this.modelMeshes.find(slot => slot.name.endsWith(' / body_mat_0007_glass_ex_difspec'));
+    return glass ? scaniaSideWindowGeometry(glass.object.geometry, useBodyUV) : null;
+  }
+  exportSideWindowUV() {
+    const geometry = this.makeSideWindowGeometry(true);
+    if (!geometry) throw new Error('ไม่พบผังกระจกข้างของ Scania 13.7 ม. ในโมเดล');
+    const canvas = document.createElement('canvas');
+    canvas.width = 4096;
+    canvas.height = 2048;
+    const context = canvas.getContext('2d');
+    const uv = geometry.getAttribute('uv');
+    context.beginPath();
+    for (let vertex = 0; vertex < uv.count; vertex += 3) {
+      context.moveTo(uv.getX(vertex) * canvas.width, uv.getY(vertex) * canvas.height);
+      for (let offset = 1; offset < 3; offset++) {
+        context.lineTo(uv.getX(vertex + offset) * canvas.width, uv.getY(vertex + offset) * canvas.height);
+      }
+      context.closePath();
+    }
+    context.fillStyle = '#63aadc55';
+    context.fill();
+    context.strokeStyle = '#33668899';
+    context.lineWidth = 1;
+    context.stroke();
+    geometry.dispose();
+    return canvas.toDataURL('image/png');
+  }
   async setGlassArtwork(file, isCurrent, supportedModel = false) {
     this.clearGlassArtwork();
     if (!file || !supportedModel) return;
-    const glass = this.modelMeshes.find(slot => slot.name.endsWith(' / body_mat_0007_glass_ex_difspec'));
-    if (!glass) return;
     const isDDS = /\.dds$/i.test(file.filename);
     const bytes = Uint8Array.from(atob(file.base64), value => value.charCodeAt(0));
     const url = URL.createObjectURL(new Blob([bytes], { type: isDDS ? 'application/octet-stream' : 'image/png' }));
@@ -269,7 +339,7 @@ export class CoachViewport {
       map.flipY = false;
       map.colorSpace = THREE.SRGBColorSpace;
       map.needsUpdate = true;
-      const geometry = scaniaSideWindowGeometry(glass.object.geometry);
+      const geometry = this.makeSideWindowGeometry();
       if (!geometry) {
         map.dispose();
         return;
