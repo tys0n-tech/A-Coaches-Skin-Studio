@@ -19,7 +19,6 @@ contextBridge.exposeInMainWorld('studioAPI', {
   openProject: () => ipcRenderer.invoke('project:open'),
   readTextureAt: (filePath) => ipcRenderer.invoke('file:texture', filePath),
   readCoachModel: (coachId) => ipcRenderer.invoke('file:coach-model', coachId),
-  readTruckModel: (truckId) => ipcRenderer.invoke('file:truck-model', truckId),
   readModelAt: (filePath) => ipcRenderer.invoke('file:model', filePath),
   exportPng: (dataUrl, filename) => ipcRenderer.invoke('file:exportpng', dataUrl, filename),
   onTextureChanged: (callback) => {

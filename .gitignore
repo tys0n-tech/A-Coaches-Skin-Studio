@@ -9,4 +9,3 @@ local-models/
 *.cssproj
 *.log
 !resources/models/*.glb
-!resources/models/trucks/*.glb

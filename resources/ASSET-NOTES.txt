@@ -6,10 +6,6 @@ The local models were converted for paintjob previews.
 Existing Thai paint designs were provided in this workspace by Tyson.
 These resources are for creating compatible paintjobs for ETS2 with Coaches DLC.
 
-Generic truck models in models/trucks are by vinish.dev, licensed CC BY 4.0.
-They are bundled for illustrative preview and UV authoring, not as ETS2 vehicle meshes.
-See models/trucks/CREDITS.txt and models/trucks/LICENSE.txt for attribution and license.
-
 texconv.exe is Microsoft's DirectXTex command-line image converter.
 Its license is included in tools/DirectXTex-LICENSE.txt.
 

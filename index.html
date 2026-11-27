@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
   <link rel="icon" type="image/png" href="./branding/app.png" />
-  <title>Coaches Skin Studio v0.5.1</title>
+  <title>Coaches Skin Studio v0.5.2</title>
 </head>
 <body>
   <div id="app">
@@ -34,10 +34,8 @@
           <select id="coachVariantSelect"></select>
         </div>
         <div class="truck-mode-help" id="truckModeHelp" hidden>
-          <strong>เลือกรถบรรทุกสำหรับพรีวิว</strong>
-          <p>มีโมเดลตัวอย่าง 12 แบบให้เลือกและทำผัง UV ได้ โมเดลตัวอย่างไม่ใช่รุ่นรถใน ETS2 โดยตรง หากจะส่งออกม็อดเกม ต้องใช้แพ็กลาย .scs และ GLB ของรุ่นเดียวกัน</p>
-          <select id="truckModelSelect" aria-label="เลือกรถบรรทุกตัวอย่าง"><option value="">เลือกรถบรรทุกตัวอย่าง</option></select>
-          <button class="secondary-btn" id="truckLoadBuiltin" disabled>โหลดโมเดลตัวอย่าง</button>
+          <strong>ใช้โมเดลรถรุ่นจริงของ ETS2</strong>
+          <p>โปรแกรมไม่รวมโมเดลตัวอย่างทั่วไปไว้ ใช้ปุ่ม “นำเข้าโมเดล 3D” เพื่อเลือก GLB ที่ตรงกับรถและ UV ของแพ็กลาย .scs</p>
           <button class="secondary-btn" id="truckChooseTemplate">เลือกแพ็กลายรถบรรทุก (.scs)</button>
           <small id="truckTemplateStatus">ยังไม่ได้เลือกแพ็กลาย</small>
         </div>
@@ -69,7 +67,7 @@
           <button data-view="front">ด้านหน้า</button><button data-view="rear">ด้านท้าย</button>
           <span>ใช้พรีวิวตรวจตำแหน่งและรอยต่อ · ตรวจสีและแสงอีกครั้งในเกม</span>
         </div><div class="lower-grid"><section class="preview-panel"><div class="panel-title"><div><span class="overline">TEXTURE</span><h3>ผังลายภาพ</h3></div><span class="tag" id="resolution">Demo texture</span></div><div class="texture-display" id="textureDisplay"><div class="default-texture"><div class="tex-stripe"></div><span>COACHES<br/><b>SKIN STUDIO</b></span></div></div><div class="panel-foot"><span id="textureFileName">demo-livery.png</span><span class="auto-reload"><span class="live-dot"></span>Auto reload เปิดอยู่</span></div></section>
-        <section class="settings-panel"><div class="panel-title"><div><span class="overline">MAPPING</span><h3>การแสดงลาย</h3></div></div><div class="setting-row"><label for="meshSelect">การลงลาย</label><select id="meshSelect" disabled><option>นำเข้า GLB ก่อน</option></select></div><div id="mappingRows" class="mapping-rows" hidden></div><p class="tiny-note" id="meshHelp">โมเดลตัวอย่างใช้การฉายภาพแบบ 2D บนด้านข้างรถ ไม่ใช่ UV จริงของ DLC</p><div class="window-tools" id="glassTools" hidden>
+        <section class="settings-panel"><div class="panel-title"><div><span class="overline">MAPPING</span><h3>การแสดงลาย</h3></div></div><div class="setting-row"><label for="meshSelect">การลงลาย</label><select id="meshSelect" disabled><option>นำเข้า GLB ก่อน</option></select></div><div id="mappingRows" class="mapping-rows" hidden></div><p class="tiny-note" id="meshHelp">นำเข้าโมเดล GLB เพื่อใช้ผัง UV จริงของรถ</p><div class="window-tools" id="glassTools" hidden>
           <div class="section-heading">กระจกข้าง · รุ่นที่เลือก</div>
           <label class="tiny-note"><input type="checkbox" id="glassFromBody" checked /> ใช้ลาย PNG ตัวถังต่อขึ้นกระจก</label>
           <div class="window-actions">
