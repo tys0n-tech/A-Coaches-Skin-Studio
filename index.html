@@ -6,20 +6,24 @@
   <meta name="color-scheme" content="light" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
   <link rel="icon" type="image/png" href="./branding/app.png" />
-  <title>Coaches Skin Studio v0.4.4</title>
+  <title>Coaches Skin Studio v0.5.0</title>
 </head>
 <body>
   <div id="app">
     <header class="topbar">
-      <div class="brand"><img class="mark" src="./branding/app.png" alt="A-Coaches Skin Studio logo" width="40" height="40" /><div class="brand-copy"><strong>Coaches Skin Studio</strong><small>ETS2 Coaches · Desktop preview</small></div></div>
+      <div class="brand"><img class="mark" src="./branding/app.png" alt="A-Coaches Skin Studio logo" width="40" height="40" /><div class="brand-copy"><strong>Coaches Skin Studio</strong><small>ETS2 Coaches &amp; Trucks · Desktop preview</small></div></div>
       <div class="app-label"><span class="live-dot"></span><span id="modeText">Preview mode</span></div>
       <div class="top-actions"><button class="text-btn" id="openProject">เปิดโปรเจ็กต์</button><button class="text-btn" id="saveProject">บันทึกโปรเจ็กต์</button><button class="icon-btn" id="helpBtn" title="คู่มือ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2.5-2.5 4.5M12 17h.01"/></svg></button></div>
     </header>
     <div class="shell">
       <aside class="left-pane">
         <div class="section-kicker">WORKSPACE</div>
-        <h2>รถบัสของคุณ<span class="muted-dot">.</span></h2>
-        <p class="section-description">เลือกรถจาก DLC Coaches แล้วเริ่มออกแบบได้ทันที</p>
+        <h2>รถของคุณ<span class="muted-dot">.</span></h2>
+        <p class="section-description">เลือกรถบัสสำเร็จรูป หรือนำโมเดลรถบรรทุกเข้ามาทำลาย</p>
+        <div class="vehicle-mode-toggle" role="group" aria-label="ประเภทรถ">
+          <button class="selected" id="coachModeBtn" data-mode="coach" aria-pressed="true">รถบัส</button>
+          <button id="truckModeBtn" data-mode="truck" aria-pressed="false">รถบรรทุก</button>
+        </div>
         <div class="coach-list" id="coachList">
           <button class="coach-option selected" data-coach="scania"><span class="coach-symbol">S</span><span><strong>Scania Touring</strong><small>Coach · Single deck</small></span><span class="selection-indicator"></span></button>
           <button class="coach-option" data-coach="volvo"><span class="coach-symbol">V</span><span><strong>Volvo 9700 DD</strong><small>Coach · Double deck</small></span><span class="selection-indicator"></span></button>
@@ -28,6 +32,12 @@
         <div class="coach-variant" id="coachVariant" hidden>
           <label for="coachVariantSelect">รุ่นย่อย</label>
           <select id="coachVariantSelect"></select>
+        </div>
+        <div class="truck-mode-help" id="truckModeHelp" hidden>
+          <strong>ใช้โมเดลและแพ็กรถบรรทุกของคุณ</strong>
+          <p>นำเข้า GLB จากรถรุ่นเดียวกับแพ็กลาย แล้วเปิด .scs ที่มีลายนั้นเพื่อเลือก DDS ตัวถัง โปรแกรมจะทำผัง UV ให้ตามขนาดไฟล์จริง</p>
+          <button class="secondary-btn" id="truckChooseTemplate">เลือกแพ็กลายรถบรรทุก (.scs)</button>
+          <small id="truckTemplateStatus">ยังไม่ได้เลือกแพ็กลาย</small>
         </div>
         <p id="vehicleSupport" class="tiny-note"></p>
         <button id="saveTemplate" class="small-outline" disabled>บันทึกเทมเพลตรุ่นนี้</button>
@@ -67,14 +77,18 @@
           </div>
           <p class="tiny-note" id="glassTextureLabel">PNG / DDS 4096 × 2048 หรือ 8192 × 4096 ตามผังรุ่นที่เลือก</p>
           <p class="tiny-note">ภาพกระจกแยกแบบเฟรมเต็ม: ส่วนที่เลยขอบกระจกจะต่อบนตัวถังอัตโนมัติ</p><p class="tiny-note" id="glassPreviewStatus" role="status"></p>
+        </div><div class="window-tools" id="truckUVTools" hidden>
+          <div class="section-heading">ผังรถบรรทุก · UV จริงจากโมเดล</div>
+          <button id="exportModelUV" class="secondary-btn" disabled>บันทึกผัง UV ตัวถัง</button>
+          <p class="tiny-note" id="truckUVHelp">เลือกวัสดุตัวถังและ UV ในส่วนการแสดงลายก่อน ผังจะใช้ขนาด DDS ที่เลือกอยู่ในแพ็กรถ</p>
         </div><div class="setting-row split"><label for="brightness">ความสว่างสตูดิโอ</label><span id="brightnessValue">2.0</span></div><input type="range" id="brightness" min="0.2" max="4" step="0.1" value="2.0"/><div class="mapping-foot"><span class="status-dot"></span><span id="mappingStatus">Demo model · skin projection</span></div></section></div>
-        <div class="export-section"><div><span class="overline">PACKAGE EXPORT</span><h3>Export เป็น ETS2 .scs</h3><p>ใส่ PNG ขนาด 4096 × 2048 หรือ 8192 × 4096 (Figma 2x) แล้วสร้างมอดสำหรับรุ่นที่เลือก รวมลายกระจกข้างได้ทั้ง 5 รุ่นในไฟล์เดียว</p></div><button class="blue-btn" id="exportBtn">Export .scs <span>↗</span></button></div>
+        <div class="export-section"><div><span class="overline">PACKAGE EXPORT</span><h3>Export เป็น ETS2 .scs</h3><p id="exportDescription">ใส่ PNG ขนาด 4096 × 2048 หรือ 8192 × 4096 (Figma 2x) แล้วสร้างมอดสำหรับรุ่นที่เลือก รวมลายกระจกข้างได้ทั้ง 5 รุ่นในไฟล์เดียว</p></div><button class="blue-btn" id="exportBtn">Export .scs <span>↗</span></button></div>
         <p class="tiny-note">นำ .scs ไปวางใน Documents/Euro Truck Simulator 2/mod เปิด Mod Manager แล้วเลือกลายในอู่แต่งรถ</p>
         <details class="advanced-export"><summary>แก้แพ็ก .scs เดิมและตั้งค่าเครื่องมือเอง</summary>        <div class="export-config"><div class="config-field"><label>1 · เทมเพลตม็อดที่ใช้ได้จริง</label><button id="chooseTemplate" class="secondary-btn">เลือก .scs / .zip</button><small id="templateLabel">สร้างลายใหม่จากรุ่นที่เลือก</small></div><div class="config-field"><label>2 · Texture ที่จะแทนที่</label><select id="ddsSelect" disabled><option>เลือกเทมเพลตก่อน</option></select></div><div class="config-field"><label>3 · Texconv (สำหรับ PNG → DDS)</label><button id="chooseTexconv" class="secondary-btn">เลือก texconv.exe</button><small id="texconvLabel">มีเครื่องมือแปลงภาพในตัว</small></div><div class="config-field"><label for="glassDDS">DDS กระจกในเทมเพลต</label><select id="glassDDS" disabled><option value="">เฉพาะลายตัวถัง</option></select></div></div>
         <button id="useBuiltin" class="secondary-btn">กลับไปสร้างลายใหม่</button></details>
 
       </main>
-      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong>ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>เลือกรถและรุ่นย่อย โปรแกรมมีโมเดลพร้อมใช้ทั้ง 5 รุ่น</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>บันทึกเทมเพลตรุ่นที่เลือก วาดลายใน Figma แล้วเพิ่ม PNG กลับเข้ามา</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>ตรวจมุมซ้าย ขวา หน้า ท้าย แล้วกด Export .scs เพื่อนำเข้าเกม</p></div></div><div class="rule"></div><div class="warning-note"><b>ข้อจำกัดของเวอร์ชันนี้</b><p>ส่งออกตัวถังและกระจกข้างได้ครบ 5 รุ่น รวมกระจกสองชั้น Volvo</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.4.4</span></aside>
+      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong id="propertyTarget">ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>รถบัสมีโมเดลพร้อมใช้ 5 รุ่น ส่วนรถบรรทุกนำเข้า GLB ของรุ่นที่ต้องการ</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>ใช้เทมเพลตรถบัส หรือสร้างผัง UV จากโมเดลรถบรรทุกแล้ววาดใน Figma</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>รถบรรทุกใช้แพ็กลาย .scs เดิมของรุ่นนั้นเพื่อรักษานิยามม็อด แล้วแทนที่ DDS</p></div></div><div class="rule"></div><div class="warning-note"><b>การทำรถบรรทุก</b><p>ต้องใช้โมเดล GLB และแพ็กลายรถบรรทุกที่ตรงรุ่น โปรแกรมยังไม่สร้างนิยามม็อดรถบรรทุกใหม่จากศูนย์</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.5.0</span></aside>
     </div>
     <div class="toast" id="toast" aria-live="polite"></div>
   </div>

@@ -4,7 +4,7 @@ import { CoachViewport, COACHES, windowArtwork, bodyArtwork } from './scene.js';
 
 const $ = id => document.getElementById(id);
 const api = window.studioAPI;
-const state = { coachId: 'scania', localModel: null, texturePath: '', modelPath: '', templatePath: '', mappingMode: 'original', mappings: [], slots: [], wireframe: false, texture: null };
+const state = { vehicleMode: 'coach', coachId: 'scania', localModel: null, texturePath: '', modelPath: '', templatePath: '', ddsInfo: {}, mappingMode: 'original', mappings: [], slots: [], wireframe: false, texture: null };
 let toastTimeout = null;
 let applySequence = 0;
 let modelSequence = 0;
@@ -14,30 +14,39 @@ let glassRequest = 0;
 
 function updateWorkflow() {
   const entry = state.localModel;
-  const ready = Boolean(entry && state.modelPath && !state.loading);
+  const ready = Boolean(state.modelPath && !state.loading);
   $('sceneLoading').hidden = !state.loading && !state.loadError;
   $('sceneLoadingText').textContent = state.loadError || ('กำลังโหลด ' + (entry?.label || 'โมเดลรถ'));
   $('retryModel').hidden = !state.loadError;
   $('importTexture').disabled = Boolean(state.loading);
   $('sceneCanvas').setAttribute('aria-busy', String(Boolean(state.loading)));
-  const glassSupported = ready && Boolean(entry.glass);
+  const glassSupported = ready && Boolean(entry?.glass) && state.vehicleMode === 'coach';
   $('glassTools').hidden = !glassSupported;
-  $('modelStatus').textContent = ready ? 'พร้อม · ' + entry.label : 'กำลังเตรียมโมเดล';
+  $('truckUVTools').hidden = state.vehicleMode !== 'truck' || !ready;
+  $('exportModelUV').disabled = !ready || !state.mappings.length || !state.ddsInfo[$('ddsSelect').value];
+  $('modelStatus').textContent = ready ? 'พร้อม · ' + (entry?.label || 'โมเดลรถบรรทุก') : 'กำลังเตรียมโมเดล';
   $('designStatus').textContent = state.texture ? state.texture.filename : 'บันทึกเทมเพลตแล้วใส่ PNG ของคุณ';
   $('reviewStatus').textContent = ready ? 'ดูด้านซ้ายและขวา แล้วตรวจรอยต่อ' : 'รอโมเดล';
   $('exportStatus').textContent = state.texture && ready ? 'พร้อมสร้างไฟล์ .scs' : 'เลือกรถและเพิ่มลายก่อน';
-  $('saveTemplate').disabled = !ready;
-  const exportReady = state.texture && (ready || state.templatePath);
+  $('saveTemplate').disabled = !ready || state.vehicleMode === 'truck';
+  const hasModTarget = Boolean(state.templatePath && $('ddsSelect').value);
+  const exportReady = state.texture && (state.vehicleMode === 'truck'
+    ? ready && hasModTarget
+    : ready || hasModTarget);
   $('exportBtn').disabled = !exportReady || $('glassPreviewStatus').textContent === 'กำลังโหลดลายกระจก';
   $('vehicleSupport').textContent = ready
-    ? 'ตัวถัง 4K / 8K' + (glassSupported ? ' · ลายกระจกข้าง' : '')
-    : 'กำลังโหลดรุ่นรถ';
+    ? (state.vehicleMode === 'truck' ? 'โมเดลรถบรรทุก · UV จริง' : 'ตัวถัง 4K / 8K' + (glassSupported ? ' · ลายกระจกข้าง' : ''))
+    : (state.vehicleMode === 'truck' ? 'นำเข้าโมเดลรถบรรทุก GLB' : 'กำลังโหลดรุ่นรถ');
+  $('propertyTarget').textContent = state.vehicleMode === 'truck' ? 'ETS2 · Truck skin mod' : 'ETS2 · Coaches DLC';
+  $('exportDescription').textContent = state.vehicleMode === 'truck'
+    ? 'ใช้แพ็กลายรถ .scs เดิมของรุ่นที่ตรงกัน เลือก DDS ตัวถัง แล้วแทนที่ลายโดยรักษาไฟล์และนิยามอื่นในแพ็กไว้'
+    : 'ใส่ PNG ขนาด 4096 × 2048 หรือ 8192 × 4096 (Figma 2x) แล้วสร้างมอดสำหรับรุ่นที่เลือก รวมลายกระจกข้างได้ทั้ง 5 รุ่นในไฟล์เดียว';
 }
 
 async function showGlass() {
   const request = ++glassRequest;
   const model = modelSequence;
-  const supported = Boolean(state.localModel?.glass && state.modelPath && viewport.windowProfile);
+  const supported = Boolean(state.vehicleMode === 'coach' && state.localModel?.glass && state.modelPath && viewport.windowProfile);
   const isCurrent = () => request === glassRequest && model === modelSequence;
   state.generatedGlass = null;
   const restoreBody = Boolean(state.generatedBody || state.bodyOverlayActive);
@@ -145,11 +154,33 @@ function showVariants(id) {
 }
 
 function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
+  state.vehicleMode = 'coach';
+  $('coachModeBtn').classList.add('selected');
+  $('coachModeBtn').setAttribute('aria-pressed', 'true');
+  $('truckModeBtn').classList.remove('selected');
+  $('truckModeBtn').setAttribute('aria-pressed', 'false');
+  $('coachList').hidden = false;
+  $('coachVariant').hidden = false;
+  $('truckModeHelp').hidden = true;
+  $('coachList').previousElementSibling.hidden = false;
+  $('coachVariant').nextElementSibling.hidden = false;
+  state.templatePath = '';
+  state.ddsInfo = {};
+  $('templateLabel').textContent = 'สร้างลายใหม่จากรุ่นที่เลือก';
+  $('truckTemplateStatus').textContent = 'ยังไม่ได้เลือกแพ็กลาย';
+  $('ddsSelect').replaceChildren(new Option('สร้างลายใหม่จากรุ่นที่เลือก', ''));
+  $('ddsSelect').disabled = true;
+  $('glassDDS').replaceChildren(new Option('เฉพาะลายตัวถัง', ''));
+  $('glassDDS').disabled = true;
   const request = ++modelSequence;
   state.localModel = null;
   state.loading = true;
   state.loadError = '';
   state.glass = null;
+  state.slots = [];
+  state.mappings = [];
+  state.mappingMode = 'original';
+  invoke('readGlassTextureAt', '').catch(() => {});
   $('glassTextureLabel').textContent = 'PNG เฟรมเต็ม 4K หรือ 8K ตามผังรุ่นที่เลือก';
   clearTexture();
   const c = viewport.setCoach(id);
@@ -195,6 +226,59 @@ function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
       displayError(error);
     });
   }
+}
+
+function selectTruckMode() {
+  const request = ++modelSequence;
+  state.vehicleMode = 'truck';
+  state.localModel = null;
+  state.modelPath = '';
+  state.templatePath = '';
+  state.ddsInfo = {};
+  state.loading = false;
+  state.loadError = '';
+  state.glass = null;
+  state.slots = [];
+  state.mappings = [];
+  state.mappingMode = 'original';
+  invoke('readGlassTextureAt', '').catch(() => {});
+  clearTexture();
+  viewport.detachModel();
+  viewport.windowProfile = null;
+  viewport.currentMode = 'empty';
+  $('coachModeBtn').classList.remove('selected');
+  $('coachModeBtn').setAttribute('aria-pressed', 'false');
+  $('truckModeBtn').classList.add('selected');
+  $('truckModeBtn').setAttribute('aria-pressed', 'true');
+  $('coachList').hidden = true;
+  $('coachVariant').hidden = true;
+  $('truckModeHelp').hidden = false;
+  $('coachList').previousElementSibling.hidden = true;
+  $('coachVariant').nextElementSibling.hidden = true;
+  $('sceneLoading').hidden = true;
+  $('vehicleTitle').textContent = 'รถบรรทุก · นำเข้าโมเดล';
+  $('propertyModel').textContent = 'ยังไม่ได้เลือกโมเดล';
+  $('propertySource').textContent = 'รอ GLB';
+  $('propertyFile').textContent = 'ยังไม่ได้เลือกลาย';
+  $('sceneSource').textContent = 'IMPORT TRUCK GLB';
+  $('previewBadge').textContent = 'TRUCK MODEL PREVIEW';
+  $('vehicleSubtitle').textContent = 'นำเข้า GLB จากรถรุ่นเดียวกับแพ็กลาย .scs';
+  $('modeText').textContent = 'Truck skin mode';
+  $('meshSelect').replaceChildren(new Option('นำเข้า GLB ก่อน', ''));
+  $('meshSelect').disabled = true;
+  $('mappingRows').hidden = true;
+  $('mappingRows').replaceChildren();
+  $('meshHelp').textContent = 'โมเดลรถบรรทุกต้องตรงกับรุ่นและ UV ของ DDS ในแพ็กลายที่จะใช้';
+  $('mappingStatus').textContent = 'นำเข้าโมเดลรถบรรทุก GLB';
+  $('exportModelUV').disabled = true;
+  $('truckTemplateStatus').textContent = 'ยังไม่ได้เลือกแพ็กลาย';
+  $('templateLabel').textContent = 'เลือกแพ็กลายรถบรรทุก .scs';
+  $('ddsSelect').replaceChildren(new Option('เลือกแพ็กลายก่อน', ''));
+  $('ddsSelect').disabled = true;
+  $('glassDDS').replaceChildren(new Option('เฉพาะลายตัวถัง', ''));
+  $('glassDDS').disabled = true;
+  updateWorkflow();
+  return request;
 }
 
 async function useTexture(file, automatic = false) {
@@ -269,12 +353,14 @@ function showMapping() {
         state.mappings = state.mappings.filter(mapping => mapping.id !== slot.id);
         if (select.value !== '') state.mappings.push({ id: slot.id, channel: Number(select.value) });
         applyMappings();
+        updateWorkflow();
       });
       row.append(text, select);
       rows.append(row);
     }
   }
   applyMappings();
+  updateWorkflow();
 }
 
 async function useModel(file, request) {
@@ -282,14 +368,17 @@ async function useModel(file, request) {
   const legacyVolvo = state.coachId === 'volvo' && /^Volvo[_ -]9700/i.test(file.filename);
   const slots = await viewport.importGLB(file.base64, () => request === modelSequence, legacyVolvo);
   if (!slots) return;
-  viewport.windowProfile = file.windowProfile || null;
+  viewport.windowProfile = state.vehicleMode === 'coach' ? file.windowProfile || null : null;
   state.modelPath = file.path;
-  state.localModel = (coachModels[state.coachId] || []).find(model => model.file === file.filename) || null;
+  state.localModel = state.vehicleMode === 'coach'
+    ? (coachModels[state.coachId] || []).find(model => model.file === file.filename) || null
+    : null;
   $('exportGlassUV').disabled = !viewport.windowProfile;
   showVariants(state.coachId);
   renderTextureSource();
   const coach = COACHES.find(item => item.id === state.coachId);
-  const title = state.localModel?.label ? `${coach.name} · ${state.localModel.label}` : coach.name;
+  const title = state.localModel?.label ? `${coach.name} · ${state.localModel.label}`
+    : state.vehicleMode === 'truck' ? file.filename.replace(/\.glb$/i, '') : coach?.name || file.filename;
   $('vehicleTitle').textContent = $('propertyModel').textContent = title;
   state.slots = slots;
   state.mappings = [];
@@ -297,9 +386,11 @@ async function useModel(file, request) {
   state.mappingMode = defaults.length ? 'recommended' : 'original';
   $('propertySource').textContent = 'Imported GLB';
   $('sceneSource').textContent = file.filename;
-  $('vehicleSubtitle').textContent = 'โมเดล GLB · ใช้ผัง UV ของโมเดล';
+  $('vehicleSubtitle').textContent = state.vehicleMode === 'truck'
+    ? 'รถบรรทุก GLB · ใช้ UV จากโมเดล และแพ็กลาย .scs ที่เลือก'
+    : 'โมเดล GLB · ใช้ผัง UV ของโมเดล';
   $('previewBadge').textContent = 'IMPORTED GLB · UV PREVIEW';
-  $('modeText').textContent = 'Custom GLB mode';
+  $('modeText').textContent = state.vehicleMode === 'truck' ? 'Truck skin mode' : 'Custom GLB mode';
   $('meshSelect').replaceChildren(new Option('วัสดุต้นฉบับ', 'original'));
   if (defaults.length) $('meshSelect').add(new Option(`วัสดุตัวถังที่กำหนดไว้ (${defaults.length})`, 'recommended'));
   $('meshSelect').add(new Option('กำหนดวัสดุและ UV เอง', 'custom'));
@@ -333,13 +424,15 @@ async function chooseModel() {
   } catch (error) { displayError(error); }
 }
 
-async function chooseTemplate() {
+async function chooseTemplate(filePath = '') {
   try {
-    const data = await invoke('openTemplate');
+    const data = filePath ? await invoke('openTemplateAt', filePath) : await invoke('openTemplate');
     if (!data) return;
     state.templatePath = data.path;
+    state.ddsInfo = data.ddsInfo || {};
     $('templateLabel').textContent = data.path.split(/[\\/]/).pop();
     $('templateLabel').title = data.path;
+    $('truckTemplateStatus').textContent = `เลือกแล้ว · ${data.path.split(/[\\/]/).pop()}`;
     const select = $('ddsSelect');
     const glassSelect = $('glassDDS');
     glassSelect.replaceChildren(new Option('เฉพาะลายตัวถัง', ''));
@@ -351,7 +444,10 @@ async function chooseTemplate() {
       toast('เทมเพลตนี้ไม่มีไฟล์ DDS ให้แทนที่', true);
       return;
     }
-    for (const file of data.ddsFiles) select.add(new Option(file, file));
+    for (const file of data.ddsFiles) {
+      const size = state.ddsInfo[file];
+      select.add(new Option(size ? `${size.width} × ${size.height} · ${file}` : file, file));
+    }
     select.disabled = false;
     for (const file of data.ddsFiles) glassSelect.add(new Option(file, file));
     const windowEntry = data.ddsFiles.find(file => /\/(?:scania137_window|windows_[\w_]+)\.dds$/.test(file));
@@ -361,6 +457,7 @@ async function chooseTemplate() {
       if (bodyEntry) select.value = bodyEntry;
     }
     glassSelect.disabled = false;
+    updateWorkflow();
     toast(`โหลดเทมเพลตแล้ว · พบ ${data.ddsFiles.length} DDS texture`);
   } catch (e) { displayError(e); }
 }
@@ -376,6 +473,7 @@ async function chooseTexconv() {
 async function exportMod() {
   try {
     if (!state.texturePath) throw new Error('กรุณาเลือกลาย PNG หรือ DDS ก่อน');
+    if (state.vehicleMode === 'truck' && (!state.modelPath || !state.templatePath)) throw new Error('รถบรรทุกต้องนำเข้า GLB และเลือกแพ็กลาย .scs ของรุ่นเดียวกันก่อน');
     if (!state.templatePath && (!state.localModel || !state.modelPath)) throw new Error('กรุณาเลือกรุ่นรถก่อน');
     $('exportBtn').disabled = true;
     if (!state.templatePath) {
@@ -399,7 +497,7 @@ async function exportMod() {
 }
 async function saveProject() {
   try {
-    const result = await invoke('saveProject', { coachId: state.coachId, mapping: { mode: state.mappingMode, slots: state.mappings }, modelPath: state.modelPath, texturePath: state.texturePath });
+    const result = await invoke('saveProject', { vehicleMode: state.vehicleMode, coachId: state.coachId, mapping: { mode: state.mappingMode, slots: state.mappings }, modelPath: state.modelPath, texturePath: state.texturePath, templatePath: state.templatePath });
     if (result) toast(`บันทึกโปรเจ็กต์แล้ว: ${result.path}`);
   } catch (e) { displayError(e); }
 }
@@ -409,11 +507,12 @@ async function openProject() {
     if (!p) return;
     state.glass = null;
     $('glassTextureLabel').textContent = 'ยังไม่ได้เลือก';
-    selectCoach(COACHES.find(c => c.id === p.coachId) ? p.coachId : 'scania', { loadLocalModel: false });
-    const request = modelSequence;
+    const request = p.vehicleMode === 'truck'
+      ? selectTruckMode()
+      : (selectCoach(COACHES.find(c => c.id === p.coachId) ? p.coachId : 'scania', { loadLocalModel: false }), modelSequence);
     const errors = [];
     try {
-      const localModel = coachModels[state.coachId]?.[0];
+      const localModel = state.vehicleMode === 'coach' ? coachModels[state.coachId]?.[0] : null;
       const model = p.model ? await invoke('readModelAt', p.model)
         : localModel ? await invoke('readCoachModel', localModel.id) : null;
       await useModel(model, request);
@@ -424,6 +523,7 @@ async function openProject() {
       errors.push(`โหลดโมเดลไม่สำเร็จ ${e.message}`);
     }
     if (request !== modelSequence) return;
+    if (p.templatePath) await chooseTemplate(p.templatePath);
     if (p.glassTexture) {
       try {
         state.glass = await invoke('readGlassTextureAt', p.glassTexture);
@@ -462,8 +562,8 @@ async function scanGame() {
   try {
     const game = await invoke('openGameFolder');
     if (!game) return;
-    const matches = game.candidates.filter(name => /coach|bus/i.test(name));
-    $('gameResult').textContent = `${game.path}\n${matches.length ? 'ไฟล์ที่มีคำว่า coach/bus: ' + matches.join(', ') : 'ไม่พบชื่อไฟล์ coach/bus ในระดับโฟลเดอร์นี้ (อาจอยู่ภายใน archive หรือชื่ออื่น)'}`;
+    const matches = game.candidates.filter(name => /coach|bus|truck/i.test(name));
+    $('gameResult').textContent = `${game.path}\n${matches.length ? 'ไฟล์ที่เกี่ยวกับรถ: ' + matches.join(', ') : 'ไม่พบชื่อไฟล์รถในระดับโฟลเดอร์นี้ (อาจอยู่ภายใน archive หรือชื่ออื่น)'}`;
     $('gameResult').style.whiteSpace = 'pre-line';
     toast('ตรวจโฟลเดอร์เกมแล้ว · ไม่ได้ดึงไฟล์หรือโมเดลออกจากเกม');
   } catch (e) { displayError(e); }
@@ -474,13 +574,26 @@ function showHelp() {
   const overlay = document.createElement('div');
   overlay.id = 'helpModal';
   overlay.style.cssText = 'position:fixed;inset:0;background:#1a25347d;display:grid;place-items:center;z-index:100;padding:24px;';
-  overlay.innerHTML = `<div style="background:#fff;border-radius:18px;padding:25px;width:min(580px,94vw);box-shadow:0 30px 90px #17233335;line-height:1.9"><div style="font-weight:800;font-size:22px;letter-spacing:-.6px;margin-bottom:10px">เริ่มต้นใช้งาน Coaches Skin Studio</div><p>1. เลือกรถและรุ่นย่อยทางซ้าย โมเดลทั้ง 5 รุ่นพร้อมใช้งาน</p><p>2. บันทึกเทมเพลตรุ่นนี้ วาดลายใน Figma แล้วเพิ่ม PNG ขนาด 4096 × 2048</p><p>3. โปรแกรมจะตรวจไฟล์ PNG ที่คุณเลือก เมื่อแก้ไฟล์เดิมแล้วกด Save โปรแกรมจะรีโหลด 3D ให้</p><p>4. ใช้ปุ่มดูซ้าย ขวา หน้า ท้ายตรวจรอยต่อ แล้วกด Export .scs โปรแกรมมีเครื่องมือแปลงภาพในตัว</p><button id="dismissHelp" style="border:0;border-radius:9px;background:#205cb1;color:#fff;padding:11px 17px;font-weight:700">เข้าใจแล้ว</button></div>`;
+  overlay.innerHTML = `<div style="background:#fff;border-radius:18px;padding:25px;width:min(580px,94vw);box-shadow:0 30px 90px #17233335;line-height:1.9"><div style="font-weight:800;font-size:22px;letter-spacing:-.6px;margin-bottom:10px">เริ่มต้นใช้งาน Coaches Skin Studio</div><p>รถบัส: เลือกรุ่นจากทางซ้าย บันทึกเทมเพลต วาด PNG แล้วนำเข้าเพื่อส่งออกเป็น .scs</p><p>รถบรรทุก: เลือกโหมดรถบรรทุก นำเข้าโมเดล GLB และแพ็กลาย .scs ที่ตรงรุ่น เลือก DDS ตัวถัง แล้วบันทึกผัง UV ตามขนาดนั้น</p><p>วาดลายตามผัง UV และ Export PNG ขนาดเดียวกับ DDS ก่อนนำกลับเข้าโปรแกรมเพื่อแทนที่ในแพ็กเดิม</p><p>ตรวจรถทั้งสี่ด้าน แล้วนำไฟล์ .scs ไปทดสอบในเกม</p><button id="dismissHelp" style="border:0;border-radius:9px;background:#205cb1;color:#fff;padding:11px 17px;font-weight:700">เข้าใจแล้ว</button></div>`;
   overlay.addEventListener('click', e => { if (e.target === overlay || e.target.id === 'dismissHelp') overlay.remove(); });
   document.body.append(overlay);
 }
 
 $('retryModel').addEventListener('click', () => selectCoach(state.coachId, { variantId: state.localModel?.id }));
 document.querySelectorAll('.coach-option').forEach(button => button.addEventListener('click', () => selectCoach(button.dataset.coach)));
+$('coachModeBtn').addEventListener('click', () => selectCoach(state.coachId));
+$('truckModeBtn').addEventListener('click', selectTruckMode);
+$('truckChooseTemplate').addEventListener('click', chooseTemplate);
+$('ddsSelect').addEventListener('change', updateWorkflow);
+$('exportModelUV').addEventListener('click', async () => {
+  try {
+    const size = state.ddsInfo[$('ddsSelect').value];
+    if (!size) throw new Error('เลือก DDS ตัวถังในแพ็กลายก่อน');
+    const name = `${state.modelPath.split(/[\\/]/).pop().replace(/\.glb$/i, '')}_UV_${size.width}x${size.height}.png`;
+    const result = await invoke('exportPng', viewport.exportModelUV(size.width, size.height), name);
+    if (result) toast(`บันทึกผัง UV ${size.width} × ${size.height} แล้ว · ${result.path}`);
+  } catch (error) { displayError(error); }
+});
 $('saveTemplate').addEventListener('click', async () => {
   try {
     const output = await invoke('saveCoachTemplate', state.localModel.id);

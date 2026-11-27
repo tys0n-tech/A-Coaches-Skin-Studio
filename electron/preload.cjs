@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('studioAPI', {
   openModel: () => ipcRenderer.invoke('dialog:model'),
   openGameFolder: () => ipcRenderer.invoke('dialog:game'),
   openTemplate: () => ipcRenderer.invoke('dialog:template'),
+  openTemplateAt: (filePath) => ipcRenderer.invoke('file:template', filePath),
   openTexconv: () => ipcRenderer.invoke('dialog:texconv'),
   listTemplateDDS: () => ipcRenderer.invoke('template:dds'),
   exportMod: (options) => ipcRenderer.invoke('mod:export', options),

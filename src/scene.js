@@ -267,6 +267,42 @@ export class CoachViewport {
     geometry.dispose();
     return canvas.toDataURL('image/png');
   }
+  exportModelUV(width = 4096, height = 2048) {
+    const selected = new Map(this.mappings.map(({ id, channel }) => [id, channel]));
+    if (!selected.size) throw new Error('เลือกวัสดุและ UV ของตัวถังก่อนบันทึกผัง');
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    context.strokeStyle = '#385f85';
+    context.lineWidth = Math.max(1, Math.min(width, height) / 2048);
+    context.beginPath();
+    const attributes = ['uv', 'uv1', 'uv2', 'uv3'];
+    for (const entry of this.modelMeshes) {
+      const channel = selected.get(entry.id);
+      if (!Number.isInteger(channel)) continue;
+      const uv = entry.object.geometry.getAttribute(attributes[channel]);
+      if (!uv) continue;
+      const geometry = entry.object.geometry;
+      const index = geometry.getIndex();
+      const groups = geometry.groups.length ? geometry.groups.filter(group => group.materialIndex === entry.slot) :
+        (entry.slot === 0 ? [{ start: 0, count: index ? index.count : uv.count }] : []);
+      for (const group of groups) {
+        const end = Math.min(group.start + group.count, index ? index.count : uv.count);
+        for (let offset = group.start; offset + 2 < end; offset += 3) {
+          const a = index ? index.getX(offset) : offset;
+          const b = index ? index.getX(offset + 1) : offset + 1;
+          const c = index ? index.getX(offset + 2) : offset + 2;
+          context.moveTo(uv.getX(a) * width, uv.getY(a) * height);
+          context.lineTo(uv.getX(b) * width, uv.getY(b) * height);
+          context.lineTo(uv.getX(c) * width, uv.getY(c) * height);
+          context.closePath();
+        }
+      }
+    }
+    context.stroke();
+    return canvas.toDataURL('image/png');
+  }
   async setGlassArtwork(file, isCurrent, supportedModel = false) {
     this.clearGlassArtwork();
     if (!file || !supportedModel) return;

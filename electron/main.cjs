@@ -39,6 +39,25 @@ async function writeMod(savePath, zip) {
   }
 }
 
+function loadSkinTemplate(file) {
+  const resolved = path.resolve(file || '');
+  if (!['.scs', '.zip'].includes(path.extname(resolved).toLowerCase()) || !fs.statSync(resolved).isFile()) {
+    throw new Error('เลือกไฟล์แพ็กลายรถ .scs หรือ .zip');
+  }
+  const zip = new AdmZip(resolved);
+  const ddsEntries = zip.getEntries().filter(entry => !entry.isDirectory && entry.entryName.toLowerCase().endsWith('.dds'));
+  const ddsFiles = ddsEntries.map(entry => entry.entryName);
+  const ddsInfo = Object.fromEntries(ddsEntries.map(entry => {
+    const bytes = entry.getData();
+    const valid = bytes.length >= 128 && bytes.subarray(0, 4).toString('ascii') === 'DDS ';
+    const width = valid ? bytes.readUInt32LE(16) : 0;
+    const height = valid ? bytes.readUInt32LE(12) : 0;
+    return [entry.entryName, valid && width > 0 && height > 0 && width <= 16384 && height <= 16384 ? { width, height } : null];
+  }));
+  templatePath = resolved;
+  return { path: resolved, ddsFiles, ddsInfo, allCount: zip.getEntries().length };
+}
+
 function usesDevelopmentPage() {
   return !app.isPackaged && process.env.COACH_STUDIO_LOCAL_BUILD !== '1';
 }
@@ -189,7 +208,7 @@ app.whenReady().then(() => {
     return data;
   }));
   ipcMain.handle('dialog:model', safeCall(async () => {
-    const file = await pickOne('Choose converted coach model (.glb)', [{ name: 'glTF Binary', extensions: ['glb'] }]);
+    const file = await pickOne('Choose coach or truck model (.glb)', [{ name: 'glTF Binary', extensions: ['glb'] }]);
     if (!file) return null;
     projectPaths.model = file;
     return modelPayload(file);
@@ -252,13 +271,11 @@ app.whenReady().then(() => {
     return { path: folder, candidates: matches.slice(0, 150), info: 'Scan only: original game archives are NOT extracted or bundled.' };
   }));
   ipcMain.handle('dialog:template', safeCall(async () => {
-    const file = await pickOne('Open a working Coaches skin mod template (.scs / .zip)', [{ name: 'ETS2 ZIP mod template', extensions: ['scs', 'zip'] }]);
+    const file = await pickOne('Open a working coach or truck skin mod (.scs / .zip)', [{ name: 'ETS2 ZIP mod', extensions: ['scs', 'zip'] }]);
     if (!file) return null;
-    const zip = new AdmZip(file); // only ZIP-based user-created .scs mod packages are supported
-    const ddsFiles = zip.getEntries().filter(e => !e.isDirectory && e.entryName.toLowerCase().endsWith('.dds')).map(e => e.entryName);
-    templatePath = file;
-    return { path: file, ddsFiles, allCount: zip.getEntries().length };
+    return loadSkinTemplate(file);
   }));
+  ipcMain.handle('file:template', safeCall(async (_e, file) => loadSkinTemplate(file)));
   ipcMain.handle('template:dds', safeCall(async () => {
     if (!templatePath) return [];
     return new AdmZip(templatePath).getEntries().filter(e => !e.isDirectory && e.entryName.toLowerCase().endsWith('.dds')).map(e => e.entryName);
@@ -271,7 +288,7 @@ app.whenReady().then(() => {
     return { path: file };
   }));
   ipcMain.handle('project:save', safeCall(async (_e, project) => {
-    const result = await dialog.showSaveDialog(win, { title: 'Save studio project', defaultPath: `${project.coachId || 'coaches'}-skin.cssproj`, filters: [{ name: 'Coaches Skin Studio Project', extensions: ['cssproj'] }] });
+    const result = await dialog.showSaveDialog(win, { title: 'Save studio project', defaultPath: `${project.vehicleMode === 'truck' ? 'truck' : project.coachId || 'coaches'}-skin.cssproj`, filters: [{ name: 'Coaches Skin Studio Project', extensions: ['cssproj'] }] });
     if (result.canceled) return null;
     const modes = new Set(['original', 'recommended', 'custom']);
     const slots = Array.isArray(project.mapping?.slots) ? project.mapping.slots : [];
@@ -279,7 +296,7 @@ app.whenReady().then(() => {
       mode: modes.has(project.mapping?.mode) ? project.mapping.mode : 'original',
       slots: slots.filter(slot => typeof slot?.id === 'string' && Number.isInteger(slot.channel))
     };
-    const safe = { version: 3, coachId: String(project.coachId || ''), texture: String(project.texturePath || ''), glassTexture: glassTexturePath, model: String(project.modelPath || ''), mapping };
+    const safe = { version: 4, vehicleMode: project.vehicleMode === 'truck' ? 'truck' : 'coach', coachId: String(project.coachId || ''), texture: String(project.texturePath || ''), glassTexture: glassTexturePath, model: String(project.modelPath || ''), templatePath: String(project.templatePath || ''), mapping };
     fs.writeFileSync(result.filePath, JSON.stringify(safe, null, 2), 'utf8');
     return { path: result.filePath };
   }));
@@ -287,7 +304,7 @@ app.whenReady().then(() => {
     const file = await pickOne('Open studio project', [{ name: 'Coaches Skin Studio Project', extensions: ['cssproj'] }]);
     if (!file) return null;
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-    if (![1, 2, 3].includes(data.version)) throw new Error('Unsupported project version');
+    if (![1, 2, 3, 4].includes(data.version)) throw new Error('Unsupported project version');
     stopWatcher();
     projectPaths = { texture: '', model: '' };
     glassTexturePath = '';
@@ -304,7 +321,7 @@ app.whenReady().then(() => {
     return { path: save.filePath };
   }));
   ipcMain.handle('mod:export', safeCall(async (_e, options) => {
-    if (!templatePath) throw new Error('Choose a known-working Coaches skin mod ZIP/.scs template first');
+    if (!templatePath) throw new Error('เลือกแพ็กลายรถ .scs หรือ .zip ก่อน');
     if (!projectPaths.texture) throw new Error('Choose a skin texture first');
     const entryName = String(options?.targetDDS || '');
     if (!entryName || !entryName.toLowerCase().endsWith('.dds')) throw new Error('Select a DDS texture from the template');
@@ -319,6 +336,11 @@ app.whenReady().then(() => {
       throw new Error('Choose a separate window DDS entry and transparent window artwork');
     }
     const newDDS = await convertDDS(projectPaths.texture, options?.bodyArtwork ? decodePNG(options.bodyArtwork) : null);
+    const originalDDS = targetEntry.getData();
+    if (originalDDS.length < 128 || originalDDS.subarray(0, 4).toString('ascii') !== 'DDS ') throw new Error('ไฟล์ DDS ในแพ็กอ่านขนาดไม่ได้');
+    if (newDDS.readUInt32LE(16) !== originalDDS.readUInt32LE(16) || newDDS.readUInt32LE(12) !== originalDDS.readUInt32LE(12)) {
+      throw new Error(`ขนาดลายไม่ตรงกับ DDS ของรถ (${originalDDS.readUInt32LE(16)} × ${originalDDS.readUInt32LE(12)} px) ให้บันทึกผัง UV ตามขนาดนี้แล้ว Export PNG ขนาดเท่ากัน`);
+    }
     zip.updateFile(entryName, newDDS);
     if (glassTarget) zip.updateFile(glassTarget, await convertDDS(glassTexturePath, generatedGlass));
     const suggested = `${path.parse(templatePath).name}-edited.scs`;
