@@ -1,0 +1,14 @@
+[
+  { "id": "tractor-unit", "file": "tractor-unit.glb", "label": "Tractor Unit · หัวลาก" },
+  { "id": "long-nose-truck", "file": "long-nose-truck.glb", "label": "Long-Nose Truck · หัวลากหน้าที่ยาว" },
+  { "id": "box-truck", "file": "box-truck.glb", "label": "Box Truck · รถตู้ทึบ" },
+  { "id": "refrigerated-truck", "file": "refrigerated-truck.glb", "label": "Refrigerated Truck · รถห้องเย็น" },
+  { "id": "curtainside-truck", "file": "curtainside-truck.glb", "label": "Curtainside Truck · รถผ้าใบ" },
+  { "id": "flatbed-truck", "file": "flatbed-truck.glb", "label": "Flatbed Truck · รถพื้นเรียบ" },
+  { "id": "tipper-truck", "file": "tipper-truck.glb", "label": "Tipper Truck · รถดัมพ์" },
+  { "id": "tanker-truck", "file": "tanker-truck.glb", "label": "Tanker Truck · รถแทงก์" },
+  { "id": "crane-truck", "file": "crane-truck.glb", "label": "Crane Truck · รถเครน" },
+  { "id": "logging-truck", "file": "logging-truck.glb", "label": "Logging Truck · รถบรรทุกไม้" },
+  { "id": "garbage-truck", "file": "garbage-truck.glb", "label": "Garbage Truck · รถขยะ" },
+  { "id": "recovery-truck", "file": "recovery-truck.glb", "label": "Recovery Truck · รถยก" }
+]

@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
   <link rel="icon" type="image/png" href="./branding/app.png" />
-  <title>Coaches Skin Studio v0.5.0</title>
+  <title>Coaches Skin Studio v0.5.1</title>
 </head>
 <body>
   <div id="app">
@@ -34,8 +34,10 @@
           <select id="coachVariantSelect"></select>
         </div>
         <div class="truck-mode-help" id="truckModeHelp" hidden>
-          <strong>ใช้โมเดลและแพ็กรถบรรทุกของคุณ</strong>
-          <p>นำเข้า GLB จากรถรุ่นเดียวกับแพ็กลาย แล้วเปิด .scs ที่มีลายนั้นเพื่อเลือก DDS ตัวถัง โปรแกรมจะทำผัง UV ให้ตามขนาดไฟล์จริง</p>
+          <strong>เลือกรถบรรทุกสำหรับพรีวิว</strong>
+          <p>มีโมเดลตัวอย่าง 12 แบบให้เลือกและทำผัง UV ได้ โมเดลตัวอย่างไม่ใช่รุ่นรถใน ETS2 โดยตรง หากจะส่งออกม็อดเกม ต้องใช้แพ็กลาย .scs และ GLB ของรุ่นเดียวกัน</p>
+          <select id="truckModelSelect" aria-label="เลือกรถบรรทุกตัวอย่าง"><option value="">เลือกรถบรรทุกตัวอย่าง</option></select>
+          <button class="secondary-btn" id="truckLoadBuiltin" disabled>โหลดโมเดลตัวอย่าง</button>
           <button class="secondary-btn" id="truckChooseTemplate">เลือกแพ็กลายรถบรรทุก (.scs)</button>
           <small id="truckTemplateStatus">ยังไม่ได้เลือกแพ็กลาย</small>
         </div>

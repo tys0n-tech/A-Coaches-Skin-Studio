@@ -1,5 +1,6 @@
 import './style.css';
 import coachModels from '../electron/coach-models.json';
+import truckModels from '../electron/truck-models.json';
 import { CoachViewport, COACHES, windowArtwork, bodyArtwork } from './scene.js';
 
 const $ = id => document.getElementById(id);
@@ -253,6 +254,8 @@ function selectTruckMode() {
   $('coachList').hidden = true;
   $('coachVariant').hidden = true;
   $('truckModeHelp').hidden = false;
+  $('truckModelSelect').value = '';
+  $('truckLoadBuiltin').disabled = true;
   $('coachList').previousElementSibling.hidden = true;
   $('coachVariant').nextElementSibling.hidden = true;
   $('sceneLoading').hidden = true;
@@ -424,6 +427,28 @@ async function chooseModel() {
   } catch (error) { displayError(error); }
 }
 
+async function loadBuiltinTruck() {
+  const id = $('truckModelSelect').value;
+  if (!id) return;
+  const request = ++modelSequence;
+  state.loading = true;
+  state.loadError = '';
+  clearTexture();
+  $('sceneLoading').hidden = false;
+  $('sceneLoadingText').textContent = 'กำลังโหลดโมเดลรถบรรทุก';
+  updateWorkflow();
+  try {
+    const file = await invoke('readTruckModel', id);
+    if (request !== modelSequence) return;
+    await useModel(file, request);
+  } catch (error) {
+    if (request !== modelSequence) return;
+    state.loading = false;
+    state.loadError = error.message;
+    displayError(error);
+  }
+}
+
 async function chooseTemplate(filePath = '') {
   try {
     const data = filePath ? await invoke('openTemplateAt', filePath) : await invoke('openTemplate');
@@ -583,6 +608,9 @@ $('retryModel').addEventListener('click', () => selectCoach(state.coachId, { var
 document.querySelectorAll('.coach-option').forEach(button => button.addEventListener('click', () => selectCoach(button.dataset.coach)));
 $('coachModeBtn').addEventListener('click', () => selectCoach(state.coachId));
 $('truckModeBtn').addEventListener('click', selectTruckMode);
+$('truckModelSelect').replaceChildren(new Option('เลือกรถบรรทุกตัวอย่าง', ''), ...truckModels.map(model => new Option(model.label, model.id)));
+$('truckModelSelect').addEventListener('change', event => { $('truckLoadBuiltin').disabled = !event.target.value; });
+$('truckLoadBuiltin').addEventListener('click', loadBuiltinTruck);
 $('truckChooseTemplate').addEventListener('click', chooseTemplate);
 $('ddsSelect').addEventListener('change', updateWorkflow);
 $('exportModelUV').addEventListener('click', async () => {

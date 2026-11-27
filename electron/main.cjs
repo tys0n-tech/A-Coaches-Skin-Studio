@@ -6,6 +6,7 @@ const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 const AdmZip = require('adm-zip');
 const coachModels = require('./coach-models.json');
+const truckModels = require('./truck-models.json');
 const { createPaintjob } = require('./create-paintjob.cjs');
 const { convertTextureDDS, isLiverySize } = require('./texture-conversion.cjs');
 
@@ -225,6 +226,13 @@ app.whenReady().then(() => {
     const bundled = path.join(resources, 'models', entry.file);
     const file = fs.existsSync(bundled) ? bundled : model;
     return fs.existsSync(file) ? modelPayload(file) : null;
+  }));
+  ipcMain.handle('file:truck-model', safeCall(async (_e, id) => {
+    const entry = truckModels.find(model => model.id === id);
+    if (!entry) throw new Error('ไม่พบโมเดลรถบรรทุกตัวอย่าง');
+    const file = path.join(resources, 'models', 'trucks', entry.file);
+    if (!fs.existsSync(file)) throw new Error(`ไม่พบไฟล์โมเดล ${entry.file}`);
+    return modelPayload(file);
   }));
   ipcMain.handle('coach:template', safeCall(async (_e, id) => {
     const entry = findModel(id);
