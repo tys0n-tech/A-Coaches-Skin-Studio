@@ -180,6 +180,8 @@ export class CoachViewport {
     floor.rotation.x = -Math.PI/2; floor.position.y = -.02; floor.castShadow = false; this.scene.add(floor);
     const grid = new THREE.GridHelper(100, 100, '#ced5dd', '#e4e9ed'); grid.position.y = 0; grid.material.opacity = .27; grid.material.transparent = true; this.scene.add(grid);
     this.root = null;
+    this.modelBounds = null;
+    this.modelPreviewInfo = null;
     this.skinTexture = demoTexture();
     this.modelMeshes = [];
     this.materialBases = new Map();
@@ -224,6 +226,8 @@ export class CoachViewport {
     for (const resource of resources) resource.dispose();
     this.scene.remove(this.root);
     this.root = null;
+    this.modelBounds = null;
+    this.modelPreviewInfo = null;
     this.modelMeshes = [];
     this.materialBases.clear();
     this.mappings = [];
@@ -347,7 +351,7 @@ export class CoachViewport {
     this.currentMode = 'loading';
     return coach;
   }
-  async importGLB(base64, isCurrent = () => true, legacyVolvo = false) {
+  async importGLB(base64, isCurrent = () => true, legacyVolvo = false, truckMode = false) {
     const bytes = Uint8Array.from(atob(base64), x => x.charCodeAt(0));
     const loader = new GLTFLoader();
     const gltf = await new Promise((resolve, reject) => loader.parse(bytes.buffer, '', resolve, reject));
@@ -371,20 +375,41 @@ export class CoachViewport {
     const center = bounds.getCenter(new THREE.Vector3());
     center.y = bounds.min.y;
     const size = bounds.getSize(new THREE.Vector3());
-    const factor = n(13.2 / Math.max(size.x, size.z, 1), .01, 1000);
+    // ETS2 truck GLBs exported from SCS Blender Tools are already in metres.
+    // Do not stretch a cab component to coach length; coach references retain legacy normalization.
+    const factor = truckMode ? 1 : n(13.2 / Math.max(size.x, size.z, 1), .01, 1000);
     this.root = new THREE.Group();
     this.root.add(gltf.scene);
     this.root.position.copy(center).multiplyScalar(-factor);
     this.root.position.y += .015;
     this.root.scale.setScalar(factor);
+    const meshNames = [];
+    let hasUntexturedMaterial = false;
     let meshIndex = 0;
     gltf.scene.traverse(obj => {
       if (!obj.isMesh) return;
+      meshNames.push(obj.name || '');
+      const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+      for (const material of materials) {
+        if (!material) continue;
+        if (!material.map) hasUntexturedMaterial = true;
+        if (!truckMode || material.map || material.color.r + material.color.g + material.color.b > .06) continue;
+        const name = material.name.toLowerCase();
+        const fallback = name.includes('glass') ? '#263d4a'
+          : name.includes('plain_grey') || name.includes('white') || /paint|body|cab/.test(name) ? '#e0e4e8'
+            : /steel|galvanized|chrome|metal/.test(name) ? '#87939c'
+              : /lamp|light/.test(name) ? '#e8cf9b'
+                : /darkgray|dark_grey/.test(name) ? '#3a3e42'
+                  : '#30353a';
+        material.color.set(fallback);
+        material.roughness = name.includes('glass') ? .22 : .55;
+        material.metalness = /steel|galvanized|chrome|metal/.test(name) ? .62 : .08;
+        material.needsUpdate = true;
+      }
       const channels = ['uv', 'uv1', 'uv2', 'uv3'].flatMap((attribute, index) =>
         obj.geometry.hasAttribute(attribute) ? [index] : []);
       // Keep the slot IDs used by version 1 projects.
       if (!channels.includes(0)) return;
-      const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
       this.materialBases.set(obj.uuid, { mesh: obj, original: obj.material });
       const label = obj.name || `Mesh ${meshIndex + 1}`;
       for (let slot = 0; slot < materials.length; slot++) {
@@ -404,7 +429,16 @@ export class CoachViewport {
     });
     this.scene.add(this.root);
     this.currentMode = 'imported';
-    this.resetCamera();
+    this.root.updateMatrixWorld(true);
+    this.modelBounds = new THREE.Box3().setFromObject(this.root);
+    const rootNames = gltf.scene.children.map(child => child.name).filter(Boolean);
+    this.modelPreviewInfo = {
+      cabOnly: truckMode && rootNames.some(name => /^cab(?:in)?[_-]/i.test(name)),
+      rootName: rootNames[0] || '',
+      missingTextures: truckMode && hasUntexturedMaterial,
+      meshCount: meshNames.length
+    };
+    this.fitCameraToBounds(this.modelBounds);
     return this.modelMeshes.map(({ id, name, channels, defaultChannel }) => ({ id, name, channels, defaultChannel }));
   }
   applyMappings(mappings, hasTexture) {
@@ -476,14 +510,42 @@ export class CoachViewport {
     } finally { URL.revokeObjectURL(url); }
   }
   setView(direction) {
-    const positions = { left: [-19, 3, 0], right: [19, 3, 0], front: [0, 3, -19], rear: [0, 3, 19] };
-    this.camera.position.set(...positions[direction]);
-    this.controls.target.set(0, 2, 0);
+    const target = this.modelBounds?.getCenter(new THREE.Vector3()) || new THREE.Vector3(0, 2, 0);
+    const directions = { left: [-1, .16, 0], right: [1, .16, 0], front: [0, .16, -1], rear: [0, .16, 1] };
+    const offset = new THREE.Vector3(...(directions[direction] || directions.left)).normalize();
+    const radius = this.modelBounds?.getBoundingSphere(new THREE.Sphere()).radius || 7;
+    const distance = this.cameraDistanceForRadius(radius);
+    this.camera.position.copy(target).addScaledVector(offset, distance);
+    this.controls.target.copy(target);
     this.controls.update();
   }
   resetCamera() {
+    if (this.modelBounds && !this.modelBounds.isEmpty()) {
+      this.fitCameraToBounds(this.modelBounds);
+      return;
+    }
     this.camera.position.set(-16, 6.4, -9);
     this.controls.target.set(0, 2, 0);
+    this.controls.update();
+  }
+  cameraDistanceForRadius(radius) {
+    const aspect = Math.max(.25, this.camera.aspect || 1);
+    const vertical = THREE.MathUtils.degToRad(this.camera.fov);
+    const horizontal = 2 * Math.atan(Math.tan(vertical / 2) * aspect);
+    return Math.max(radius * 1.6, radius / Math.sin(Math.min(vertical, horizontal) / 2) * 1.14);
+  }
+  fitCameraToBounds(bounds) {
+    const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+    const radius = Math.max(sphere.radius, .25);
+    const direction = new THREE.Vector3(-1, .34, -.72).normalize();
+    const distance = this.cameraDistanceForRadius(radius);
+    this.controls.target.copy(sphere.center);
+    this.camera.position.copy(sphere.center).addScaledVector(direction, distance);
+    this.camera.near = Math.max(.01, distance / 500);
+    this.camera.far = distance + radius * 12;
+    this.camera.updateProjectionMatrix();
+    this.controls.minDistance = Math.max(.2, radius * .2);
+    this.controls.maxDistance = Math.max(40, distance * 5);
     this.controls.update();
   }
   setLighting(value) { this.ambient.intensity = n(Number(value), .1, 5); }

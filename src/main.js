@@ -154,6 +154,8 @@ function showVariants(id) {
 }
 
 function selectCoach(id, { loadLocalModel = true, variantId } = {}) {
+  $('modelNotice').hidden = true;
+  $('modelNotice').textContent = '';
   state.vehicleMode = 'coach';
   $('coachModeBtn').classList.add('selected');
   $('coachModeBtn').setAttribute('aria-pressed', 'true');
@@ -244,6 +246,8 @@ function selectTruckMode() {
   invoke('readGlassTextureAt', '').catch(() => {});
   clearTexture();
   viewport.detachModel();
+  $('modelNotice').hidden = true;
+  $('modelNotice').textContent = '';
   viewport.windowProfile = null;
   viewport.currentMode = 'empty';
   $('coachModeBtn').classList.remove('selected');
@@ -366,7 +370,7 @@ function showMapping() {
 async function useModel(file, request) {
   if (!file || request !== modelSequence) return;
   const legacyVolvo = state.coachId === 'volvo' && /^Volvo[_ -]9700/i.test(file.filename);
-  const slots = await viewport.importGLB(file.base64, () => request === modelSequence, legacyVolvo);
+  const slots = await viewport.importGLB(file.base64, () => request === modelSequence, legacyVolvo, state.vehicleMode === 'truck');
   if (!slots) return;
   viewport.windowProfile = state.vehicleMode === 'coach' ? file.windowProfile || null : null;
   state.modelPath = file.path;
@@ -377,8 +381,9 @@ async function useModel(file, request) {
   showVariants(state.coachId);
   renderTextureSource();
   const coach = COACHES.find(item => item.id === state.coachId);
+  const truckPartLabels = { cab_s_high: 'Scania S 2016 · High Roof Cab', cab_s_high_8x4: 'Scania S 2016 · High Roof Cab 8×4' };
   const title = state.localModel?.label ? `${coach.name} · ${state.localModel.label}`
-    : state.vehicleMode === 'truck' ? file.filename.replace(/\.glb$/i, '') : coach?.name || file.filename;
+    : state.vehicleMode === 'truck' ? (truckPartLabels[previewInfo?.rootName] || file.filename.replace(/\.glb$/i, '')) : coach?.name || file.filename;
   $('vehicleTitle').textContent = $('propertyModel').textContent = title;
   state.slots = slots;
   state.mappings = [];
@@ -386,9 +391,15 @@ async function useModel(file, request) {
   state.mappingMode = defaults.length ? 'recommended' : 'original';
   $('propertySource').textContent = 'Imported GLB';
   $('sceneSource').textContent = file.filename;
+  const previewInfo = viewport.modelPreviewInfo;
   $('vehicleSubtitle').textContent = state.vehicleMode === 'truck'
-    ? 'รถบรรทุก GLB · ใช้ UV จากโมเดล และแพ็กลาย .scs ที่เลือก'
+    ? (previewInfo?.cabOnly ? 'พรีวิวเฉพาะห้องโดยสาร · GLB นี้ไม่มีแชสซีและล้อ' : 'โมเดลรถบรรทุก GLB · ใช้ UV จากโมเดล')
     : 'โมเดล GLB · ใช้ผัง UV ของโมเดล';
+  const notices = [];
+  if (previewInfo?.cabOnly) notices.push('ไฟล์นี้เป็นเฉพาะชิ้นห้องโดยสาร ไม่ใช่รถทั้งคัน จึงไม่มีแชสซีและล้อให้แสดง');
+  if (previewInfo?.missingTextures) notices.push('GLB ไม่มีภาพ texture ฝังมา · พรีวิวใช้สีวัสดุสำรอง ภาพลาย UV ยังใช้งานได้');
+  $('modelNotice').textContent = notices.join('  •  ');
+  $('modelNotice').hidden = notices.length === 0;
   $('previewBadge').textContent = 'IMPORTED GLB · UV PREVIEW';
   $('modeText').textContent = state.vehicleMode === 'truck' ? 'Truck skin mode' : 'Custom GLB mode';
   $('meshSelect').replaceChildren(new Option('วัสดุต้นฉบับ', 'original'));
