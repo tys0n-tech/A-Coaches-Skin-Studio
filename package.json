@@ -1,7 +1,7 @@
 {
   "name": "coaches-skin-studio",
   "productName": "Coaches Skin Studio",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "private": true,
   "description": "ETS2 coach livery studio with ready-to-use models and templates",
   "main": "electron/main.cjs",

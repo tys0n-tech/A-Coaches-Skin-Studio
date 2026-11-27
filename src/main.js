@@ -381,6 +381,7 @@ async function useModel(file, request) {
   showVariants(state.coachId);
   renderTextureSource();
   const coach = COACHES.find(item => item.id === state.coachId);
+  const previewInfo = viewport.modelPreviewInfo;
   const truckPartLabels = { cab_s_high: 'Scania S 2016 · High Roof Cab', cab_s_high_8x4: 'Scania S 2016 · High Roof Cab 8×4' };
   const title = state.localModel?.label ? `${coach.name} · ${state.localModel.label}`
     : state.vehicleMode === 'truck' ? (truckPartLabels[previewInfo?.rootName] || file.filename.replace(/\.glb$/i, '')) : coach?.name || file.filename;
@@ -391,7 +392,6 @@ async function useModel(file, request) {
   state.mappingMode = defaults.length ? 'recommended' : 'original';
   $('propertySource').textContent = 'Imported GLB';
   $('sceneSource').textContent = file.filename;
-  const previewInfo = viewport.modelPreviewInfo;
   $('vehicleSubtitle').textContent = state.vehicleMode === 'truck'
     ? (previewInfo?.cabOnly ? 'พรีวิวเฉพาะห้องโดยสาร · GLB นี้ไม่มีแชสซีและล้อ' : 'โมเดลรถบรรทุก GLB · ใช้ UV จากโมเดล')
     : 'โมเดล GLB · ใช้ผัง UV ของโมเดล';
