@@ -5,8 +5,9 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
-const { createPaintjob } = require('../electron/create-paintjob.cjs');
+const { createPaintjob, createTruckPaintjob, createMultiSkinPack } = require('../electron/create-paintjob.cjs');
 const models = require('../electron/coach-models.json');
+const truckModels = require('../electron/truck-models.json');
 const resources = fileURLToPath(new URL('../resources/', import.meta.url));
 const body = Buffer.alloc(128);
 body.write('DDS ');
@@ -118,4 +119,188 @@ test('window faces point outward so opposite-side decals can be culled', () => {
       assert.ok(crossX*Math.sign((p[0]+p[3]+p[6])/3)>0,model.id+' has an inward window face');
     }
   }
+});
+
+test('bundled truck models include GLB, template, and export valid ETS2 truck paintjob mods', () => {
+  const truckDDS = Buffer.alloc(128);
+  truckDDS.write('DDS ');
+  truckDDS.writeUInt32LE(4096, 16);
+  truckDDS.writeUInt32LE(4096, 12);
+  const accDDS = Buffer.alloc(128);
+  accDDS.write('DDS ');
+  accDDS.writeUInt32LE(2048, 16);
+  accDDS.writeUInt32LE(1024, 12);
+  const allTrucks = Object.values(truckModels).flat();
+  assert.equal(Object.keys(truckModels).length, 7);
+  assert.equal(allTrucks.length, 33);
+  const seenIds = new Set();
+  const seenFiles = new Set();
+  for (const model of allTrucks) {
+    assert.ok(!seenIds.has(model.id), `duplicate model id ${model.id}`);
+    assert.ok(!seenFiles.has(model.file), `duplicate model file ${model.file}`);
+    seenIds.add(model.id);
+    seenFiles.add(model.file);
+    assert.ok(fs.existsSync(new URL('../resources/models/' + model.file, import.meta.url)), model.file);
+    assert.ok(fs.existsSync(new URL('../resources/templates/' + model.template, import.meta.url)), model.template);
+    assert.ok(Array.isArray(model.accessories) && model.accessories.length >= 1, `${model.id} missing accessories`);
+    const seenAccKeys = new Set();
+    const seenAccItems = new Set();
+    for (const acc of model.accessories) {
+      assert.ok(!seenAccKeys.has(acc.key), `duplicate accessory key ${model.id}.${acc.key}`);
+      seenAccKeys.add(acc.key);
+      assert.ok(fs.existsSync(new URL('../resources/templates/' + acc.template, import.meta.url)), acc.template);
+      assert.ok(Array.isArray(acc.accList) && acc.accList.length >= 1, `${model.id}.${acc.key} missing accList`);
+      for (const item of acc.accList) {
+        assert.ok(!seenAccItems.has(item), `duplicate acc_list ${item} in ${model.id}.${acc.key}`);
+        seenAccItems.add(item);
+      }
+    }
+    const iconDDS = Buffer.alloc(128);
+    iconDDS.write('DDS ');
+    iconDDS.writeUInt32LE(256, 16);
+    iconDDS.writeUInt32LE(64, 12);
+    const chosenAccs = model.accessories.slice(0, 2).map(acc => ({ key: acc.key, dds: accDDS, accList: acc.accList }));
+    const { zip } = createTruckPaintjob(model, 'Aurelis Livery.png', truckDDS, {
+      customName: `★ Aurelis ${model.name}`,
+      accessoryTextures: chosenAccs,
+      sharedDDS: accDDS,
+      accessoryColor: '#2465C0',
+      iconDDS
+    });
+    const defEntry = zip.getEntries().find(entry => entry.entryName.includes('/paint_job/') && !entry.entryName.includes('/accessory/'));
+    assert.ok(defEntry);
+    const def = defEntry.getData().toString();
+    assert.ok(def.includes(`suitable_for[]: "${model.cabin}.${model.vehicle}.cabin"`));
+    assert.ok(def.includes(`alternate_uvset: ${Boolean(model.alternateUvset)}`));
+    assert.ok(def.includes(`name: "★ Aurelis ${model.name}"`));
+    // Accessory .sii filename MUST match the 12-char paint_job unit token so ETS2 loads it!
+    const unitMatch = def.match(/accessory_paint_job_data\s*:\s*([a-z0-9_]+)\./);
+    assert.ok(unitMatch);
+    const unitToken = unitMatch[1];
+    assert.equal(defEntry.entryName, `def/vehicle/truck/${model.vehicle}/paint_job/${unitToken}.sii`);
+    const accEntry = zip.getEntry(`def/vehicle/truck/${model.vehicle}/paint_job/accessory/${unitToken}.sii`);
+    assert.ok(accEntry, `missing accessory/${unitToken}.sii matching unit token`);
+    const accDef = accEntry.getData().toString();
+    for (const chosen of chosenAccs) {
+      assert.ok(accDef.includes(`${chosen.key}.tobj`), `${model.id} missing ${chosen.key}.tobj`);
+      assert.ok(accDef.includes(chosen.accList[0]), `${model.id} missing ${chosen.accList[0]}`);
+    }
+    if (model.vehicle === 'scania.s_2016') {
+      assert.ok(accDef.includes('r_chs_cover.6xnl_p'));
+    }
+    assert.ok(def.includes(`icon: "${unitToken}"`));
+    assert.ok(zip.getEntry(`material/ui/accessory/${unitToken}.mat`));
+    assert.ok(zip.getEntry(`material/ui/accessory/${unitToken}.tobj`));
+    assert.ok(zip.getEntry(`material/ui/accessory/${unitToken}.dds`));
+    const manifest = zip.getEntry('manifest.sii').getData().toString();
+    assert.ok(!manifest.includes('dlc_bus'));
+    for (const [, unit] of def.matchAll(/^\w+\s*:\s*([.\w]+)\s*$/gm)) {
+      assert.ok(unit.split('.').every(part => /^[a-z0-9_]{1,12}$/.test(part)), unit);
+    }
+    for (const tobjName of ['/paint.tobj', ...chosenAccs.map(c => `/${c.key}.tobj`), `/${unitToken}.tobj`]) {
+      const tobj = zip.getEntries().find(entry => entry.entryName.endsWith(tobjName)).getData();
+      assert.equal(tobj.readUInt32LE(40), tobj.length - 48);
+      assert.ok(zip.getEntry(tobj.subarray(49).toString()));
+    }
+  }
+});
+
+test('multi-skin pack combines coaches and trucks into a single collision-free .scs archive', () => {
+  const truckDDS = Buffer.alloc(128);
+  truckDDS.write('DDS ');
+  truckDDS.writeUInt32LE(4096, 16);
+  truckDDS.writeUInt32LE(4096, 12);
+  const accDDS = Buffer.alloc(128);
+  accDDS.write('DDS ');
+  accDDS.writeUInt32LE(2048, 16);
+  accDDS.writeUInt32LE(1024, 12);
+  const iconDDS = Buffer.alloc(128);
+  iconDDS.write('DDS ');
+  iconDDS.writeUInt32LE(256, 16);
+  iconDDS.writeUInt32LE(64, 12);
+
+  const coachModel = { ...models.scania[0], kind: 'coach' };
+  const scaniaTruck = { ...truckModels.scania[0], kind: 'truck' };
+  const volvoTruck = { ...truckModels.volvo[0], kind: 'truck' };
+
+  // Truck-only pack should NOT require dlc_bus
+  const truckOnly = createMultiSkinPack([
+    {
+      model: scaniaTruck,
+      filename: 'SkinA.png',
+      bodyDDS: truckDDS,
+      customName: '★ Fleet One',
+      accessoryTextures: [{ key: 'sideskirt', dds: accDDS, accList: scaniaTruck.accessories[0].accList }],
+      sharedDDS: accDDS,
+      accessoryColor: '#0071e3',
+      iconDDS
+    },
+    {
+      // Duplicate customName + same model -> must auto-salt to a distinct valid 12-char unitToken
+      model: scaniaTruck,
+      filename: 'SkinA.png',
+      bodyDDS: truckDDS,
+      customName: '★ Fleet One',
+      sharedDDS: accDDS,
+      accessoryColor: '#c91f28',
+      iconDDS
+    },
+    {
+      model: volvoTruck,
+      filename: 'VolvoBlue.png',
+      bodyDDS: truckDDS,
+      customName: '★ Volvo Aero',
+      accessoryTextures: [{ key: 'sideskirt', dds: accDDS, accList: volvoTruck.accessories[0].accList }],
+      sharedDDS: accDDS,
+      accessoryColor: '#1d1d1f',
+      iconDDS
+    }
+  ], resources, { packName: '★ Thailand Truck Fleet' });
+
+  assert.equal(truckOnly.count, 3);
+  const truckManifest = truckOnly.zip.getEntry('manifest.sii').getData().toString();
+  assert.ok(truckManifest.includes('display_name: "★ Thailand Truck Fleet"'));
+  assert.ok(!truckManifest.includes('dlc_bus'));
+  const truckPaintDefs = truckOnly.zip.getEntries().filter(e => /def\/vehicle\/truck\/[^/]+\/paint_job\/[^/]+\.sii$/.test(e.entryName));
+  assert.equal(truckPaintDefs.length, 3);
+  const seenUnits = new Set();
+  for (const defEntry of truckPaintDefs) {
+    const def = defEntry.getData().toString();
+    const m = def.match(/accessory_paint_job_data\s*:\s*([a-z0-9_]+)\./);
+    assert.ok(m);
+    assert.ok(!seenUnits.has(m[1]), `duplicate unit token ${m[1]}`);
+    seenUnits.add(m[1]);
+    assert.ok(/^[a-z0-9_]{1,12}$/.test(m[1]));
+    assert.ok(truckOnly.zip.getEntry(`material/ui/accessory/${m[1]}.dds`));
+  }
+
+  // Mixed Coach + Truck pack MUST include dlc_bus and keep coach glass + truck accessories intact
+  const mixed = createMultiSkinPack([
+    {
+      model: coachModel,
+      filename: 'CoachA.png',
+      bodyDDS: body,
+      glassDDS: body,
+      customName: '★ Touring VIP',
+      iconDDS
+    },
+    {
+      model: volvoTruck,
+      filename: 'VolvoVIP.png',
+      bodyDDS: truckDDS,
+      customName: '★ FH6 VIP',
+      accessoryTextures: [{ key: 'sideskirt', dds: accDDS, accList: volvoTruck.accessories[0].accList }],
+      sharedDDS: accDDS,
+      accessoryColor: '#0071e3',
+      iconDDS
+    }
+  ], resources, { packName: '★ Mixed VIP Pack' });
+
+  assert.equal(mixed.count, 2);
+  const mixedManifest = mixed.zip.getEntry('manifest.sii').getData().toString();
+  assert.ok(mixedManifest.includes('dlc_dependencies[]: "dlc_bus"'));
+  assert.ok(mixed.zip.getEntries().some(e => e.entryName.includes('def/vehicle/bus/scania.touring_23/paint_job/')));
+  assert.ok(mixed.zip.getEntries().some(e => e.entryName.includes('def/vehicle/bus/scania.touring_23/accessory/warnsticker/')));
+  assert.ok(mixed.zip.getEntries().some(e => e.entryName.includes('def/vehicle/truck/volvo.fh_2024/paint_job/')));
+  assert.ok(mixed.zip.getEntries().some(e => e.entryName.includes('def/vehicle/truck/volvo.fh_2024/paint_job/accessory/')));
 });

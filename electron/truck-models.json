@@ -1,0 +1,4751 @@
+{
+  "scania": [
+    {
+      "id": "scania-s-2016-high-4x2",
+      "brand": "scania",
+      "name": "Scania S 2016",
+      "title": "Scania S 2016 · High Roof · 4×2",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_S_2016_High_Roof_4x2.glb",
+      "label": "S 2016 · High Roof · 4×2",
+      "vehicle": "scania.s_2016",
+      "cabin": "highline",
+      "suitableCabins": [
+        "highline"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania S 2016 High Roof - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania S 2016 Sideskirt 4x2 - Stock II.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.4x2_mg01"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE Scania S 2016 Sideskirt 4x2 - Stock II.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.4x2_p",
+            "sideskirt.4x2_p_1",
+            "sideskirt.4x2_p_2",
+            "sideskirt.4x2_p_v8",
+            "sideskirt.4x2_p_v8_1",
+            "sideskirt.4x2_p_v8_2",
+            "sideskirt.4x2_mg01"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.4x2_blk_p",
+            "r_fender.4x2_p",
+            "r_fender.4x2_spcgr_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-s-2016-high-6x2",
+      "brand": "scania",
+      "name": "Scania S 2016",
+      "title": "Scania S 2016 · High Roof · 6×2",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_S_2016_High_Roof_6x2.glb",
+      "label": "S 2016 · High Roof · 6×2",
+      "vehicle": "scania.s_2016",
+      "cabin": "highline",
+      "suitableCabins": [
+        "highline"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania S 2016 High Roof - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania S 2016 Sideskirt 6x2 - Stock II.png",
+      "sideskirtTemplateSize": "2048 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2_mg01"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×2 (Sideskirt)",
+          "template": "TEMPLATE Scania S 2016 Sideskirt 6x2 - Stock II.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "sideskirt.6x2_p",
+            "sideskirt.6x2_p_1",
+            "sideskirt.6x2_p_2",
+            "sideskirt.6x2_p_v8",
+            "sideskirt.6x2_p_v8_1",
+            "sideskirt.6x2_p_v8_2",
+            "sideskirt.6x2_mg01"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 6x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x2_blk_p",
+            "r_fender.6x2_p",
+            "r_fender.6x2_spcgr_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-s-2016-high-6x4",
+      "brand": "scania",
+      "name": "Scania S 2016",
+      "title": "Scania S 2016 · High Roof · 6×4",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_S_2016_High_Roof_6x4.glb",
+      "label": "S 2016 · High Roof · 6×4",
+      "vehicle": "scania.s_2016",
+      "cabin": "highline",
+      "suitableCabins": [
+        "highline"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania S 2016 High Roof - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania S 2016 Sideskirt 6x4 - Stock II.png",
+      "sideskirtTemplateSize": "2048 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.6x2l_mg01"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×4 (Sideskirt)",
+          "template": "TEMPLATE Scania S 2016 Sideskirt 6x4 - Stock II.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "sideskirt.6x2l_p",
+            "sideskirt.6x2l_p_1",
+            "sideskirt.6x2l_p_2",
+            "sideskirt.6x2l_p_v8",
+            "sideskirt.6x2l_p_v8_1",
+            "sideskirt.6x2l_p_v8_2",
+            "sideskirt.6x2l_mg01"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 6x4.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x2l_blk_p",
+            "r_fender.6x2l_p",
+            "r_fender.6x2l_spcgr_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-s-2016-high-8x4",
+      "brand": "scania",
+      "name": "Scania S 2016",
+      "title": "Scania S 2016 · High Roof · 8×4",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_S_2016_High_Roof_8x4.glb",
+      "label": "S 2016 · High Roof · 8×4",
+      "vehicle": "scania.s_2016",
+      "cabin": "highline_8x4",
+      "suitableCabins": [
+        "highline_8x4"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania S 2016 High Roof 8x4 - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania 2016 Sideskirt 8x4.png",
+      "sideskirtTemplateSize": "1024 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.8x4_p"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 8×4 (Sideskirt)",
+          "template": "TEMPLATE Scania 2016 Sideskirt 8x4.png",
+          "templateSize": "1024 × 2048",
+          "accList": [
+            "sideskirt.8x4_p"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 8×4 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 8x4.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "r_fender.8x4_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-r-2016-high-4x2",
+      "brand": "scania",
+      "name": "Scania R 2016",
+      "title": "Scania R 2016 · High Roof · 4×2",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_R_2016_High_Roof_4x2.glb",
+      "label": "R 2016 · High Roof · 4×2",
+      "vehicle": "scania.r_2016",
+      "cabin": "highline",
+      "suitableCabins": [
+        "highline"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania R 2016 High Roof - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania S 2016 Sideskirt 4x2 - Stock II.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.4x2_mg01"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE Scania S 2016 Sideskirt 4x2 - Stock II.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.4x2_p",
+            "sideskirt.4x2_p_1",
+            "sideskirt.4x2_p_2",
+            "sideskirt.4x2_p_v8",
+            "sideskirt.4x2_p_v8_1",
+            "sideskirt.4x2_p_v8_2",
+            "sideskirt.4x2_mg01"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.4x2_blk_p",
+            "r_fender.4x2_p",
+            "r_fender.4x2_spcgr_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-r-2016-high-6x2",
+      "brand": "scania",
+      "name": "Scania R 2016",
+      "title": "Scania R 2016 · High Roof · 6×2",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_R_2016_High_Roof_6x2.glb",
+      "label": "R 2016 · High Roof · 6×2",
+      "vehicle": "scania.r_2016",
+      "cabin": "highline",
+      "suitableCabins": [
+        "highline"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania R 2016 High Roof - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania S 2016 Sideskirt 6x2 - Stock II.png",
+      "sideskirtTemplateSize": "2048 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2_mg01"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×2 (Sideskirt)",
+          "template": "TEMPLATE Scania S 2016 Sideskirt 6x2 - Stock II.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "sideskirt.6x2_p",
+            "sideskirt.6x2_p_1",
+            "sideskirt.6x2_p_2",
+            "sideskirt.6x2_p_v8",
+            "sideskirt.6x2_p_v8_1",
+            "sideskirt.6x2_p_v8_2",
+            "sideskirt.6x2_mg01"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 6x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x2_blk_p",
+            "r_fender.6x2_p",
+            "r_fender.6x2_spcgr_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-r-2016-high-6x4",
+      "brand": "scania",
+      "name": "Scania R 2016",
+      "title": "Scania R 2016 · High Roof · 6×4",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_R_2016_High_Roof_6x4.glb",
+      "label": "R 2016 · High Roof · 6×4",
+      "vehicle": "scania.r_2016",
+      "cabin": "highline",
+      "suitableCabins": [
+        "highline"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania R 2016 High Roof - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania S 2016 Sideskirt 6x4 - Stock II.png",
+      "sideskirtTemplateSize": "2048 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.6x2l_mg01"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×4 (Sideskirt)",
+          "template": "TEMPLATE Scania S 2016 Sideskirt 6x4 - Stock II.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "sideskirt.6x2l_p",
+            "sideskirt.6x2l_p_1",
+            "sideskirt.6x2l_p_2",
+            "sideskirt.6x2l_p_v8",
+            "sideskirt.6x2l_p_v8_1",
+            "sideskirt.6x2l_p_v8_2",
+            "sideskirt.6x2l_mg01"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 6x4.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x2l_blk_p",
+            "r_fender.6x2l_p",
+            "r_fender.6x2l_spcgr_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    },
+    {
+      "id": "scania-r-2016-high-8x4",
+      "brand": "scania",
+      "name": "Scania R 2016",
+      "title": "Scania R 2016 · High Roof · 8×4",
+      "symbol": "S",
+      "descriptor": "Truck · High Roof",
+      "file": "Scania_R_2016_High_Roof_8x4.glb",
+      "label": "R 2016 · High Roof · 8×4",
+      "vehicle": "scania.r_2016",
+      "cabin": "highline_8x4",
+      "suitableCabins": [
+        "highline_8x4"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Scania R 2016 High Roof 8x4 - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Scania 2016 Sideskirt 8x4.png",
+      "sideskirtTemplateSize": "1024 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.8x4_p"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 8×4 (Sideskirt)",
+          "template": "TEMPLATE Scania 2016 Sideskirt 8x4.png",
+          "templateSize": "1024 × 2048",
+          "accList": [
+            "sideskirt.8x4_p"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Scania 2016 Sun Visor.png",
+          "templateSize": "4096 × 256",
+          "accList": [
+            "sunshld.stock",
+            "sunshld.sunshld_01",
+            "sunshld.sunshld_04",
+            "sunshld.sunshld_05",
+            "sunshld.sunshld_06",
+            "sunshld.sunshld_02",
+            "sunshld.sunshld_03",
+            "sunshld.mg01",
+            "sunshld.mg02",
+            "sunshld.mg03",
+            "sunshld.mg04",
+            "sunshld.mg05",
+            "sunshld.mg06"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้างหลัก (Main Mirrors)",
+          "template": "TEMPLATE Scania 2016 Main Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.painted",
+            "mirror.painted_f"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Scania 2016 Front Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "f_mirror.painted"
+          ]
+        },
+        {
+          "key": "s_mirror",
+          "label": "กระจกข้างประตู (Side Mirror)",
+          "template": "TEMPLATE Scania 2016 Side Mirror.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "s_mirror.painted"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 8×4 (Rear Fender)",
+          "template": "TEMPLATE Scania 2016 Rear Fender 8x4.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "r_fender.8x4_p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย (Rear Bumper)",
+          "template": "TEMPLATE Scania 2016 Rear Bumper.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_bumper.duty_p",
+            "r_bumper.mg01",
+            "r_bumper.mg03",
+            "r_bumper.mg04",
+            "r_bumper.stock_p"
+          ]
+        },
+        {
+          "key": "f_logo",
+          "label": "โลโก้หน้า SCANIA (Front Logo)",
+          "template": "TEMPLATE Scania 2016 Front Logo.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "f_logo.painted",
+            "f_logo.mg01"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_bumper.low_p",
+        "f_bumper.mid_p",
+        "f_bumper.hgh_p",
+        "f_bumper.low_40mm_p",
+        "f_bumper.mid_40mm_p",
+        "f_bumper.hgh_40mm_p",
+        "f_bumper.mg01",
+        "f_bumper.mg02",
+        "f_bumper.mg03",
+        "f_bumper.mg04",
+        "f_bumper.mg05",
+        "f_bumper.mg06",
+        "f_fender.stock_p",
+        "f_fender.stock_p_s",
+        "f_fender.stock_p_s2",
+        "f_fender.hgh_p",
+        "f_fender.hgh_p_s",
+        "f_fender.hgh_p_s2",
+        "f_fendr_chs.pnt",
+        "f_light_bmp.covered_p",
+        "f_light_chs.shape1_p",
+        "f_light_chs.shape2_p",
+        "f_light_top.stock_p",
+        "f_light_top.stk_nrm_p",
+        "f_light_top.mod_pnt",
+        "f_light_top.mod_v8_pnt",
+        "f_light_top.mod_nrm_pnt",
+        "f_light_top.mod_nrm_v8p",
+        "f_logo.painted",
+        "f_logo.mg01",
+        "f_equip.super_hi_pnt",
+        "f_equip.super_md_pnt",
+        "f_equip.super_lo_pnt",
+        "f_wnd_frame.paint",
+        "f_mudflap.scania",
+        "f_mudflap.scaniah",
+        "f_mudflap.scanial",
+        "f_mudflap.v8",
+        "f_mudflap.v8h",
+        "f_mudflap.v8l",
+        "f_mudflap.kotr",
+        "f_mudflap.kotrh",
+        "f_mudflap.kotrl",
+        "f_mudflap.scaniamg",
+        "f_mudflap.scaniamgh",
+        "f_mudflap.scaniamgl",
+        "doorhndl.stock_p",
+        "mirror.painted",
+        "mirror.painted_f",
+        "s_mirror.painted",
+        "f_mirror.painted",
+        "sunshld.stock",
+        "sunshld.sunshld_01",
+        "sunshld.sunshld_02",
+        "sunshld.sunshld_03",
+        "sunshld.sunshld_04",
+        "sunshld.sunshld_05",
+        "sunshld.sunshld_06",
+        "sunshld.mg01",
+        "sunshld.mg02",
+        "sunshld.mg03",
+        "sunshld.mg04",
+        "sunshld.mg05",
+        "sunshld.mg06",
+        "r_fender.4x2_p",
+        "r_fender.4x2_blk_p",
+        "r_fender.4x2_spcgr_p",
+        "r_fender.6x2_p",
+        "r_fender.6x2_blk_p",
+        "r_fender.6x2_spcgr_p",
+        "r_fender.6x2l_p",
+        "r_fender.6x2l_blk_p",
+        "r_fender.6x2l_spcgr_p",
+        "r_fender.8x4_p",
+        "r_fendr_top.4x2_p",
+        "r_fendr_top.6x2_p",
+        "r_fendr_top.6x2l_p",
+        "r_fendr_top.8x4_p",
+        "r_fendr_top.low_4x2_p",
+        "r_fendr_top.low_6x2_p",
+        "r_fendr_top.low_6x2l_p",
+        "r_fendr_top.low_8x4_p",
+        "r_bumper.stock_p",
+        "r_bumper.duty_p",
+        "r_bumper.mg01",
+        "r_bumper.mg02",
+        "r_bumper.mg03",
+        "r_bumper.mg04",
+        "r_bumper.mg05",
+        "r_bumper.mg06",
+        "r_chs_cover.4x2_p",
+        "r_chs_cover.6xn_p",
+        "r_chs_cover.6xnl_p",
+        "r_chs_cover.8x4_p",
+        "exhaust_m.mg01",
+        "exhaust_m.mg02",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_1",
+        "sideskirt.4x2_p_2",
+        "sideskirt.4x2_p_v8",
+        "sideskirt.4x2_p_v8_1",
+        "sideskirt.4x2_p_v8_2",
+        "sideskirt.6x2_p",
+        "sideskirt.6x2_p_1",
+        "sideskirt.6x2_p_2",
+        "sideskirt.6x2_p_v8",
+        "sideskirt.6x2_p_v8_1",
+        "sideskirt.6x2_p_v8_2",
+        "sideskirt.6x2l_p",
+        "sideskirt.6x2l_p_1",
+        "sideskirt.6x2l_p_2",
+        "sideskirt.6x2l_p_v8",
+        "sideskirt.6x2l_p_v8_1",
+        "sideskirt.6x2l_p_v8_2",
+        "sideskirt.8x4_p"
+      ],
+      "glass": false
+    }
+  ],
+  "volvo": [
+    {
+      "id": "volvo-fh6-2024-4x2",
+      "brand": "volvo",
+      "name": "Volvo FH6 (2024)",
+      "title": "Volvo FH6 (2024) · Aero XL · 4×2",
+      "symbol": "V",
+      "descriptor": "Truck · Aero Globetrotter XL",
+      "file": "Volvo_FH6_Aero_XL_4x2.glb",
+      "label": "FH6 · Aero XL · 4×2",
+      "vehicle": "volvo.fh_2024",
+      "cabin": "l2h3_aero",
+      "suitableCabins": [
+        "l2h3_aero"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH6 Aero XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Volvo FH Sideskirt 4x2.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.stock_4x_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE Volvo FH Sideskirt 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.chrome_4x",
+            "sideskirt.chrome_s4x",
+            "sideskirt.stock_4x_a"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง / กล้อง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.cam_digi",
+            "mirror.cam_digi_a",
+            "mirror.chrm_logo_a",
+            "mirror.chrom_logo_a",
+            "mirror.chrom_spec",
+            "mirror.chrom_spec_a",
+            "mirror.chrome_led",
+            "mirror.chrome_led_a",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape3_a"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_4x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 4×2 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_4x",
+            "r_fendr_top.paint_4x"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 4×2 (Chassis Cover)",
+          "template": "TEMPLATE Volvo FH Chassis Cover 4x2.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "r_chs_cover.mix_4x",
+            "r_chs_cover.mix_4x_2",
+            "r_chs_cover.painted_4x",
+            "r_chs_cover.painted_4x_2"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "mirror.cam_digi",
+        "mirror.cam_digi_a",
+        "mirror.chrm_logo_a",
+        "mirror.chrom_logo_a",
+        "mirror.chrom_spec",
+        "mirror.chrom_spec_a",
+        "mirror.chrome_led",
+        "mirror.chrome_led_a",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape3_a",
+        "s_deflector.light_xxl",
+        "s_deflector.stock_gtxxl",
+        "chassis.8x4",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_gt",
+        "filter.paint_gtxl",
+        "filter.paint_gtxxl",
+        "filter.paint_slp",
+        "s_mirror.paint"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh6-2024-6x2",
+      "brand": "volvo",
+      "name": "Volvo FH6 (2024)",
+      "title": "Volvo FH6 (2024) · Aero XL · 6×2",
+      "symbol": "V",
+      "descriptor": "Truck · Aero Globetrotter XL",
+      "file": "Volvo_FH6_Aero_XL_6x2.glb",
+      "label": "FH6 · Aero XL · 6×2",
+      "vehicle": "volvo.fh_2024",
+      "cabin": "l2h3_aero",
+      "suitableCabins": [
+        "l2h3_aero"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH6 Aero XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Volvo FH Sideskirt 6x.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_6x_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×2 (Sideskirt)",
+          "template": "TEMPLATE Volvo FH Sideskirt 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.chrome_6x",
+            "sideskirt.chrome_s6x",
+            "sideskirt.stock_6x_a"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง / กล้อง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.cam_digi",
+            "mirror.cam_digi_a",
+            "mirror.chrm_logo_a",
+            "mirror.chrom_logo_a",
+            "mirror.chrom_spec",
+            "mirror.chrom_spec_a",
+            "mirror.chrome_led",
+            "mirror.chrome_led_a",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape3_a"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_6x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×2 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_6x",
+            "r_fendr_top.paint_6x"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 6×2 (Chassis Cover)",
+          "template": "TEMPLATE Volvo FH Chassis Cover 6x.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "r_chs_cover.mix_6x",
+            "r_chs_cover.painted_6x"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "mirror.cam_digi",
+        "mirror.cam_digi_a",
+        "mirror.chrm_logo_a",
+        "mirror.chrom_logo_a",
+        "mirror.chrom_spec",
+        "mirror.chrom_spec_a",
+        "mirror.chrome_led",
+        "mirror.chrome_led_a",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape3_a",
+        "s_deflector.light_xxl",
+        "s_deflector.stock_gtxxl",
+        "chassis.8x4",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_gt",
+        "filter.paint_gtxl",
+        "filter.paint_gtxxl",
+        "filter.paint_slp",
+        "s_mirror.paint"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh6-2024-6x4",
+      "brand": "volvo",
+      "name": "Volvo FH6 (2024)",
+      "title": "Volvo FH6 (2024) · Aero XL · 6×4",
+      "symbol": "V",
+      "descriptor": "Truck · Aero Globetrotter XL",
+      "file": "Volvo_FH6_Aero_XL_6x4.glb",
+      "label": "FH6 · Aero XL · 6×4",
+      "vehicle": "volvo.fh_2024",
+      "cabin": "l2h3_aero",
+      "suitableCabins": [
+        "l2h3_aero"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH6 Aero XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Volvo FH Sideskirt 6x.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_6x_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×4 (Sideskirt)",
+          "template": "TEMPLATE Volvo FH Sideskirt 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.chrome_6x",
+            "sideskirt.chrome_s6x",
+            "sideskirt.stock_6x_a"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง / กล้อง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.cam_digi",
+            "mirror.cam_digi_a",
+            "mirror.chrm_logo_a",
+            "mirror.chrom_logo_a",
+            "mirror.chrom_spec",
+            "mirror.chrom_spec_a",
+            "mirror.chrome_led",
+            "mirror.chrome_led_a",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape3_a"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_6x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×4 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_6x",
+            "r_fendr_top.paint_6x"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 6×4 (Chassis Cover)",
+          "template": "TEMPLATE Volvo FH Chassis Cover 6x.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "r_chs_cover.mix_6x",
+            "r_chs_cover.painted_6x"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "mirror.cam_digi",
+        "mirror.cam_digi_a",
+        "mirror.chrm_logo_a",
+        "mirror.chrom_logo_a",
+        "mirror.chrom_spec",
+        "mirror.chrom_spec_a",
+        "mirror.chrome_led",
+        "mirror.chrome_led_a",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape3_a",
+        "s_deflector.light_xxl",
+        "s_deflector.stock_gtxxl",
+        "chassis.8x4",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_gt",
+        "filter.paint_gtxl",
+        "filter.paint_gtxxl",
+        "filter.paint_slp",
+        "s_mirror.paint"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh6-2024-8x4",
+      "brand": "volvo",
+      "name": "Volvo FH6 (2024)",
+      "title": "Volvo FH6 (2024) · Aero XL · 8×4",
+      "symbol": "V",
+      "descriptor": "Truck · Aero Globetrotter XL",
+      "file": "Volvo_FH6_Aero_XL_8x4.glb",
+      "label": "FH6 · Aero XL · 8×4",
+      "vehicle": "volvo.fh_2024",
+      "cabin": "l2h3_8x4_a",
+      "suitableCabins": [
+        "l2h3_8x4_a"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH6 Aero XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "s_deflector",
+          "label": "แผงข้างหอคอย 8×4 (Side Deflectors 8×4)",
+          "template": "TEMPLATE Volvo FH Side Deflectors 8x4.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "s_deflector.light_xxl",
+            "s_deflector.stock_gtxxl",
+            "chassis.8x4"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง / กล้อง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.cam_digi",
+            "mirror.cam_digi_a",
+            "mirror.chrm_logo_a",
+            "mirror.chrom_logo_a",
+            "mirror.chrom_spec",
+            "mirror.chrom_spec_a",
+            "mirror.chrome_led",
+            "mirror.chrome_led_a",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape3_a"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 8×4 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_8x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 8×4 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_8x",
+            "r_fendr_top.paint_8x"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "mirror.cam_digi",
+        "mirror.cam_digi_a",
+        "mirror.chrm_logo_a",
+        "mirror.chrom_logo_a",
+        "mirror.chrom_spec",
+        "mirror.chrom_spec_a",
+        "mirror.chrome_led",
+        "mirror.chrome_led_a",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape3_a",
+        "s_deflector.light_xxl",
+        "s_deflector.stock_gtxxl",
+        "chassis.8x4",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_gt",
+        "filter.paint_gtxl",
+        "filter.paint_gtxxl",
+        "filter.paint_slp",
+        "s_mirror.paint"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh5-2021-4x2",
+      "brand": "volvo",
+      "name": "Volvo FH5 (2021)",
+      "title": "Volvo FH5 (2021) · Globetrotter XL · 4×2",
+      "symbol": "V",
+      "descriptor": "Truck · Globetrotter XL",
+      "file": "Volvo_FH5_XL_4x2.glb",
+      "label": "FH5 · Globetrotter XL · 4×2",
+      "vehicle": "volvo.fh_2021",
+      "cabin": "l2h3",
+      "suitableCabins": [
+        "l2h3"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH5 XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Volvo FH Sideskirt 4x2.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.stock_4x_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE Volvo FH Sideskirt 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.chrome_4x",
+            "sideskirt.chrome_s4x",
+            "sideskirt.stock_4x_a"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.chrom_spec",
+            "mirror.chrome_led",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape4"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_4x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 4×2 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_4x",
+            "r_fendr_top.paint_4x"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 4×2 (Chassis Cover)",
+          "template": "TEMPLATE Volvo FH Chassis Cover 4x2.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "r_chs_cover.mix_4x",
+            "r_chs_cover.mix_4x_2",
+            "r_chs_cover.painted_4x",
+            "r_chs_cover.painted_4x_2"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "exhaust_m.shape1",
+        "exhaust_m.shape2",
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_h1",
+        "filter.paint_h2",
+        "filter.paint_h3",
+        "mirror.chrom_spec",
+        "mirror.chrome_led",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape4",
+        "s_mirror.paint",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "chassis.8x4"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh5-2021-6x2",
+      "brand": "volvo",
+      "name": "Volvo FH5 (2021)",
+      "title": "Volvo FH5 (2021) · Globetrotter XL · 6×2",
+      "symbol": "V",
+      "descriptor": "Truck · Globetrotter XL",
+      "file": "Volvo_FH5_XL_6x2.glb",
+      "label": "FH5 · Globetrotter XL · 6×2",
+      "vehicle": "volvo.fh_2021",
+      "cabin": "l2h3",
+      "suitableCabins": [
+        "l2h3"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH5 XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Volvo FH Sideskirt 6x.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_6x_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×2 (Sideskirt)",
+          "template": "TEMPLATE Volvo FH Sideskirt 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.chrome_6x",
+            "sideskirt.chrome_s6x",
+            "sideskirt.stock_6x_a"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.chrom_spec",
+            "mirror.chrome_led",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape4"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_6x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×2 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_6x",
+            "r_fendr_top.paint_6x"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 6×2 (Chassis Cover)",
+          "template": "TEMPLATE Volvo FH Chassis Cover 6x.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "r_chs_cover.mix_6x",
+            "r_chs_cover.painted_6x"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "exhaust_m.shape1",
+        "exhaust_m.shape2",
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_h1",
+        "filter.paint_h2",
+        "filter.paint_h3",
+        "mirror.chrom_spec",
+        "mirror.chrome_led",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape4",
+        "s_mirror.paint",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "chassis.8x4"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh5-2021-6x4",
+      "brand": "volvo",
+      "name": "Volvo FH5 (2021)",
+      "title": "Volvo FH5 (2021) · Globetrotter XL · 6×4",
+      "symbol": "V",
+      "descriptor": "Truck · Globetrotter XL",
+      "file": "Volvo_FH5_XL_6x4.glb",
+      "label": "FH5 · Globetrotter XL · 6×4",
+      "vehicle": "volvo.fh_2021",
+      "cabin": "l2h3",
+      "suitableCabins": [
+        "l2h3"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH5 XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Volvo FH Sideskirt 6x.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_6x_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×4 (Sideskirt)",
+          "template": "TEMPLATE Volvo FH Sideskirt 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.chrome_6x",
+            "sideskirt.chrome_s6x",
+            "sideskirt.stock_6x_a"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.chrom_spec",
+            "mirror.chrome_led",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape4"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_6x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×4 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_6x",
+            "r_fendr_top.paint_6x"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 6×4 (Chassis Cover)",
+          "template": "TEMPLATE Volvo FH Chassis Cover 6x.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "r_chs_cover.mix_6x",
+            "r_chs_cover.painted_6x"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "exhaust_m.shape1",
+        "exhaust_m.shape2",
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_h1",
+        "filter.paint_h2",
+        "filter.paint_h3",
+        "mirror.chrom_spec",
+        "mirror.chrome_led",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape4",
+        "s_mirror.paint",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "chassis.8x4"
+      ],
+      "glass": false
+    },
+    {
+      "id": "volvo-fh5-2021-8x4",
+      "brand": "volvo",
+      "name": "Volvo FH5 (2021)",
+      "title": "Volvo FH5 (2021) · Globetrotter XL · 8×4",
+      "symbol": "V",
+      "descriptor": "Truck · Globetrotter XL",
+      "file": "Volvo_FH5_XL_8x4.glb",
+      "label": "FH5 · Globetrotter XL · 8×4",
+      "vehicle": "volvo.fh_2021",
+      "cabin": "l2h3_8x4",
+      "suitableCabins": [
+        "l2h3_8x4"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Volvo FH5 XL - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "s_deflector",
+          "label": "แผงข้างหอคอย 8×4 (Side Deflectors 8×4)",
+          "template": "TEMPLATE Volvo FH Side Deflectors 8x4.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "chassis.8x4"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Volvo FH Sun Visor.png",
+          "templateSize": "1024 × 128",
+          "accList": [
+            "sunshld.dual",
+            "sunshld.quatro",
+            "sunshld.shape1",
+            "sunshld.shape2",
+            "sunshld.triangle"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE Volvo FH Mirrors.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "mirror.chrom_spec",
+            "mirror.chrome_led",
+            "mirror.chrome_logo",
+            "mirror.shape3",
+            "mirror.shape4"
+          ]
+        },
+        {
+          "key": "f_mirror",
+          "label": "กระจกมองหน้า (Front Mirror)",
+          "template": "TEMPLATE Volvo FH Front Mirror.png",
+          "templateSize": "1024 × 1024",
+          "accList": [
+            "f_mirror.painted",
+            "f_mirror.paintedl"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 8×4 (Rear Fender)",
+          "template": "TEMPLATE Volvo FH Rear Fender.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fender.paint_8x"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 8×4 (Rear Fender Top)",
+          "template": "TEMPLATE Volvo FH Rear Fender Top.png",
+          "templateSize": "1024 × 512",
+          "accList": [
+            "r_fendr_top.chrome_p_8x",
+            "r_fendr_top.paint_8x"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "exhaust_m.shape1",
+        "exhaust_m.shape2",
+        "f_fender_chs.paint",
+        "r_bumper.bend",
+        "r_bumper.painted",
+        "r_bumper.smoth",
+        "r_chs_cover.mix_4x",
+        "r_chs_cover.mix_4x_2",
+        "r_chs_cover.mix_6x",
+        "r_chs_cover.painted_4x",
+        "r_chs_cover.painted_4x_2",
+        "r_chs_cover.painted_6x",
+        "r_fender.paint_4x",
+        "r_fender.paint_6x",
+        "r_fender.paint_8x",
+        "r_fendr_top.chrome_p_4x",
+        "r_fendr_top.chrome_p_6x",
+        "r_fendr_top.chrome_p_8x",
+        "r_fendr_top.paint_4x",
+        "r_fendr_top.paint_6x",
+        "r_fendr_top.paint_8x",
+        "sideskirt.chrome_4x",
+        "sideskirt.chrome_6x",
+        "sideskirt.chrome_s4x",
+        "sideskirt.chrome_s6x",
+        "sideskirt.stock_4x_a",
+        "sideskirt.stock_6x_a",
+        "f_grill.net",
+        "f_mirror.painted",
+        "f_mirror.paintedl",
+        "filter.paint_h1",
+        "filter.paint_h2",
+        "filter.paint_h3",
+        "mirror.chrom_spec",
+        "mirror.chrome_led",
+        "mirror.chrome_logo",
+        "mirror.shape3",
+        "mirror.shape4",
+        "s_mirror.paint",
+        "sunshld.dual",
+        "sunshld.quatro",
+        "sunshld.shape1",
+        "sunshld.shape2",
+        "sunshld.triangle",
+        "chassis.8x4"
+      ],
+      "glass": false
+    }
+  ],
+  "daf": [
+    {
+      "id": "daf-ngd-xgp-4x2",
+      "brand": "daf",
+      "name": "DAF NGD",
+      "title": "DAF NGD · XG+ · 4×2",
+      "symbol": "D",
+      "descriptor": "Truck · XG+",
+      "file": "DAF_NGD_XG_Plus_4x2.glb",
+      "label": "XG+ · 4×2",
+      "vehicle": "daf.2021",
+      "cabin": "xg_plus",
+      "suitableCabins": [
+        "xg_plus"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE DAF NGD XG Plus - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE DAF NGD Sideskirt 4x2.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.pnt2_4x2",
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_xf",
+        "sideskirt.slv2_4x2",
+        "sideskirt.slv2_4x2_xf",
+        "sideskirt.slv_4x2",
+        "sideskirt.slv_4x2_xf"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE DAF NGD Sideskirt 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.pnt2_4x2",
+            "sideskirt.pnt_4x2",
+            "sideskirt.pnt_4x2_xf",
+            "sideskirt.slv2_4x2",
+            "sideskirt.slv2_4x2_xf",
+            "sideskirt.slv_4x2",
+            "sideskirt.slv_4x2_xf"
+          ]
+        },
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE DAF NGD Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshield.paint_xf",
+            "sunshield.paint_xg",
+            "sunshield.paint_xgp",
+            "sunshield.pnt_glo_xgp"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกกล้อง / มองข้าง (Mirrors)",
+          "template": "TEMPLATE DAF NGD Camera Mirrors.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "mirror.cam_semi",
+            "mirror.plast",
+            "mirror.semi"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "sunshield.paint_xf",
+        "sunshield.paint_xg",
+        "sunshield.paint_xgp",
+        "sunshield.pnt_glo_xgp",
+        "sideskirt.pnt2_4x2",
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_xf",
+        "sideskirt.slv2_4x2",
+        "sideskirt.slv2_4x2_xf",
+        "sideskirt.slv_4x2",
+        "sideskirt.slv_4x2_xf",
+        "mirror.cam_semi",
+        "mirror.plast",
+        "mirror.semi"
+      ],
+      "glass": false
+    },
+    {
+      "id": "daf-ngd-xgp-6x2",
+      "brand": "daf",
+      "name": "DAF NGD",
+      "title": "DAF NGD · XG+ · 6×2",
+      "symbol": "D",
+      "descriptor": "Truck · XG+",
+      "file": "DAF_NGD_XG_Plus_6x2.glb",
+      "label": "XG+ · 6×2",
+      "vehicle": "daf.2021",
+      "cabin": "xg_plus",
+      "suitableCabins": [
+        "xg_plus"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE DAF NGD XG Plus - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE DAF NGD Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshield.paint_xf",
+            "sunshield.paint_xg",
+            "sunshield.paint_xgp",
+            "sunshield.pnt_glo_xgp"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกกล้อง / มองข้าง (Mirrors)",
+          "template": "TEMPLATE DAF NGD Camera Mirrors.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "mirror.cam_semi",
+            "mirror.plast",
+            "mirror.semi"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "sunshield.paint_xf",
+        "sunshield.paint_xg",
+        "sunshield.paint_xgp",
+        "sunshield.pnt_glo_xgp",
+        "sideskirt.pnt2_4x2",
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_xf",
+        "sideskirt.slv2_4x2",
+        "sideskirt.slv2_4x2_xf",
+        "sideskirt.slv_4x2",
+        "sideskirt.slv_4x2_xf",
+        "mirror.cam_semi",
+        "mirror.plast",
+        "mirror.semi"
+      ],
+      "glass": false
+    },
+    {
+      "id": "daf-ngd-xgp-6x4",
+      "brand": "daf",
+      "name": "DAF NGD",
+      "title": "DAF NGD · XG+ · 6×4",
+      "symbol": "D",
+      "descriptor": "Truck · XG+",
+      "file": "DAF_NGD_XG_Plus_6x4.glb",
+      "label": "XG+ · 6×4",
+      "vehicle": "daf.2021",
+      "cabin": "xg_plus",
+      "suitableCabins": [
+        "xg_plus"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE DAF NGD XG Plus - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE DAF NGD Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshield.paint_xf",
+            "sunshield.paint_xg",
+            "sunshield.paint_xgp",
+            "sunshield.pnt_glo_xgp"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกกล้อง / มองข้าง (Mirrors)",
+          "template": "TEMPLATE DAF NGD Camera Mirrors.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "mirror.cam_semi",
+            "mirror.plast",
+            "mirror.semi"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "sunshield.paint_xf",
+        "sunshield.paint_xg",
+        "sunshield.paint_xgp",
+        "sunshield.pnt_glo_xgp",
+        "sideskirt.pnt2_4x2",
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_xf",
+        "sideskirt.slv2_4x2",
+        "sideskirt.slv2_4x2_xf",
+        "sideskirt.slv_4x2",
+        "sideskirt.slv_4x2_xf",
+        "mirror.cam_semi",
+        "mirror.plast",
+        "mirror.semi"
+      ],
+      "glass": false
+    },
+    {
+      "id": "daf-ngd-xgp-8x4",
+      "brand": "daf",
+      "name": "DAF NGD",
+      "title": "DAF NGD · XG+ · 8×4",
+      "symbol": "D",
+      "descriptor": "Truck · XG+",
+      "file": "DAF_NGD_XG_Plus_8x4.glb",
+      "label": "XG+ · 8×4",
+      "vehicle": "daf.2021",
+      "cabin": "xg_plus",
+      "suitableCabins": [
+        "xg_plus"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE DAF NGD XG Plus - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE DAF NGD Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshield.paint_xf",
+            "sunshield.paint_xg",
+            "sunshield.paint_xgp",
+            "sunshield.pnt_glo_xgp"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกกล้อง / มองข้าง (Mirrors)",
+          "template": "TEMPLATE DAF NGD Camera Mirrors.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "mirror.cam_semi",
+            "mirror.plast",
+            "mirror.semi"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "sunshield.paint_xf",
+        "sunshield.paint_xg",
+        "sunshield.paint_xgp",
+        "sunshield.pnt_glo_xgp",
+        "sideskirt.pnt2_4x2",
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_xf",
+        "sideskirt.slv2_4x2",
+        "sideskirt.slv2_4x2_xf",
+        "sideskirt.slv_4x2",
+        "sideskirt.slv_4x2_xf",
+        "mirror.cam_semi",
+        "mirror.plast",
+        "mirror.semi"
+      ],
+      "glass": false
+    }
+  ],
+  "man": [
+    {
+      "id": "man-tgx-2020-gx-4x2",
+      "brand": "man",
+      "name": "MAN TGX 2020",
+      "title": "MAN TGX 2020 · GX · 4×2",
+      "symbol": "M",
+      "descriptor": "Truck · GX",
+      "file": "MAN_TGX_2020_GX_4x2.glb",
+      "label": "GX · 4×2",
+      "vehicle": "man.tgx_2020",
+      "cabin": "gx",
+      "suitableCabins": [
+        "gx"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE MAN TGX 2020 GX - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.4x2",
+        "sideskirt.4x2_e",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_e"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.4x2",
+            "sideskirt.4x2_e",
+            "sideskirt.4x2_p",
+            "sideskirt.4x2_p_e"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE MAN TGX 2020 Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.cam_pnt",
+            "mirror.cam_pnt_gn",
+            "mirror.pnt_pla",
+            "mirror.pnt_pla_bs"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.pnt_4x2"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 4×2 (Rear Fender Top)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender Top.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fendr_top.pnt_4x2"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_deflector.gm",
+        "r_deflector.gm_2024",
+        "r_deflector.gn",
+        "f_bumper.pnt_pla_duty",
+        "mirror.cam_pnt",
+        "mirror.cam_pnt_gn",
+        "mirror.pnt_pla",
+        "mirror.pnt_pla_bs",
+        "r_fender.pnt_4x2",
+        "r_fender.pnt_6x22",
+        "r_fender.pnt_6x4",
+        "r_fender.pnt_8x4",
+        "r_fendr_top.pnt_4x2",
+        "r_fendr_top.pnt_6x22",
+        "r_fendr_top.pnt_6x4",
+        "r_fendr_top.pnt_8x4",
+        "r_light.led_pnt",
+        "r_light.old_pnt",
+        "sideskirt.4x2",
+        "sideskirt.4x2_e",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_e",
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e",
+        "f_fender_chs.pnt_duty"
+      ],
+      "glass": false
+    },
+    {
+      "id": "man-tgx-2020-gx-6x2",
+      "brand": "man",
+      "name": "MAN TGX 2020",
+      "title": "MAN TGX 2020 · GX · 6×2",
+      "symbol": "M",
+      "descriptor": "Truck · GX",
+      "file": "MAN_TGX_2020_GX_6x2.glb",
+      "label": "GX · 6×2",
+      "vehicle": "man.tgx_2020",
+      "cabin": "gx",
+      "suitableCabins": [
+        "gx"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE MAN TGX 2020 GX - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×2 (Sideskirt)",
+          "template": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.fender_p",
+            "sideskirt.fender_p_e",
+            "sideskirt.fender_s",
+            "sideskirt.fender_s_e"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE MAN TGX 2020 Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.cam_pnt",
+            "mirror.cam_pnt_gn",
+            "mirror.pnt_pla",
+            "mirror.pnt_pla_bs"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.pnt_6x22",
+            "r_fender.pnt_6x4"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×2 (Rear Fender Top)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender Top.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fendr_top.pnt_6x22",
+            "r_fendr_top.pnt_6x4"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_deflector.gm",
+        "r_deflector.gm_2024",
+        "r_deflector.gn",
+        "f_bumper.pnt_pla_duty",
+        "mirror.cam_pnt",
+        "mirror.cam_pnt_gn",
+        "mirror.pnt_pla",
+        "mirror.pnt_pla_bs",
+        "r_fender.pnt_4x2",
+        "r_fender.pnt_6x22",
+        "r_fender.pnt_6x4",
+        "r_fender.pnt_8x4",
+        "r_fendr_top.pnt_4x2",
+        "r_fendr_top.pnt_6x22",
+        "r_fendr_top.pnt_6x4",
+        "r_fendr_top.pnt_8x4",
+        "r_light.led_pnt",
+        "r_light.old_pnt",
+        "sideskirt.4x2",
+        "sideskirt.4x2_e",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_e",
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e",
+        "f_fender_chs.pnt_duty"
+      ],
+      "glass": false
+    },
+    {
+      "id": "man-tgx-2020-gx-6x4",
+      "brand": "man",
+      "name": "MAN TGX 2020",
+      "title": "MAN TGX 2020 · GX · 6×4",
+      "symbol": "M",
+      "descriptor": "Truck · GX",
+      "file": "MAN_TGX_2020_GX_6x4.glb",
+      "label": "GX · 6×4",
+      "vehicle": "man.tgx_2020",
+      "cabin": "gx",
+      "suitableCabins": [
+        "gx"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE MAN TGX 2020 GX - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×4 (Sideskirt)",
+          "template": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.fender_p",
+            "sideskirt.fender_p_e",
+            "sideskirt.fender_s",
+            "sideskirt.fender_s_e"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE MAN TGX 2020 Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.cam_pnt",
+            "mirror.cam_pnt_gn",
+            "mirror.pnt_pla",
+            "mirror.pnt_pla_bs"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.pnt_6x4"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×4 (Rear Fender Top)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender Top.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fendr_top.pnt_6x4"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_deflector.gm",
+        "r_deflector.gm_2024",
+        "r_deflector.gn",
+        "f_bumper.pnt_pla_duty",
+        "mirror.cam_pnt",
+        "mirror.cam_pnt_gn",
+        "mirror.pnt_pla",
+        "mirror.pnt_pla_bs",
+        "r_fender.pnt_4x2",
+        "r_fender.pnt_6x22",
+        "r_fender.pnt_6x4",
+        "r_fender.pnt_8x4",
+        "r_fendr_top.pnt_4x2",
+        "r_fendr_top.pnt_6x22",
+        "r_fendr_top.pnt_6x4",
+        "r_fendr_top.pnt_8x4",
+        "r_light.led_pnt",
+        "r_light.old_pnt",
+        "sideskirt.4x2",
+        "sideskirt.4x2_e",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_e",
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e",
+        "f_fender_chs.pnt_duty"
+      ],
+      "glass": false
+    },
+    {
+      "id": "man-tgx-2020-gx-8x4",
+      "brand": "man",
+      "name": "MAN TGX 2020",
+      "title": "MAN TGX 2020 · GX · 8×4",
+      "symbol": "M",
+      "descriptor": "Truck · GX",
+      "file": "MAN_TGX_2020_GX_8x4.glb",
+      "label": "GX · 8×4",
+      "vehicle": "man.tgx_2020",
+      "cabin": "gx",
+      "suitableCabins": [
+        "gx"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE MAN TGX 2020 GX - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 8×4 (Sideskirt)",
+          "template": "TEMPLATE MAN TGX 2020 Sideskirt.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.fender_p",
+            "sideskirt.fender_p_e",
+            "sideskirt.fender_s",
+            "sideskirt.fender_s_e"
+          ]
+        },
+        {
+          "key": "mirror",
+          "label": "กระจกมองข้าง (Mirrors)",
+          "template": "TEMPLATE MAN TGX 2020 Mirrors.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "mirror.cam_pnt",
+            "mirror.cam_pnt_gn",
+            "mirror.pnt_pla",
+            "mirror.pnt_pla_bs"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 8×4 (Rear Fender)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.pnt_8x4"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 8×4 (Rear Fender Top)",
+          "template": "TEMPLATE MAN TGX 2020 Rear Fender Top.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fendr_top.pnt_8x4"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_deflector.gm",
+        "r_deflector.gm_2024",
+        "r_deflector.gn",
+        "f_bumper.pnt_pla_duty",
+        "mirror.cam_pnt",
+        "mirror.cam_pnt_gn",
+        "mirror.pnt_pla",
+        "mirror.pnt_pla_bs",
+        "r_fender.pnt_4x2",
+        "r_fender.pnt_6x22",
+        "r_fender.pnt_6x4",
+        "r_fender.pnt_8x4",
+        "r_fendr_top.pnt_4x2",
+        "r_fendr_top.pnt_6x22",
+        "r_fendr_top.pnt_6x4",
+        "r_fendr_top.pnt_8x4",
+        "r_light.led_pnt",
+        "r_light.old_pnt",
+        "sideskirt.4x2",
+        "sideskirt.4x2_e",
+        "sideskirt.4x2_p",
+        "sideskirt.4x2_p_e",
+        "sideskirt.fender_p",
+        "sideskirt.fender_p_e",
+        "sideskirt.fender_s",
+        "sideskirt.fender_s_e",
+        "f_fender_chs.pnt_duty"
+      ],
+      "glass": false
+    }
+  ],
+  "mercedes": [
+    {
+      "id": "mercedes-actros-2014-4x2",
+      "brand": "mercedes",
+      "name": "Mercedes New Actros",
+      "title": "Mercedes New Actros · GigaSpace · 4×2",
+      "symbol": "MB",
+      "descriptor": "Truck · GigaSpace",
+      "file": "Mercedes_New_Actros_GigaSpace_4x2.glb",
+      "label": "GigaSpace · 4×2",
+      "vehicle": "mercedes.actros2014",
+      "cabin": "gigaspace",
+      "suitableCabins": [
+        "gigaspace"
+      ],
+      "alternateUvset": true,
+      "template": "TEMPLATE Mercedes New Actros GigaSpace - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Mercedes New Actros Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshld.paint01",
+            "sunshld.paint02",
+            "sunshld.paint03"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender 4x2.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_fender.4x2p"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 4×2 (Rear Fender Top)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender Top 4x2.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_fendr_top.4x2p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย 4×2 (Rear Bumper)",
+          "template": "TEMPLATE Mercedes New Actros Rear Bumper.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_bumper.4x2v1",
+            "r_bumper.4x2v2",
+            "r_bumper.4x2v3"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_fender.4x2p",
+        "r_fender.6x24p",
+        "r_fender.6x2p",
+        "r_fender.8x4p",
+        "r_fendr_top.4x2p",
+        "r_fendr_top.6x24p",
+        "r_fendr_top.6x2p",
+        "r_fendr_top.8x4p",
+        "r_bumper.4x2v1",
+        "r_bumper.4x2v2",
+        "r_bumper.4x2v3",
+        "r_bumper.6x24v1",
+        "r_bumper.6x24v2",
+        "r_bumper.6x24v3",
+        "r_bumper.6x2v1",
+        "r_bumper.6x2v2",
+        "r_bumper.6x2v3",
+        "r_chs_cover.4x2p",
+        "r_chs_cover.6x24p",
+        "r_chs_cover.6x2p",
+        "sunshld.paint01",
+        "sunshld.paint02",
+        "sunshld.paint03",
+        "s_guard.type3"
+      ],
+      "glass": false
+    },
+    {
+      "id": "mercedes-actros-2014-6x2",
+      "brand": "mercedes",
+      "name": "Mercedes New Actros",
+      "title": "Mercedes New Actros · GigaSpace · 6×2",
+      "symbol": "MB",
+      "descriptor": "Truck · GigaSpace",
+      "file": "Mercedes_New_Actros_GigaSpace_6x2.glb",
+      "label": "GigaSpace · 6×2",
+      "vehicle": "mercedes.actros2014",
+      "cabin": "gigaspace",
+      "suitableCabins": [
+        "gigaspace"
+      ],
+      "alternateUvset": true,
+      "template": "TEMPLATE Mercedes New Actros GigaSpace - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Mercedes New Actros Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshld.paint01",
+            "sunshld.paint02",
+            "sunshld.paint03"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x24p",
+            "r_fender.6x2p"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×2 (Rear Fender Top)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender Top 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fendr_top.6x24p",
+            "r_fendr_top.6x2p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย 6×2 (Rear Bumper)",
+          "template": "TEMPLATE Mercedes New Actros Rear Bumper.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_bumper.6x24v1",
+            "r_bumper.6x24v2",
+            "r_bumper.6x24v3",
+            "r_bumper.6x2v1",
+            "r_bumper.6x2v2",
+            "r_bumper.6x2v3"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_fender.4x2p",
+        "r_fender.6x24p",
+        "r_fender.6x2p",
+        "r_fender.8x4p",
+        "r_fendr_top.4x2p",
+        "r_fendr_top.6x24p",
+        "r_fendr_top.6x2p",
+        "r_fendr_top.8x4p",
+        "r_bumper.4x2v1",
+        "r_bumper.4x2v2",
+        "r_bumper.4x2v3",
+        "r_bumper.6x24v1",
+        "r_bumper.6x24v2",
+        "r_bumper.6x24v3",
+        "r_bumper.6x2v1",
+        "r_bumper.6x2v2",
+        "r_bumper.6x2v3",
+        "r_chs_cover.4x2p",
+        "r_chs_cover.6x24p",
+        "r_chs_cover.6x2p",
+        "sunshld.paint01",
+        "sunshld.paint02",
+        "sunshld.paint03",
+        "s_guard.type3"
+      ],
+      "glass": false
+    },
+    {
+      "id": "mercedes-actros-2014-6x4",
+      "brand": "mercedes",
+      "name": "Mercedes New Actros",
+      "title": "Mercedes New Actros · GigaSpace · 6×4",
+      "symbol": "MB",
+      "descriptor": "Truck · GigaSpace",
+      "file": "Mercedes_New_Actros_GigaSpace_6x4.glb",
+      "label": "GigaSpace · 6×4",
+      "vehicle": "mercedes.actros2014",
+      "cabin": "gigaspace",
+      "suitableCabins": [
+        "gigaspace"
+      ],
+      "alternateUvset": true,
+      "template": "TEMPLATE Mercedes New Actros GigaSpace - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Mercedes New Actros Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshld.paint01",
+            "sunshld.paint02",
+            "sunshld.paint03"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x24p",
+            "r_fender.6x2p"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 6×4 (Rear Fender Top)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender Top 6x.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fendr_top.6x24p",
+            "r_fendr_top.6x2p"
+          ]
+        },
+        {
+          "key": "r_bumper",
+          "label": "กันชนท้าย 6×4 (Rear Bumper)",
+          "template": "TEMPLATE Mercedes New Actros Rear Bumper.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_bumper.6x24v1",
+            "r_bumper.6x24v2",
+            "r_bumper.6x24v3",
+            "r_bumper.6x2v1",
+            "r_bumper.6x2v2",
+            "r_bumper.6x2v3"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_fender.4x2p",
+        "r_fender.6x24p",
+        "r_fender.6x2p",
+        "r_fender.8x4p",
+        "r_fendr_top.4x2p",
+        "r_fendr_top.6x24p",
+        "r_fendr_top.6x2p",
+        "r_fendr_top.8x4p",
+        "r_bumper.4x2v1",
+        "r_bumper.4x2v2",
+        "r_bumper.4x2v3",
+        "r_bumper.6x24v1",
+        "r_bumper.6x24v2",
+        "r_bumper.6x24v3",
+        "r_bumper.6x2v1",
+        "r_bumper.6x2v2",
+        "r_bumper.6x2v3",
+        "r_chs_cover.4x2p",
+        "r_chs_cover.6x24p",
+        "r_chs_cover.6x2p",
+        "sunshld.paint01",
+        "sunshld.paint02",
+        "sunshld.paint03",
+        "s_guard.type3"
+      ],
+      "glass": false
+    },
+    {
+      "id": "mercedes-actros-2014-8x4",
+      "brand": "mercedes",
+      "name": "Mercedes New Actros",
+      "title": "Mercedes New Actros · GigaSpace · 8×4",
+      "symbol": "MB",
+      "descriptor": "Truck · GigaSpace",
+      "file": "Mercedes_New_Actros_GigaSpace_8x4.glb",
+      "label": "GigaSpace · 8×4",
+      "vehicle": "mercedes.actros2014",
+      "cabin": "gs_8x4",
+      "suitableCabins": [
+        "gs_8x4"
+      ],
+      "alternateUvset": true,
+      "template": "TEMPLATE Mercedes New Actros GigaSpace 8x4 - cabin.png",
+      "templateSize": "4096 × 4096",
+      "accessories": [
+        {
+          "key": "sunshld",
+          "label": "ที่บังแดดหน้า (Sun Visor)",
+          "template": "TEMPLATE Mercedes New Actros Sun Visor.png",
+          "templateSize": "2048 × 256",
+          "accList": [
+            "sunshld.paint01",
+            "sunshld.paint02",
+            "sunshld.paint03"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 8×4 (Rear Fender)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender 8x4.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "r_fender.8x4p"
+          ]
+        },
+        {
+          "key": "r_fendr_top",
+          "label": "ฝาบังโคลนหลัง 8×4 (Rear Fender Top)",
+          "template": "TEMPLATE Mercedes New Actros Rear Fender Top 8x4.png",
+          "templateSize": "2048 × 512",
+          "accList": [
+            "r_fendr_top.8x4p"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_fender.4x2p",
+        "r_fender.6x24p",
+        "r_fender.6x2p",
+        "r_fender.8x4p",
+        "r_fendr_top.4x2p",
+        "r_fendr_top.6x24p",
+        "r_fendr_top.6x2p",
+        "r_fendr_top.8x4p",
+        "r_bumper.4x2v1",
+        "r_bumper.4x2v2",
+        "r_bumper.4x2v3",
+        "r_bumper.6x24v1",
+        "r_bumper.6x24v2",
+        "r_bumper.6x24v3",
+        "r_bumper.6x2v1",
+        "r_bumper.6x2v2",
+        "r_bumper.6x2v3",
+        "r_chs_cover.4x2p",
+        "r_chs_cover.6x24p",
+        "r_chs_cover.6x2p",
+        "sunshld.paint01",
+        "sunshld.paint02",
+        "sunshld.paint03",
+        "s_guard.type3"
+      ],
+      "glass": false
+    }
+  ],
+  "renault": [
+    {
+      "id": "renault-t-high-4x2",
+      "brand": "renault",
+      "name": "Renault T",
+      "title": "Renault T · High Sleeper · 4×2",
+      "symbol": "R",
+      "descriptor": "Truck · High Sleeper",
+      "file": "Renault_T_High_Sleeper_4x2.glb",
+      "label": "High Sleeper · 4×2",
+      "vehicle": "renault.t",
+      "cabin": "high_sleeper",
+      "suitableCabins": [
+        "high_sleeper"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Renault T High Sleeper - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Renault T Sideskirt 4x2.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.4x2plain",
+        "sideskirt.4x2satin",
+        "sideskirt.4x2shp",
+        "sideskirt.4x2side1p",
+        "sideskirt.4x2side1p24",
+        "sideskirt.4x2side2pg",
+        "sideskirt.4x2side3"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 4×2 (Sideskirt)",
+          "template": "TEMPLATE Renault T Sideskirt 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.4x2plain",
+            "sideskirt.4x2satin",
+            "sideskirt.4x2shp",
+            "sideskirt.4x2side1p",
+            "sideskirt.4x2side1p24",
+            "sideskirt.4x2side2pg",
+            "sideskirt.4x2side3"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 4×2 (Rear Fender)",
+          "template": "TEMPLATE Renault T Rear Fender 4x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.4x2_pn",
+            "r_fender.4x2_pn_ch",
+            "r_fender.4x2paintn",
+            "r_fender.4x2painto"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 4×2 (Chassis Cover)",
+          "template": "TEMPLATE Renault T Chassis Cover 4x2.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_chs_cover.4x2_diva",
+            "r_chs_cover.4x2_satin",
+            "r_chs_cover.4x2_thor_pn",
+            "r_chs_cover.4x2t_diva",
+            "r_chs_cover.4x2t_satin",
+            "r_chs_cover.4x2t_thor_pn"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_bumper.4x2_racing",
+        "r_bumper.6x24_racing",
+        "r_bumper.6x2_racing",
+        "r_chs_cover.4x2_diva",
+        "r_chs_cover.4x2_satin",
+        "r_chs_cover.4x2_thor_pn",
+        "r_chs_cover.4x2t_diva",
+        "r_chs_cover.4x2t_satin",
+        "r_chs_cover.4x2t_thor_pn",
+        "r_chs_cover.6x24_diva",
+        "r_chs_cover.6x24_satin",
+        "r_chs_cover.6x24_thor_pn",
+        "r_chs_cover.6x2_diva",
+        "r_chs_cover.6x2_satin",
+        "r_chs_cover.6x2_thor_pn",
+        "r_fender.4x2_pn",
+        "r_fender.4x2_pn_ch",
+        "r_fender.4x2paintn",
+        "r_fender.4x2painto",
+        "r_fender.6x24_pn",
+        "r_fender.6x24_pn_ch",
+        "r_fender.6x24paintn",
+        "r_fender.6x24painto",
+        "r_fender.6x2_pn",
+        "r_fender.6x2_pn_ch",
+        "r_fender.6x2paintn",
+        "r_fender.6x2painto",
+        "r_fendr_top.4x2_pn",
+        "r_fendr_top.4x2_pn_ch",
+        "r_fendr_top.4x2paintn",
+        "r_fendr_top.6x24_pn",
+        "r_fendr_top.6x24_pn_ch",
+        "r_fendr_top.6x24paintn",
+        "r_fendr_top.6x2_pn",
+        "r_fendr_top.6x2_pn_ch",
+        "r_fendr_top.6x2paintn",
+        "r_mudflap.4x2pnt",
+        "r_mudflap.4x2pntw",
+        "r_mudflap.6x24pnt",
+        "r_mudflap.6x24pntw",
+        "r_mudflap.6x2pnt",
+        "r_mudflap.6x2pntw",
+        "sideskirt.4x2plain",
+        "sideskirt.4x2satin",
+        "sideskirt.4x2shp",
+        "sideskirt.4x2side1p",
+        "sideskirt.4x2side1p24",
+        "sideskirt.4x2side2pg",
+        "sideskirt.4x2side3",
+        "sideskirt.6x24plain",
+        "sideskirt.6x24satin",
+        "sideskirt.6x24shp",
+        "sideskirt.6x24side1p",
+        "sideskirt.6x24side1p24",
+        "sideskirt.6x24side2pg",
+        "sideskirt.6x24side3",
+        "sideskirt.6x2plain",
+        "sideskirt.6x2satin",
+        "sideskirt.6x2shp",
+        "sideskirt.6x2side1p",
+        "sideskirt.6x2side1p24",
+        "sideskirt.6x2side2pg",
+        "sideskirt.6x2side3",
+        "sideskrt_bar.4x2_paint",
+        "sideskrt_bar.6x24_paint",
+        "sideskrt_bar.6x2_paint",
+        "b_grill.paint_mirage",
+        "b_grill.paint_pride",
+        "f_grill.hawk_paint",
+        "f_grill.joker_paint",
+        "f_grill.racing_paint",
+        "hl_guard.paint",
+        "hl_guard.paint_evo",
+        "s_guard.renault_pa"
+      ],
+      "glass": false
+    },
+    {
+      "id": "renault-t-high-6x2",
+      "brand": "renault",
+      "name": "Renault T",
+      "title": "Renault T · High Sleeper · 6×2",
+      "symbol": "R",
+      "descriptor": "Truck · High Sleeper",
+      "file": "Renault_T_High_Sleeper_6x2.glb",
+      "label": "High Sleeper · 6×2",
+      "vehicle": "renault.t",
+      "cabin": "high_sleeper",
+      "suitableCabins": [
+        "high_sleeper"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Renault T High Sleeper - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Renault T Sideskirt 6x2.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.6x2plain",
+        "sideskirt.6x2satin",
+        "sideskirt.6x2shp",
+        "sideskirt.6x2side1p",
+        "sideskirt.6x2side1p24",
+        "sideskirt.6x2side2pg",
+        "sideskirt.6x2side3"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×2 (Sideskirt)",
+          "template": "TEMPLATE Renault T Sideskirt 6x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.6x2plain",
+            "sideskirt.6x2satin",
+            "sideskirt.6x2shp",
+            "sideskirt.6x2side1p",
+            "sideskirt.6x2side1p24",
+            "sideskirt.6x2side2pg",
+            "sideskirt.6x2side3"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×2 (Rear Fender)",
+          "template": "TEMPLATE Renault T Rear Fender 6x2.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x2_pn",
+            "r_fender.6x2_pn_ch",
+            "r_fender.6x2paintn",
+            "r_fender.6x2painto"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 6×2 (Chassis Cover)",
+          "template": "TEMPLATE Renault T Chassis Cover 6x2.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_chs_cover.6x2_diva",
+            "r_chs_cover.6x2_satin",
+            "r_chs_cover.6x2_thor_pn"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_bumper.4x2_racing",
+        "r_bumper.6x24_racing",
+        "r_bumper.6x2_racing",
+        "r_chs_cover.4x2_diva",
+        "r_chs_cover.4x2_satin",
+        "r_chs_cover.4x2_thor_pn",
+        "r_chs_cover.4x2t_diva",
+        "r_chs_cover.4x2t_satin",
+        "r_chs_cover.4x2t_thor_pn",
+        "r_chs_cover.6x24_diva",
+        "r_chs_cover.6x24_satin",
+        "r_chs_cover.6x24_thor_pn",
+        "r_chs_cover.6x2_diva",
+        "r_chs_cover.6x2_satin",
+        "r_chs_cover.6x2_thor_pn",
+        "r_fender.4x2_pn",
+        "r_fender.4x2_pn_ch",
+        "r_fender.4x2paintn",
+        "r_fender.4x2painto",
+        "r_fender.6x24_pn",
+        "r_fender.6x24_pn_ch",
+        "r_fender.6x24paintn",
+        "r_fender.6x24painto",
+        "r_fender.6x2_pn",
+        "r_fender.6x2_pn_ch",
+        "r_fender.6x2paintn",
+        "r_fender.6x2painto",
+        "r_fendr_top.4x2_pn",
+        "r_fendr_top.4x2_pn_ch",
+        "r_fendr_top.4x2paintn",
+        "r_fendr_top.6x24_pn",
+        "r_fendr_top.6x24_pn_ch",
+        "r_fendr_top.6x24paintn",
+        "r_fendr_top.6x2_pn",
+        "r_fendr_top.6x2_pn_ch",
+        "r_fendr_top.6x2paintn",
+        "r_mudflap.4x2pnt",
+        "r_mudflap.4x2pntw",
+        "r_mudflap.6x24pnt",
+        "r_mudflap.6x24pntw",
+        "r_mudflap.6x2pnt",
+        "r_mudflap.6x2pntw",
+        "sideskirt.4x2plain",
+        "sideskirt.4x2satin",
+        "sideskirt.4x2shp",
+        "sideskirt.4x2side1p",
+        "sideskirt.4x2side1p24",
+        "sideskirt.4x2side2pg",
+        "sideskirt.4x2side3",
+        "sideskirt.6x24plain",
+        "sideskirt.6x24satin",
+        "sideskirt.6x24shp",
+        "sideskirt.6x24side1p",
+        "sideskirt.6x24side1p24",
+        "sideskirt.6x24side2pg",
+        "sideskirt.6x24side3",
+        "sideskirt.6x2plain",
+        "sideskirt.6x2satin",
+        "sideskirt.6x2shp",
+        "sideskirt.6x2side1p",
+        "sideskirt.6x2side1p24",
+        "sideskirt.6x2side2pg",
+        "sideskirt.6x2side3",
+        "sideskrt_bar.4x2_paint",
+        "sideskrt_bar.6x24_paint",
+        "sideskrt_bar.6x2_paint",
+        "b_grill.paint_mirage",
+        "b_grill.paint_pride",
+        "f_grill.hawk_paint",
+        "f_grill.joker_paint",
+        "f_grill.racing_paint",
+        "hl_guard.paint",
+        "hl_guard.paint_evo",
+        "s_guard.renault_pa"
+      ],
+      "glass": false
+    },
+    {
+      "id": "renault-t-high-6x4",
+      "brand": "renault",
+      "name": "Renault T",
+      "title": "Renault T · High Sleeper · 6×4",
+      "symbol": "R",
+      "descriptor": "Truck · High Sleeper",
+      "file": "Renault_T_High_Sleeper_6x4.glb",
+      "label": "High Sleeper · 6×4",
+      "vehicle": "renault.t",
+      "cabin": "high_sleeper",
+      "suitableCabins": [
+        "high_sleeper"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Renault T High Sleeper - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Renault T Sideskirt 6x4.png",
+      "sideskirtTemplateSize": "2048 × 1024",
+      "sideskirtAccList": [
+        "sideskirt.6x24plain",
+        "sideskirt.6x24satin",
+        "sideskirt.6x24shp",
+        "sideskirt.6x24side1p",
+        "sideskirt.6x24side1p24",
+        "sideskirt.6x24side2pg",
+        "sideskirt.6x24side3",
+        "sideskirt.6x2plain",
+        "sideskirt.6x2satin",
+        "sideskirt.6x2shp",
+        "sideskirt.6x2side1p",
+        "sideskirt.6x2side1p24",
+        "sideskirt.6x2side2pg",
+        "sideskirt.6x2side3"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง 6×4 (Sideskirt)",
+          "template": "TEMPLATE Renault T Sideskirt 6x4.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "sideskirt.6x24plain",
+            "sideskirt.6x24satin",
+            "sideskirt.6x24shp",
+            "sideskirt.6x24side1p",
+            "sideskirt.6x24side1p24",
+            "sideskirt.6x24side2pg",
+            "sideskirt.6x24side3",
+            "sideskirt.6x2plain",
+            "sideskirt.6x2satin",
+            "sideskirt.6x2shp",
+            "sideskirt.6x2side1p",
+            "sideskirt.6x2side1p24",
+            "sideskirt.6x2side2pg",
+            "sideskirt.6x2side3"
+          ]
+        },
+        {
+          "key": "r_fender",
+          "label": "บังโคลนหลัง 6×4 (Rear Fender)",
+          "template": "TEMPLATE Renault T Rear Fender 6x4.png",
+          "templateSize": "2048 × 1024",
+          "accList": [
+            "r_fender.6x24_pn",
+            "r_fender.6x24_pn_ch",
+            "r_fender.6x24paintn",
+            "r_fender.6x24painto",
+            "r_fender.6x2_pn",
+            "r_fender.6x2_pn_ch",
+            "r_fender.6x2paintn",
+            "r_fender.6x2painto"
+          ]
+        },
+        {
+          "key": "r_chs_cover",
+          "label": "ฝาครอบแชสซี 6×4 (Chassis Cover)",
+          "template": "TEMPLATE Renault T Chassis Cover 6x4.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "r_chs_cover.6x24_diva",
+            "r_chs_cover.6x24_satin",
+            "r_chs_cover.6x24_thor_pn",
+            "r_chs_cover.6x2_diva",
+            "r_chs_cover.6x2_satin",
+            "r_chs_cover.6x2_thor_pn"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "r_bumper.4x2_racing",
+        "r_bumper.6x24_racing",
+        "r_bumper.6x2_racing",
+        "r_chs_cover.4x2_diva",
+        "r_chs_cover.4x2_satin",
+        "r_chs_cover.4x2_thor_pn",
+        "r_chs_cover.4x2t_diva",
+        "r_chs_cover.4x2t_satin",
+        "r_chs_cover.4x2t_thor_pn",
+        "r_chs_cover.6x24_diva",
+        "r_chs_cover.6x24_satin",
+        "r_chs_cover.6x24_thor_pn",
+        "r_chs_cover.6x2_diva",
+        "r_chs_cover.6x2_satin",
+        "r_chs_cover.6x2_thor_pn",
+        "r_fender.4x2_pn",
+        "r_fender.4x2_pn_ch",
+        "r_fender.4x2paintn",
+        "r_fender.4x2painto",
+        "r_fender.6x24_pn",
+        "r_fender.6x24_pn_ch",
+        "r_fender.6x24paintn",
+        "r_fender.6x24painto",
+        "r_fender.6x2_pn",
+        "r_fender.6x2_pn_ch",
+        "r_fender.6x2paintn",
+        "r_fender.6x2painto",
+        "r_fendr_top.4x2_pn",
+        "r_fendr_top.4x2_pn_ch",
+        "r_fendr_top.4x2paintn",
+        "r_fendr_top.6x24_pn",
+        "r_fendr_top.6x24_pn_ch",
+        "r_fendr_top.6x24paintn",
+        "r_fendr_top.6x2_pn",
+        "r_fendr_top.6x2_pn_ch",
+        "r_fendr_top.6x2paintn",
+        "r_mudflap.4x2pnt",
+        "r_mudflap.4x2pntw",
+        "r_mudflap.6x24pnt",
+        "r_mudflap.6x24pntw",
+        "r_mudflap.6x2pnt",
+        "r_mudflap.6x2pntw",
+        "sideskirt.4x2plain",
+        "sideskirt.4x2satin",
+        "sideskirt.4x2shp",
+        "sideskirt.4x2side1p",
+        "sideskirt.4x2side1p24",
+        "sideskirt.4x2side2pg",
+        "sideskirt.4x2side3",
+        "sideskirt.6x24plain",
+        "sideskirt.6x24satin",
+        "sideskirt.6x24shp",
+        "sideskirt.6x24side1p",
+        "sideskirt.6x24side1p24",
+        "sideskirt.6x24side2pg",
+        "sideskirt.6x24side3",
+        "sideskirt.6x2plain",
+        "sideskirt.6x2satin",
+        "sideskirt.6x2shp",
+        "sideskirt.6x2side1p",
+        "sideskirt.6x2side1p24",
+        "sideskirt.6x2side2pg",
+        "sideskirt.6x2side3",
+        "sideskrt_bar.4x2_paint",
+        "sideskrt_bar.6x24_paint",
+        "sideskrt_bar.6x2_paint",
+        "b_grill.paint_mirage",
+        "b_grill.paint_pride",
+        "f_grill.hawk_paint",
+        "f_grill.joker_paint",
+        "f_grill.racing_paint",
+        "hl_guard.paint",
+        "hl_guard.paint_evo",
+        "s_guard.renault_pa"
+      ],
+      "glass": false
+    }
+  ],
+  "iveco": [
+    {
+      "id": "iveco-sway-4x2",
+      "brand": "iveco",
+      "name": "Iveco S-Way",
+      "title": "Iveco S-Way · Active Space · 4×2",
+      "symbol": "I",
+      "descriptor": "Truck · Active Space",
+      "file": "Iveco_SWay_Active_Space_4x2.glb",
+      "label": "Active Space · 4×2",
+      "vehicle": "iveco.sway",
+      "cabin": "as",
+      "suitableCabins": [
+        "as"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Iveco S-Way - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Iveco S-Way Sideskirt.png",
+      "sideskirtTemplateSize": "2048 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง (Sideskirt)",
+          "template": "TEMPLATE Iveco S-Way Sideskirt.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "sideskirt.pnt_4x2",
+            "sideskirt.pnt_4x2_a"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_a"
+      ],
+      "glass": false
+    },
+    {
+      "id": "iveco-sway-6x2",
+      "brand": "iveco",
+      "name": "Iveco S-Way",
+      "title": "Iveco S-Way · Active Space · 6×2",
+      "symbol": "I",
+      "descriptor": "Truck · Active Space",
+      "file": "Iveco_SWay_Active_Space_6x2.glb",
+      "label": "Active Space · 6×2",
+      "vehicle": "iveco.sway",
+      "cabin": "as",
+      "suitableCabins": [
+        "as"
+      ],
+      "alternateUvset": false,
+      "template": "TEMPLATE Iveco S-Way - cabin.png",
+      "templateSize": "4096 × 4096",
+      "sideskirtTemplate": "TEMPLATE Iveco S-Way Sideskirt.png",
+      "sideskirtTemplateSize": "2048 × 2048",
+      "sideskirtAccList": [
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_a"
+      ],
+      "accessories": [
+        {
+          "key": "sideskirt",
+          "label": "สเกิร์ตข้าง (Sideskirt)",
+          "template": "TEMPLATE Iveco S-Way Sideskirt.png",
+          "templateSize": "2048 × 2048",
+          "accList": [
+            "sideskirt.pnt_4x2",
+            "sideskirt.pnt_4x2_a"
+          ]
+        }
+      ],
+      "sharedAccList": [
+        "sideskirt.pnt_4x2",
+        "sideskirt.pnt_4x2_a"
+      ],
+      "glass": false
+    }
+  ]
+}

@@ -6,16 +6,17 @@ const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 const AdmZip = require('adm-zip');
 const coachModels = require('./coach-models.json');
-const { createPaintjob } = require('./create-paintjob.cjs');
-const { convertTextureDDS, isLiverySize } = require('./texture-conversion.cjs');
+const truckModels = require('./truck-models.json');
+const { createPaintjob, createTruckPaintjob, createMultiSkinPack } = require('./create-paintjob.cjs');
+const { convertTextureDDS, convertIconDDS, isLiverySize, isTruckLiverySize, isTruckAccessorySize, solidColorPNG } = require('./texture-conversion.cjs');
 
 let win;
-let watchedPath = '';
 let templatePath = '';
 let texconvPath = '';
-let reloadTimeout = null;
 let projectPaths = { texture: '', model: '' };
 let glassTexturePath = '';
+let accessoryTexturePaths = new Map();
+const fileWatchers = new Map();
 const allowedTextureExt = new Set(['.png', '.jpg', '.jpeg', '.webp', '.dds']);
 const MAX_BYTES = 80 * 1024 * 1024;
 const localPage = path.join(__dirname, '..', 'dist', 'index.html');
@@ -23,9 +24,11 @@ const developmentPage = 'http://127.0.0.1:5173';
 const resources = app.isPackaged ? path.join(process.resourcesPath, 'studio-resources') : path.join(app.getAppPath(), 'resources');
 
 function findModel(id) {
-  const entry = Object.values(coachModels).flat().find(model => model.id === id);
-  if (!entry) throw new Error('เลือกรุ่นรถก่อน');
-  return entry;
+  const coach = Object.values(coachModels).flat().find(model => model.id === id);
+  if (coach) return { ...coach, kind: 'coach' };
+  const truck = Object.values(truckModels).flat().find(model => model.id === id);
+  if (truck) return { ...truck, kind: 'truck' };
+  throw new Error('เลือกรุ่นรถก่อน');
 }
 
 async function writeMod(savePath, zip) {
@@ -109,26 +112,55 @@ async function windowArtworkPayload(file) {
   }
   return { ...data, bodyLayout, width, height };
 }
-function stopWatcher() {
-  if (watchedPath) fs.unwatchFile(watchedPath);
-  watchedPath = '';
-  if (reloadTimeout) clearTimeout(reloadTimeout);
-  reloadTimeout = null;
+function stopWatch(key) {
+  const entry = fileWatchers.get(key);
+  if (!entry) return;
+  fs.unwatchFile(entry.file, entry.listener);
+  if (entry.timer) clearTimeout(entry.timer);
+  fileWatchers.delete(key);
+}
+function stopWatcher(prefix = '') {
+  for (const key of [...fileWatchers.keys()]) {
+    if (!prefix || key.startsWith(prefix)) stopWatch(key);
+  }
+}
+function startWatch(key, file, channel, loadPayload) {
+  stopWatch(key);
+  if (!file) return;
+  const resolved = path.resolve(file);
+  const entry = { file: resolved, timer: null, listener: null };
+  entry.listener = (newStat, oldStat) => {
+    if (!newStat.mtimeMs && !newStat.size) return;
+    if (newStat.mtimeMs === oldStat.mtimeMs && newStat.size === oldStat.size) return;
+    if (entry.timer) clearTimeout(entry.timer);
+    entry.timer = setTimeout(async () => {
+      entry.timer = null;
+      if (fileWatchers.get(key) !== entry) return;
+      try {
+        const data = await loadPayload(resolved);
+        if (win && !win.isDestroyed()) win.webContents.send(channel, data);
+      } catch (err) {
+        if (win && !win.isDestroyed()) {
+          win.webContents.send(channel, { error: err.message, path: resolved, slotKey: key.startsWith('accessory:') ? key.slice(10) : undefined });
+        }
+      }
+    }, 400);
+  };
+  fileWatchers.set(key, entry);
+  fs.watchFile(resolved, { interval: 600 }, entry.listener);
 }
 function startWatcher(file) {
-  stopWatcher();
-  watchedPath = file;
-  fs.watchFile(file, { interval: 700 }, (newStat, oldStat) => {
-    if (newStat.mtimeMs === oldStat.mtimeMs && newStat.size === oldStat.size) return;
-    if (reloadTimeout) clearTimeout(reloadTimeout);
-    reloadTimeout = setTimeout(() => {
-      try {
-        if (win && !win.isDestroyed()) win.webContents.send('texture-changed', payloadFor(file, allowedTextureExt));
-      } catch (err) {
-        if (win && !win.isDestroyed()) win.webContents.send('texture-changed', { error: err.message });
-      }
-    }, 500);
-  });
+  startWatch('body', file, 'texture-changed', resolved => payloadFor(resolved, allowedTextureExt));
+}
+function watchGlassTexture(file) {
+  startWatch('glass', file, 'glass-texture-changed', resolved => windowArtworkPayload(resolved));
+}
+function watchAccessoryTexture(slotKey, file) {
+  const key = String(slotKey || 'sideskirt');
+  startWatch(`accessory:${key}`, file, 'accessory-texture-changed', resolved => ({
+    ...payloadFor(resolved, allowedTextureExt),
+    slotKey: key
+  }));
 }
 function createWindow() {
   win = new BrowserWindow({
@@ -181,7 +213,21 @@ app.whenReady().then(() => {
     startWatcher(file);
     return payloadFor(file, allowedTextureExt);
   }));
+  ipcMain.handle('dialog:textures-multi', safeCall(async () => {
+    const result = await dialog.showOpenDialog(win, {
+      title: 'เลือกไฟล์ลายหลายไฟล์เพื่อเพิ่มเข้าแพ็ก',
+      properties: ['openFile', 'multiSelections'],
+      filters: [{ name: 'Skin texture', extensions: ['png', 'jpg', 'jpeg', 'webp', 'dds'] }]
+    });
+    if (result.canceled || !result.filePaths.length) return [];
+    return result.filePaths.map(file => payloadFor(file, allowedTextureExt));
+  }));
   ipcMain.handle('file:texture', safeCall(async (_e, file) => {
+    if (!file) {
+      projectPaths.texture = '';
+      stopWatch('body');
+      return null;
+    }
     const data = payloadFor(file, allowedTextureExt);
     projectPaths.texture = data.path;
     startWatcher(data.path);
@@ -196,16 +242,92 @@ app.whenReady().then(() => {
     if (!file) return null;
     const data = await windowArtworkPayload(file);
     glassTexturePath = data.path;
+    watchGlassTexture(data.path);
     return data;
   }));
   ipcMain.handle('file:glass-texture', safeCall(async (_e, file) => {
     if (!file) {
       glassTexturePath = '';
+      stopWatch('glass');
       return null;
     }
     const data = await windowArtworkPayload(file);
     glassTexturePath = data.path;
+    watchGlassTexture(data.path);
     return data;
+  }));
+  ipcMain.handle('dialog:accessory-texture', safeCall(async (_e, slotKey = 'sideskirt') => {
+    const key = String(slotKey || 'sideskirt');
+    const file = await pickOne('Choose truck accessory skin image', [{ name: 'Accessory texture', extensions: ['png', 'jpg', 'jpeg', 'webp', 'dds'] }]);
+    if (!file) return null;
+    const data = payloadFor(file, allowedTextureExt);
+    accessoryTexturePaths.set(key, data.path);
+    watchAccessoryTexture(key, data.path);
+    return { ...data, slotKey: key };
+  }));
+  ipcMain.handle('file:accessory-texture', safeCall(async (_e, slotKey, file) => {
+    if (!slotKey) {
+      accessoryTexturePaths.clear();
+      stopWatcher('accessory:');
+      return null;
+    }
+    const key = String(slotKey);
+    if (!file) {
+      accessoryTexturePaths.delete(key);
+      stopWatch(`accessory:${key}`);
+      return null;
+    }
+    const data = payloadFor(file, allowedTextureExt);
+    accessoryTexturePaths.set(key, data.path);
+    watchAccessoryTexture(key, data.path);
+    return { ...data, slotKey: key };
+  }));
+  ipcMain.handle('truck:accessory-template', safeCall(async (_e, id, slotKey = 'sideskirt') => {
+    const entry = findModel(id);
+    const acc = Array.isArray(entry.accessories) ? entry.accessories.find(a => a.key === slotKey) : null;
+    const tplName = acc?.template || (slotKey === 'sideskirt' ? entry.sideskirtTemplate : null);
+    if (!tplName) throw new Error('รุ่นนี้ยังไม่มีเทมเพลตของชิ้นส่วนนี้');
+    const source = path.join(resources, 'templates', tplName);
+    const save = await dialog.showSaveDialog(win, {
+      title: 'Save truck accessory template', defaultPath: tplName,
+      filters: [{ name: 'PNG template', extensions: ['png'] }]
+    });
+    if (save.canceled) return null;
+    fs.copyFileSync(source, save.filePath);
+    return { path: save.filePath };
+  }));
+  ipcMain.handle('dialog:sideskirt-texture', safeCall(async () => {
+    const file = await pickOne('Choose truck sideskirt skin image', [{ name: 'Sideskirt texture', extensions: ['png', 'jpg', 'jpeg', 'webp', 'dds'] }]);
+    if (!file) return null;
+    const data = payloadFor(file, allowedTextureExt);
+    accessoryTexturePaths.set('sideskirt', data.path);
+    watchAccessoryTexture('sideskirt', data.path);
+    return data;
+  }));
+  ipcMain.handle('file:sideskirt-texture', safeCall(async (_e, file) => {
+    if (!file) {
+      accessoryTexturePaths.delete('sideskirt');
+      stopWatch('accessory:sideskirt');
+      return null;
+    }
+    const data = payloadFor(file, allowedTextureExt);
+    accessoryTexturePaths.set('sideskirt', data.path);
+    watchAccessoryTexture('sideskirt', data.path);
+    return data;
+  }));
+  ipcMain.handle('truck:sideskirt-template', safeCall(async (_e, id) => {
+    const entry = findModel(id);
+    const acc = Array.isArray(entry.accessories) ? entry.accessories.find(a => a.key === 'sideskirt') : null;
+    const tplName = acc?.template || entry.sideskirtTemplate;
+    if (!tplName) throw new Error('รุ่นนี้ยังไม่มีเทมเพลตสเกิร์ตข้าง');
+    const source = path.join(resources, 'templates', tplName);
+    const save = await dialog.showSaveDialog(win, {
+      title: 'Save truck sideskirt template', defaultPath: tplName,
+      filters: [{ name: 'PNG template', extensions: ['png'] }]
+    });
+    if (save.canceled) return null;
+    fs.copyFileSync(source, save.filePath);
+    return { path: save.filePath };
   }));
   ipcMain.handle('dialog:model', safeCall(async () => {
     const file = await pickOne('Choose coach or truck model (.glb)', [{ name: 'glTF Binary', extensions: ['glb'] }]);
@@ -230,7 +352,7 @@ app.whenReady().then(() => {
     const entry = findModel(id);
     const source = path.join(resources, 'templates', entry.template);
     const save = await dialog.showSaveDialog(win, {
-      title: 'Save coach design template', defaultPath: entry.template,
+      title: entry.kind === 'truck' ? 'Save truck design template' : 'Save coach design template', defaultPath: entry.template,
       filters: [{ name: 'PNG template', extensions: ['png'] }]
     });
     if (save.canceled) return null;
@@ -241,6 +363,45 @@ app.whenReady().then(() => {
     const model = findModel(options?.modelId);
     if (!projectPaths.texture) throw new Error('เพิ่มไฟล์ลายรถก่อนส่งออก');
     const body = await convertDDS(projectPaths.texture, options?.bodyArtwork ? decodePNG(options.bodyArtwork) : null);
+    const iconDDS = options?.iconArtwork ? await convertIcon(decodePNG(options.iconArtwork)) : null;
+    const customName = typeof options?.customName === 'string' ? options.customName : '';
+    if (model.kind === 'truck') {
+      if (!isTruckLiverySize(body.readUInt32LE(16), body.readUInt32LE(12))) {
+        throw new Error('ลายรถบรรทุกต้องเป็นภาพสี่เหลี่ยมจัตุรัส 2048 × 2048, 4096 × 4096 หรือ 8192 × 8192 ตามเทมเพลต');
+      }
+      const requestedKeys = Array.isArray(options?.accessoryKeys)
+        ? options.accessoryKeys
+        : (options?.includeSideskirt ? ['sideskirt'] : []);
+      const accessoryTextures = [];
+      for (const key of requestedKeys) {
+        const texPath = accessoryTexturePaths.get(key);
+        if (!texPath) continue;
+        const accMeta = Array.isArray(model.accessories) ? model.accessories.find(a => a.key === key) : null;
+        const accList = accMeta?.accList || (key === 'sideskirt' ? model.sideskirtAccList : null);
+        if (!accList || !accList.length) continue;
+        const dds = await convertDDS(texPath, null);
+        if (!isTruckAccessorySize(dds.readUInt32LE(16), dds.readUInt32LE(12))) {
+          throw new Error(`ลาย ${accMeta?.label || key} ต้องมีขนาดเป็นเลขกำลังสองของ 2 (เช่น 2048×1024, 2048×2048, 4096×256)`);
+        }
+        accessoryTextures.push({ key, dds, accList });
+      }
+      let sharedDDS = null;
+      const accessoryColor = typeof options?.accessoryColor === 'string' && /^#[0-9a-f]{6}$/i.test(options.accessoryColor)
+        ? options.accessoryColor : null;
+      if (accessoryColor) {
+        sharedDDS = await convertDDS(null, solidColorPNG(accessoryColor));
+      } else if (accessoryTextures.length) {
+        sharedDDS = await convertDDS(null, solidColorPNG('#f2f4f7'));
+      }
+      const result = createTruckPaintjob(model, projectPaths.texture, body, { customName, accessoryTextures, sharedDDS, accessoryColor, iconDDS });
+      const save = await dialog.showSaveDialog(win, {
+        title: 'Export Truck skin mod (.scs)', defaultPath: result.filename,
+        filters: [{ name: 'ETS2 mod', extensions: ['scs'] }]
+      });
+      if (save.canceled) return null;
+      await writeMod(save.filePath, result.zip);
+      return { path: save.filePath, name: result.name };
+    }
     if (!isLiverySize(body.readUInt32LE(16), body.readUInt32LE(12))) {
       throw new Error('ลายรถต้องมีขนาด 4096 × 2048 หรือ 8192 × 4096 ตามเทมเพลต');
     }
@@ -252,7 +413,7 @@ app.whenReady().then(() => {
     if (glass && !isLiverySize(glass.readUInt32LE(16), glass.readUInt32LE(12))) {
       throw new Error('ลายกระจกต้องเป็นเฟรมเต็ม 4096 × 2048 หรือ 8192 × 4096');
     }
-    const result = createPaintjob(model, projectPaths.texture, body, glass, resources);
+    const result = createPaintjob(model, projectPaths.texture, body, glass, resources, { customName, iconDDS });
     const save = await dialog.showSaveDialog(win, {
       title: 'Export Coaches skin mod (.scs)', defaultPath: result.filename,
       filters: [{ name: 'ETS2 mod', extensions: ['scs'] }]
@@ -260,6 +421,84 @@ app.whenReady().then(() => {
     if (save.canceled) return null;
     await writeMod(save.filePath, result.zip);
     return { path: save.filePath, name: result.name };
+  }));
+  ipcMain.handle('coach:export-pack', safeCall(async (_e, options) => {
+    const items = Array.isArray(options?.items) ? options.items : [];
+    if (!items.length) throw new Error('กรุณาเพิ่มลายลงในแพ็กอย่างน้อย 1 ลายก่อนส่งออก');
+    const builtEntries = [];
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i] || {};
+      const model = findModel(item.modelId);
+      const label = item.customName || path.basename(String(item.texturePath || '')) || `ลายที่ ${i + 1}`;
+      if (!item.texturePath) throw new Error(`ไม่พบไฟล์ลายของ "${label}"`);
+      const body = await convertDDS(item.texturePath, item.bodyArtwork ? decodePNG(item.bodyArtwork) : null);
+      const iconDDS = item.iconArtwork ? await convertIcon(decodePNG(item.iconArtwork)) : null;
+      if (model.kind === 'truck') {
+        if (!isTruckLiverySize(body.readUInt32LE(16), body.readUInt32LE(12))) {
+          throw new Error(`ลาย "${label}" ต้องเป็นภาพสี่เหลี่ยมจัตุรัส 2048×2048, 4096×4096 หรือ 8192×8192`);
+        }
+        const accessoryPaths = (item.accessoryPaths && typeof item.accessoryPaths === 'object') ? item.accessoryPaths : {};
+        const accessoryTextures = [];
+        for (const [key, texPath] of Object.entries(accessoryPaths)) {
+          if (!texPath) continue;
+          const accMeta = Array.isArray(model.accessories) ? model.accessories.find(a => a.key === key) : null;
+          const accList = accMeta?.accList || (key === 'sideskirt' ? model.sideskirtAccList : null);
+          if (!accList || !accList.length) continue;
+          const dds = await convertDDS(texPath, null);
+          if (!isTruckAccessorySize(dds.readUInt32LE(16), dds.readUInt32LE(12))) {
+            throw new Error(`ลายของแต่ง ${accMeta?.label || key} ใน "${label}" ต้องมีขนาดเป็นเลขกำลังสองของ 2`);
+          }
+          accessoryTextures.push({ key, dds, accList });
+        }
+        let sharedDDS = null;
+        const accessoryColor = typeof item.accessoryColor === 'string' && /^#[0-9a-f]{6}$/i.test(item.accessoryColor)
+          ? item.accessoryColor : null;
+        if (accessoryColor) {
+          sharedDDS = await convertDDS(null, solidColorPNG(accessoryColor));
+        } else if (accessoryTextures.length) {
+          sharedDDS = await convertDDS(null, solidColorPNG('#f2f4f7'));
+        }
+        builtEntries.push({
+          model,
+          filename: item.texturePath,
+          bodyDDS: body,
+          customName: typeof item.customName === 'string' ? item.customName : '',
+          accessoryTextures,
+          sharedDDS,
+          accessoryColor,
+          iconDDS
+        });
+      } else {
+        if (!isLiverySize(body.readUInt32LE(16), body.readUInt32LE(12))) {
+          throw new Error(`ลายรถบัส "${label}" ต้องมีขนาด 4096×2048 หรือ 8192×4096`);
+        }
+        let glass = null;
+        if (item.includeGlass) {
+          if (!model.glass) throw new Error(`รุ่นรถของ "${label}" ไม่รองรับลายกระจก`);
+          glass = await convertDDS(item.glassTexturePath || '', item.glassArtwork ? decodePNG(item.glassArtwork) : null);
+          if (glass && !isLiverySize(glass.readUInt32LE(16), glass.readUInt32LE(12))) {
+            throw new Error(`ลายกระจกของ "${label}" ต้องเป็นเฟรมเต็ม 4096×2048 หรือ 8192×4096`);
+          }
+        }
+        builtEntries.push({
+          model,
+          filename: item.texturePath,
+          bodyDDS: body,
+          glassDDS: glass,
+          customName: typeof item.customName === 'string' ? item.customName : '',
+          iconDDS
+        });
+      }
+    }
+    const result = createMultiSkinPack(builtEntries, resources, { packName: options?.packName });
+    const save = await dialog.showSaveDialog(win, {
+      title: `Export Skin Pack (${result.count} ลาย) (.scs)`,
+      defaultPath: result.filename,
+      filters: [{ name: 'ETS2 mod', extensions: ['scs'] }]
+    });
+    if (save.canceled) return null;
+    await writeMod(save.filePath, result.zip);
+    return { path: save.filePath, name: result.name, count: result.count };
   }));
   ipcMain.handle('dialog:game', safeCall(async () => {
     const res = await dialog.showOpenDialog(win, { title: 'Select your Euro Truck Simulator 2 install folder', properties: ['openDirectory'] });
@@ -296,7 +535,7 @@ app.whenReady().then(() => {
       mode: modes.has(project.mapping?.mode) ? project.mapping.mode : 'original',
       slots: slots.filter(slot => typeof slot?.id === 'string' && Number.isInteger(slot.channel))
     };
-    const safe = { version: 4, vehicleMode: project.vehicleMode === 'truck' ? 'truck' : 'coach', coachId: String(project.coachId || ''), texture: String(project.texturePath || ''), glassTexture: glassTexturePath, model: String(project.modelPath || ''), templatePath: String(project.templatePath || ''), mapping };
+    const safe = { version: 4, vehicleMode: project.vehicleMode === 'truck' ? 'truck' : 'coach', coachId: String(project.coachId || ''), truckId: String(project.truckId || ''), variantId: String(project.variantId || ''), texture: String(project.texturePath || ''), glassTexture: glassTexturePath, sideskirtTexture: accessoryTexturePaths.get('sideskirt') || '', accessoryTextures: Object.fromEntries(accessoryTexturePaths), accessoryColor: String(project.accessoryColor || ''), model: String(project.modelPath || ''), templatePath: String(project.templatePath || ''), mapping };
     fs.writeFileSync(result.filePath, JSON.stringify(safe, null, 2), 'utf8');
     return { path: result.filePath };
   }));
@@ -308,6 +547,7 @@ app.whenReady().then(() => {
     stopWatcher();
     projectPaths = { texture: '', model: '' };
     glassTexturePath = '';
+    accessoryTexturePaths.clear();
     return { ...data, path: file };
   }));
   ipcMain.handle('file:exportpng', safeCall(async (_e, dataUrl, filename = 'coaches-paint.png') => {
@@ -371,4 +611,10 @@ async function convertDDS(file, generatedPNG = null) {
   const bundled = path.join(resources, 'tools', 'texconv.exe');
   const tool = texconvPath || (fs.existsSync(bundled) ? bundled : 'texconv.exe');
   return convertTextureDDS(source, generatedPNG, tool);
+}
+
+async function convertIcon(pngBuffer) {
+  const bundled = path.join(resources, 'tools', 'texconv.exe');
+  const tool = texconvPath || (fs.existsSync(bundled) ? bundled : 'texconv.exe');
+  return convertIconDDS(pngBuffer, tool);
 }

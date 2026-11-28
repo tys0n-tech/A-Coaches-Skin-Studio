@@ -4,92 +4,328 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' data: blob: ws://127.0.0.1:5173; object-src 'none'; base-uri 'none'; frame-src 'none'" />
   <link rel="icon" type="image/png" href="./branding/app.png" />
-  <title>Coaches Skin Studio v0.5.4</title>
+  <title>Coaches Skin Studio v0.6.0</title>
+  <style>
+    @font-face {
+      font-family: 'SF Pro';
+      src: url('./fonts/SF-Pro.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro TH';
+      src: url('./fonts/SFProTH.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+      unicode-range: U+0E00-0E7F;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
     <header class="topbar">
-      <div class="brand"><img class="mark" src="./branding/app.png" alt="A-Coaches Skin Studio logo" width="40" height="40" /><div class="brand-copy"><strong>Coaches Skin Studio</strong><small>ETS2 Coaches &amp; Trucks · Desktop preview</small></div></div>
-      <div class="app-label"><span class="live-dot"></span><span id="modeText">Preview mode</span></div>
-      <div class="top-actions"><button class="text-btn" id="openProject">เปิดโปรเจ็กต์</button><button class="text-btn" id="saveProject">บันทึกโปรเจ็กต์</button><button class="icon-btn" id="helpBtn" title="คู่มือ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2.5-2.5 4.5M12 17h.01"/></svg></button></div>
-    </header>
-    <div class="shell">
-      <aside class="left-pane">
-        <div class="section-kicker">WORKSPACE</div>
-        <h2>รถของคุณ<span class="muted-dot">.</span></h2>
-        <p class="section-description">เลือกรถบัสสำเร็จรูป หรือนำโมเดลรถบรรทุกเข้ามาทำลาย</p>
-        <div class="vehicle-mode-toggle" role="group" aria-label="ประเภทรถ">
-          <button class="selected" id="coachModeBtn" data-mode="coach" aria-pressed="true">รถบัส</button>
-          <button id="truckModeBtn" data-mode="truck" aria-pressed="false">รถบรรทุก</button>
+      <div class="brand">
+        <img class="mark" src="./branding/app.png" alt="A-Coaches Skin Studio logo" width="32" height="32" />
+        <div class="brand-copy">
+          <strong>Skin Studio</strong>
+          <small>ETS2 Coaches &amp; Trucks</small>
         </div>
-        <div class="coach-list" id="coachList">
-          <button class="coach-option selected" data-coach="scania"><span class="coach-symbol">S</span><span><strong>Scania Touring</strong><small>Coach · Single deck</small></span><span class="selection-indicator"></span></button>
-          <button class="coach-option" data-coach="volvo"><span class="coach-symbol">V</span><span><strong>Volvo 9700 DD</strong><small>Coach · Double deck</small></span><span class="selection-indicator"></span></button>
-          <button class="coach-option" data-coach="man"><span class="coach-symbol">M</span><span><strong>MAN Lion’s Coach</strong><small>Coach · Single deck</small></span><span class="selection-indicator"></span></button>
-        </div>
-        <div class="coach-variant" id="coachVariant" hidden>
-          <label for="coachVariantSelect">รุ่นย่อย</label>
-          <select id="coachVariantSelect"></select>
-        </div>
-        <div class="truck-mode-help" id="truckModeHelp" hidden>
-          <strong>ใช้โมเดลรถรุ่นจริงของ ETS2</strong>
-          <p>โปรแกรมไม่รวมโมเดลตัวอย่างทั่วไปไว้ ใช้ปุ่ม “นำเข้าโมเดล 3D” เพื่อเลือก GLB ที่ตรงกับรถและ UV ของแพ็กลาย .scs</p>
-          <button class="secondary-btn" id="truckChooseTemplate">เลือกแพ็กลายรถบรรทุก (.scs)</button>
-          <small id="truckTemplateStatus">ยังไม่ได้เลือกแพ็กลาย</small>
-        </div>
-        <p id="vehicleSupport" class="tiny-note"></p>
-        <button id="saveTemplate" class="small-outline" disabled>บันทึกเทมเพลตรุ่นนี้</button>
-        <div class="rule"></div>
-        <div class="section-heading"><span>ASSETS</span><span class="tag light">Local files</span></div>
-        <button class="import-card" id="importModel"><span class="import-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></span><span><strong>นำเข้าโมเดล 3D</strong><small>GLB · ใช้ UV จริงจากโมเดล</small></span><span class="import-arrow">↗</span></button>
-        <button class="import-card emphasized" id="importTexture"><span class="import-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m4 17 5-5 3.5 3.5 3-3L20 17"/></svg></span><span><strong>เพิ่มลายรถ</strong><small>PNG, JPG, WebP, DDS</small></span><span class="import-arrow">↗</span></button>
-        <div class="file-detail" id="fileDetail">ยังไม่ได้เพิ่มลาย · แสดงลายตัวอย่าง</div>
-        <div class="rule"></div>
-        <div class="section-heading">ETS2 GAME</div>
-        <button class="small-outline" id="scanGame"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v11H3z"/></svg>เลือกโฟลเดอร์เกม</button>
-        <div class="game-result" id="gameResult">การค้นหาไฟล์ DLC เป็นแบบอ่านอย่างเดียว ไม่มีการคัดลอกไฟล์เกม</div>
-        <div class="spacer"></div>
-        <div class="left-note"><span class="note-top"><span class="note-bullet"></span>ใช้งานได้โดยไม่เปิดเกม</span><span>นำภาพจาก Figma หรือ Photoshop มาใช้ และแก้ไฟล์เดิมเพื่อให้โปรแกรมรีโหลดอัตโนมัติ</span></div>
-      </aside>
-      <main class="main-area">
-        <nav class="workflow" aria-label="ขั้นตอนทำลายรถ">
-          <div><strong>เลือกรถ</strong><span id="modelStatus">กำลังเตรียมโมเดล</span></div>
-          <div><strong>ใส่ลาย</strong><span id="designStatus">เริ่มจากเทมเพลต</span></div>
-          <div><strong>ตรวจลาย</strong><span id="reviewStatus">ตรวจทั้งสองฝั่ง</span></div>
-          <div><strong>ส่งออก</strong><span id="exportStatus">เพิ่มลายก่อน</span></div>
-        </nav>
-        <div class="stage-header"><div><div class="overline">3D LIVE VIEWPORT</div><h1 id="vehicleTitle">Scania Touring</h1><p id="vehicleSubtitle">Reference preview · Not original DLC mesh</p></div><div class="stage-controls"><button class="control-icon" id="resetCamera" title="รีเซ็ตมุมกล้อง"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v6h6"/></svg></button><button class="control-icon" id="toggleWire" title="เปิด/ปิด Wireframe"><svg viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10"/></svg></button></div></div>
-        <div class="scene-wrap"><canvas id="sceneCanvas"></canvas><div id="sceneLoading" class="scene-loading" role="status"><strong id="sceneLoadingText">กำลังโหลดโมเดลรถ</strong><button id="retryModel" class="secondary-btn" hidden>โหลดอีกครั้ง</button></div><span class="scene-pill"><span class="live-dot"></span><span id="previewBadge">ILLUSTRATIVE PREVIEW</span></span><span class="scene-hint">ลากเพื่อหมุน · Scroll เพื่อซูม · คลิกขวาเพื่อเลื่อน</span><span class="scene-bottom" id="sceneSource">REFERENCE MODEL</span></div><div id="modelNotice" class="model-notice" role="status" hidden></div>
-        <div class="view-buttons" aria-label="มุมตรวจลาย">
-          <button data-view="left">ด้านซ้าย</button><button data-view="right">ด้านขวา</button>
-          <button data-view="front">ด้านหน้า</button><button data-view="rear">ด้านท้าย</button>
-          <span>ใช้พรีวิวตรวจตำแหน่งและรอยต่อ · ตรวจสีและแสงอีกครั้งในเกม</span>
-        </div><div class="lower-grid"><section class="preview-panel"><div class="panel-title"><div><span class="overline">TEXTURE</span><h3>ผังลายภาพ</h3></div><span class="tag" id="resolution">Demo texture</span></div><div class="texture-display" id="textureDisplay"><div class="default-texture"><div class="tex-stripe"></div><span>COACHES<br/><b>SKIN STUDIO</b></span></div></div><div class="panel-foot"><span id="textureFileName">demo-livery.png</span><span class="auto-reload"><span class="live-dot"></span>Auto reload เปิดอยู่</span></div></section>
-        <section class="settings-panel"><div class="panel-title"><div><span class="overline">MAPPING</span><h3>การแสดงลาย</h3></div></div><div class="setting-row"><label for="meshSelect">การลงลาย</label><select id="meshSelect" disabled><option>นำเข้า GLB ก่อน</option></select></div><div id="mappingRows" class="mapping-rows" hidden></div><p class="tiny-note" id="meshHelp">นำเข้าโมเดล GLB เพื่อใช้ผัง UV จริงของรถ</p><div class="window-tools" id="glassTools" hidden>
-          <div class="section-heading">กระจกข้าง · รุ่นที่เลือก</div>
-          <label class="tiny-note"><input type="checkbox" id="glassFromBody" checked /> ใช้ลาย PNG ตัวถังต่อขึ้นกระจก</label>
-          <div class="window-actions">
-            <button id="chooseGlass" class="secondary-btn">เพิ่มลายกระจก</button>
-            <button id="exportGlassUV" class="secondary-btn" disabled>บันทึกผังซ้อนตัวถัง</button>
-            <button id="clearGlass" class="secondary-btn">ล้างไฟล์กระจก</button>
-          </div>
-          <p class="tiny-note" id="glassTextureLabel">PNG / DDS 4096 × 2048 หรือ 8192 × 4096 ตามผังรุ่นที่เลือก</p>
-          <p class="tiny-note">ภาพกระจกแยกแบบเฟรมเต็ม: ส่วนที่เลยขอบกระจกจะต่อบนตัวถังอัตโนมัติ</p><p class="tiny-note" id="glassPreviewStatus" role="status"></p>
-        </div><div class="window-tools" id="truckUVTools" hidden>
-          <div class="section-heading">ผังรถบรรทุก · UV จริงจากโมเดล</div>
-          <button id="exportModelUV" class="secondary-btn" disabled>บันทึกผัง UV ตัวถัง</button>
-          <p class="tiny-note" id="truckUVHelp">เลือกวัสดุตัวถังและ UV ในส่วนการแสดงลายก่อน ผังจะใช้ขนาด DDS ที่เลือกอยู่ในแพ็กรถ</p>
-        </div><div class="setting-row split"><label for="brightness">ความสว่างสตูดิโอ</label><span id="brightnessValue">2.0</span></div><input type="range" id="brightness" min="0.2" max="4" step="0.1" value="2.0"/><div class="mapping-foot"><span class="status-dot"></span><span id="mappingStatus">Demo model · skin projection</span></div></section></div>
-        <div class="export-section"><div><span class="overline">PACKAGE EXPORT</span><h3>Export เป็น ETS2 .scs</h3><p id="exportDescription">ใส่ PNG ขนาด 4096 × 2048 หรือ 8192 × 4096 (Figma 2x) แล้วสร้างมอดสำหรับรุ่นที่เลือก รวมลายกระจกข้างได้ทั้ง 5 รุ่นในไฟล์เดียว</p></div><button class="blue-btn" id="exportBtn">Export .scs <span>↗</span></button></div>
-        <p class="tiny-note">นำ .scs ไปวางใน Documents/Euro Truck Simulator 2/mod เปิด Mod Manager แล้วเลือกลายในอู่แต่งรถ</p>
-        <details class="advanced-export"><summary>แก้แพ็ก .scs เดิมและตั้งค่าเครื่องมือเอง</summary>        <div class="export-config"><div class="config-field"><label>1 · เทมเพลตม็อดที่ใช้ได้จริง</label><button id="chooseTemplate" class="secondary-btn">เลือก .scs / .zip</button><small id="templateLabel">สร้างลายใหม่จากรุ่นที่เลือก</small></div><div class="config-field"><label>2 · Texture ที่จะแทนที่</label><select id="ddsSelect" disabled><option>เลือกเทมเพลตก่อน</option></select></div><div class="config-field"><label>3 · Texconv (สำหรับ PNG → DDS)</label><button id="chooseTexconv" class="secondary-btn">เลือก texconv.exe</button><small id="texconvLabel">มีเครื่องมือแปลงภาพในตัว</small></div><div class="config-field"><label for="glassDDS">DDS กระจกในเทมเพลต</label><select id="glassDDS" disabled><option value="">เฉพาะลายตัวถัง</option></select></div></div>
-        <button id="useBuiltin" class="secondary-btn">กลับไปสร้างลายใหม่</button></details>
+      </div>
 
+      <div class="topbar-center">
+        <div class="status-pill"><span class="live-dot"></span><span id="modeText">Preview mode</span></div>
+      </div>
+
+      <div class="top-actions">
+        <button class="pill-btn" id="openProject">เปิดโปรเจ็กต์</button>
+        <button class="pill-btn" id="saveProject">บันทึก</button>
+        <button class="icon-btn" id="helpBtn" title="คู่มือและคีย์ลัด"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2.5-2.5 4.5M12 17h.01"/></svg></button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <!-- LEFT SIDEBAR: Vehicle & Model Selection -->
+      <aside class="left-pane">
+        <div class="pane-scroll">
+          <div class="pane-block">
+            <div class="pane-label">เลือกรถ</div>
+            <div class="vehicle-mode-toggle" role="group" aria-label="ประเภทรถ">
+              <button class="selected" id="coachModeBtn" data-mode="coach" aria-pressed="true">รถบัส</button>
+              <button id="truckModeBtn" data-mode="truck" aria-pressed="false">รถบรรทุก</button>
+            </div>
+
+            <div class="coach-list" id="coachList">
+              <button class="coach-option selected" data-coach="scania"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/scania.png" alt="Scania" /></span><span><strong>Scania Touring</strong><small>Single deck · 2 รุ่น</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-coach="volvo"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/volvo.png" alt="Volvo" /></span><span><strong>Volvo 9700 DD</strong><small>Double deck · 1 รุ่น</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-coach="man"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/man.png" alt="MAN" /></span><span><strong>MAN Lion’s Coach</strong><small>Single deck · 2 รุ่น</small></span><span class="selection-indicator"></span></button>
+            </div>
+
+            <div class="coach-list truck-list" id="truckList" hidden>
+              <button class="coach-option selected" data-truck="scania"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/scania.png" alt="Scania" /></span><span><strong>Scania S / R 2016</strong><small>4×2 · 6×2 · 6×4 · 8×4</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-truck="volvo"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/volvo.png" alt="Volvo" /></span><span><strong>Volvo FH6 / FH5</strong><small>4×2 · 6×2 · 6×4 · 8×4</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-truck="daf"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/daf.png" alt="DAF" /></span><span><strong>DAF NGD XG+</strong><small>4×2 · 6×2 · 6×4 · 8×4</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-truck="man"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/man.png" alt="MAN" /></span><span><strong>MAN TGX 2020</strong><small>4×2 · 6×2 · 6×4 · 8×4</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-truck="mercedes"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/mercedes.png" alt="Mercedes-Benz" /></span><span><strong>Mercedes New Actros</strong><small>4×2 · 6×2 · 6×4 · 8×4</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-truck="renault"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/renault.png" alt="Renault Trucks" /></span><span><strong>Renault T</strong><small>4×2 · 6×2 · 6×4</small></span><span class="selection-indicator"></span></button>
+              <button class="coach-option" data-truck="iveco"><span class="coach-symbol"><img class="brand-logo" src="./branding/logos/iveco.png" alt="Iveco" /></span><span><strong>Iveco S-Way</strong><small>4×2 · 6×2</small></span><span class="selection-indicator"></span></button>
+            </div>
+
+            <div class="coach-variant" id="coachVariant" hidden>
+              <label for="coachVariantSelect">รุ่นย่อย</label>
+              <select id="coachVariantSelect"></select>
+            </div>
+            <div class="coach-variant" id="truckVariant" hidden>
+              <label for="truckVariantSelect">รุ่นย่อย &amp; แชสซี</label>
+              <select id="truckVariantSelect"></select>
+            </div>
+            <p id="vehicleSupport" class="tiny-note"></p>
+            <button id="saveTemplate" class="secondary-btn full-width" disabled>บันทึกเทมเพลตตัวถัง (.png)</button>
+          </div>
+
+          <div class="rule"></div>
+
+          <details class="apple-disclosure">
+            <summary>เครื่องมือขั้นสูง &amp; แพ็กเดิม</summary>
+            <div class="disclosure-body">
+              <button class="secondary-btn full-width" id="importModel">นำเข้าโมเดล 3D (.glb) เอง</button>
+
+              <div class="truck-mode-help" id="truckModeHelp" hidden>
+                <strong>แทนที่ลายในแพ็ก .scs เดิม</strong>
+                <p>เลือกแพ็ก .scs เดิมเพื่อแทนที่เฉพาะไฟล์ DDS</p>
+                <button class="secondary-btn full-width" id="truckChooseTemplate">เลือกแพ็กลาย (.scs)</button>
+                <small id="truckTemplateStatus">สร้างมอดใหม่จากรุ่นที่เลือก</small>
+              </div>
+
+              <div class="window-tools" id="truckUVTools" hidden>
+                <button id="exportModelUV" class="secondary-btn full-width" disabled>บันทึกผัง UV จากโมเดล</button>
+                <p class="tiny-note" id="truckUVHelp">ใช้ขนาด DDS จากแพ็กลายที่เลือก</p>
+              </div>
+
+              <div class="export-config">
+                <div class="config-field">
+                  <label>แพ็กเทมเพลต (.scs / .zip)</label>
+                  <button id="chooseTemplate" class="secondary-btn">เลือก .scs / .zip</button>
+                  <small id="templateLabel">สร้างลายใหม่จากรุ่นที่เลือก</small>
+                </div>
+                <div class="config-field">
+                  <label>DDS ตัวถังที่จะแทนที่</label>
+                  <select id="ddsSelect" disabled><option>เลือกเทมเพลตก่อน</option></select>
+                </div>
+                <div class="config-field">
+                  <label for="glassDDS">DDS กระจกในแพ็ก</label>
+                  <select id="glassDDS" disabled><option value="">เฉพาะลายตัวถัง</option></select>
+                </div>
+                <div class="config-field">
+                  <label>Texconv (PNG → DDS)</label>
+                  <button id="chooseTexconv" class="secondary-btn">เลือก texconv.exe</button>
+                  <small id="texconvLabel">มีเครื่องมือแปลงภาพในตัว</small>
+                </div>
+                <button id="useBuiltin" class="secondary-btn full-width">กลับไปสร้างมอดใหม่</button>
+              </div>
+
+              <div class="rule compact"></div>
+              <button class="secondary-btn full-width" id="scanGame">เลือกโฟลเดอร์เกม ETS2</button>
+              <div class="game-result" id="gameResult">อ่านรายชื่อไฟล์อย่างเดียว ไม่แก้ไขไฟล์เกม</div>
+            </div>
+          </details>
+        </div>
+      </aside>
+
+      <!-- CENTER STAGE: Full-bleed Apple 3D Studio Viewport -->
+      <main class="main-area">
+        <div class="scene-wrap" id="sceneDropZone">
+          <canvas id="sceneCanvas"></canvas>
+
+          <!-- Floating Top-Left Vehicle Title Glass Card -->
+          <div class="stage-overlay-top">
+            <div class="stage-title-card">
+              <div class="stage-kicker"><span class="live-dot"></span><span id="previewBadge">3D STUDIO</span></div>
+              <h1 id="vehicleTitle">Scania Touring</h1>
+              <p id="vehicleSubtitle">กำลังเตรียมโมเดล...</p>
+            </div>
+            <nav class="workflow-pills" aria-label="สถานะการทำงาน">
+              <span class="wf-chip"><b>รถ</b> <em id="modelStatus">กำลังโหลด</em></span>
+              <span class="wf-chip"><b>ลาย</b> <em id="designStatus">รอไฟล์</em></span>
+              <span class="wf-chip" hidden><b>ตรวจ</b> <em id="reviewStatus">พร้อม</em></span>
+              <span class="wf-chip accent"><b>ส่งออก</b> <em id="exportStatus">เพิ่มลายก่อน</em></span>
+            </nav>
+          </div>
+
+          <div id="modelNotice" class="model-notice" role="status" hidden></div>
+
+          <!-- Drag & Drop Overlay -->
+          <div id="dropOverlay" class="drop-overlay" hidden>
+            <div class="drop-card">
+              <strong>วางไฟล์ลายตรงนี้</strong>
+              <span>รองรับ PNG, JPG, WebP, DDS</span>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div id="sceneLoading" class="scene-loading" role="status">
+            <div class="apple-spinner"></div>
+            <strong id="sceneLoadingText">กำลังโหลดโมเดลรถ</strong>
+            <button id="retryModel" class="secondary-btn" hidden>โหลดอีกครั้ง</button>
+          </div>
+
+          <!-- Floating Bottom-Center Apple Camera Dock -->
+          <div class="camera-dock" aria-label="มุมตรวจลายและการแสดงผล">
+            <div class="view-buttons">
+              <button data-view="left" title="คีย์ลัด 1">ซ้าย</button>
+              <button data-view="right" title="คีย์ลัด 2">ขวา</button>
+              <button data-view="front" title="คีย์ลัด 3">หน้า</button>
+              <button data-view="rear" title="คีย์ลัด 4">ท้าย</button>
+            </div>
+            <div class="dock-sep"></div>
+            <button class="dock-icon" id="resetCamera" title="รีเซ็ตมุมกล้อง (R)"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v6h6"/></svg></button>
+            <button class="dock-icon" id="toggleWire" title="เปิด/ปิด Wireframe (W)"><svg viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10"/></svg></button>
+            <div class="dock-sep"></div>
+            <div class="dock-light" title="ความสว่างสตูดิโอ">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+              <input type="range" id="brightness" min="0.4" max="3.8" step="0.1" value="2.1" aria-label="ความสว่างสตูดิโอ" />
+              <span id="brightnessValue">2.1</span>
+            </div>
+          </div>
+
+          <span class="scene-bottom" id="sceneSource">REFERENCE MODEL</span>
+          <span class="scene-hint">ลากหมุน · ซูม · คลิกขวาเลื่อน · วางไฟล์ PNG ได้เลย</span>
+        </div>
       </main>
-      <aside class="right-pane"><div class="section-kicker">INSPECTOR</div><h2>โปรเจ็กต์</h2><div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div><div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div><div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div><div class="property"><span>Live reload</span><strong class="success">Enabled</strong></div><div class="property"><span>Target</span><strong id="propertyTarget">ETS2 · Coaches DLC</strong></div><div class="rule"></div><div class="section-heading">HOW IT WORKS</div><div class="instruction"><div class="step">01</div><div><strong>เตรียมโมเดล</strong><p>รถบัสมีโมเดลพร้อมใช้ 5 รุ่น ส่วนรถบรรทุกนำเข้า GLB ของรุ่นที่ต้องการ</p></div></div><div class="instruction"><div class="step">02</div><div><strong>วางภาพลาย</strong><p>ใช้เทมเพลตรถบัส หรือสร้างผัง UV จากโมเดลรถบรรทุกแล้ววาดใน Figma</p></div></div><div class="instruction"><div class="step">03</div><div><strong>ทำม็อดจริง</strong><p>รถบรรทุกใช้แพ็กลาย .scs เดิมของรุ่นนั้นเพื่อรักษานิยามม็อด แล้วแทนที่ DDS</p></div></div><div class="rule"></div><div class="warning-note"><b>การทำรถบรรทุก</b><p>ต้องใช้โมเดล GLB และแพ็กลายรถบรรทุกที่ตรงรุ่น โปรแกรมยังไม่สร้างนิยามม็อดรถบรรทุกใหม่จากศูนย์</p></div><div class="spacer"></div><span class="version">COACHES SKIN STUDIO · v0.5.4</span></aside>
+
+      <!-- RIGHT INSPECTOR: Skin, Accessories, Color & Sticky Export -->
+      <aside class="right-pane">
+        <div class="pane-scroll">
+          <!-- Body Skin Card -->
+          <section class="inspector-card">
+            <div class="card-head">
+              <div><div class="pane-label">ลายตัวถัง</div><h3>ภาพลายหลัก</h3></div>
+              <span class="tag" id="resolution">—</span>
+            </div>
+            <div class="texture-display" id="textureDisplay">
+              <div class="default-texture"><span>ลากไฟล์ลายมาวาง<br/><b>หรือกดปุ่มด้านล่าง</b></span></div>
+            </div>
+            <button class="primary-soft-btn full-width" id="importTexture">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m4 17 5-5 3.5 3.5 3-3L20 17"/></svg>
+              <span>เลือกลายตัวถัง (PNG / DDS)</span>
+            </button>
+            <div class="file-meta">
+              <span id="textureFileName">ยังไม่ได้เลือกลาย</span>
+              <span class="auto-reload"><span class="live-dot"></span>Auto reload</span>
+            </div>
+            <div class="file-detail" id="fileDetail" hidden></div>
+          </section>
+
+          <!-- Truck Accessories Card -->
+          <section class="inspector-card" id="truckAccessoryTools" hidden>
+            <div class="card-head">
+              <div><div class="pane-label">ของแต่งรถบรรทุก</div><h3>ลายแยกชิ้น &amp; สีพื้น</h3></div>
+              <span class="auto-reload"><span class="live-dot"></span>Auto reload</span>
+            </div>
+            <div class="setting-row">
+              <label for="accessorySlotSelect">เลือกชิ้นส่วน</label>
+              <select id="accessorySlotSelect"></select>
+            </div>
+            <div class="window-actions">
+              <button id="chooseSideskirt" class="primary-soft-btn">ใส่ลายชิ้นนี้</button>
+              <button id="saveSideskirtTemplate" class="secondary-btn" disabled>เทมเพลต</button>
+              <button id="clearSideskirt" class="secondary-btn">ล้าง</button>
+            </div>
+            <p class="tiny-note" id="sideskirtTextureLabel">เลือกชิ้นส่วนด้านบนเพื่อบันทึกเทมเพลตหรือใส่ลาย</p>
+            <p class="tiny-note" id="accessoryLoadedList" hidden></p>
+
+            <div class="rule compact"></div>
+            <div class="accessory-color-block">
+              <div class="accessory-color-head">
+                <label for="accessoryColor">สีของแต่งอื่น (กันชน · กระจก · บังโคลน)</label>
+                <span id="accessoryColorValue">#F2F4F7</span>
+              </div>
+              <div class="color-swatches" id="colorSwatches" role="group" aria-label="สีแนะนำ">
+                <button type="button" class="swatch" data-color="#f2f4f7" style="--sw:#f2f4f7" title="ขาวมุก"></button>
+                <button type="button" class="swatch" data-color="#1d1d1f" style="--sw:#1d1d1f" title="ดำเงา"></button>
+                <button type="button" class="swatch" data-color="#0071e3" style="--sw:#0071e3" title="น้ำเงิน Apple"></button>
+                <button type="button" class="swatch" data-color="#2465c0" style="--sw:#2465c0" title="น้ำเงินเข้ม"></button>
+                <button type="button" class="swatch" data-color="#c91f28" style="--sw:#c91f28" title="แดง"></button>
+                <button type="button" class="swatch" data-color="#f5a623" style="--sw:#f5a623" title="เหลืองทอง"></button>
+                <button type="button" class="swatch" data-color="#28a745" style="--sw:#28a745" title="เขียว"></button>
+                <input type="color" id="accessoryColor" value="#f2f4f7" title="เลือกสีเอง" />
+                <button id="resetAccessoryColor" class="chip-reset" type="button">รีเซ็ต</button>
+              </div>
+              <label class="apple-check"><input type="checkbox" id="useAccessoryColor" checked /> รวมสีของแต่งนี้ลงในไฟล์ .scs</label>
+            </div>
+          </section>
+
+          <!-- Coach Window Artwork Card -->
+          <section class="inspector-card" id="glassTools" hidden>
+            <div class="card-head">
+              <div><div class="pane-label">กระจกข้างรถบัส</div><h3>ลายกระจกข้าง</h3></div>
+              <span class="auto-reload"><span class="live-dot"></span>Auto reload</span>
+            </div>
+            <label class="apple-check"><input type="checkbox" id="glassFromBody" checked /> ต่อลาย PNG ตัวถังขึ้นกระจกอัตโนมัติ</label>
+            <div class="window-actions">
+              <button id="chooseGlass" class="primary-soft-btn">เพิ่มลายกระจก</button>
+              <button id="exportGlassUV" class="secondary-btn" disabled>ผังกระจก</button>
+              <button id="clearGlass" class="secondary-btn">ล้าง</button>
+            </div>
+            <p class="tiny-note" id="glassTextureLabel">PNG / DDS 4096 × 2048 หรือ 8192 × 4096</p>
+            <p class="tiny-note" id="glassPreviewStatus" role="status"></p>
+          </section>
+
+          <!-- Multi-Skin Pack Queue Card (appears when 1+ skins added) -->
+          <section class="inspector-card pack-card" id="skinPackCard" hidden>
+            <div class="card-head">
+              <div><div class="pane-label">รวมไฟล์ .scs เดียว</div><h3>แพ็กรวมหลายลาย</h3></div>
+              <div class="pack-head-right">
+                <span class="pack-count-badge" id="skinPackCount">0 ลาย</span>
+                <button type="button" id="clearPackBtn" class="chip-reset">ล้าง</button>
+              </div>
+            </div>
+            <div class="paint-name-row pack-name-row">
+              <label for="packNameInput">ชื่อแพ็กใน Mod Manager</label>
+              <input type="text" id="packNameInput" maxlength="80" placeholder="เช่น ★ Thailand Fleet Pack" />
+            </div>
+            <div class="pack-list" id="skinPackList"></div>
+          </section>
+
+          <!-- Mapping & Project Info Disclosure -->
+          <details class="apple-disclosure">
+            <summary>การลงลาย UV &amp; ข้อมูลโปรเจ็กต์</summary>
+            <div class="disclosure-body">
+              <div class="setting-row">
+                <label for="meshSelect">การลงลายบนโมเดล</label>
+                <select id="meshSelect" disabled><option>นำเข้า GLB ก่อน</option></select>
+              </div>
+              <div id="mappingRows" class="mapping-rows" hidden></div>
+              <p class="tiny-note" id="meshHelp">เลือกวัสดุและ UV ได้หลังโหลดโมเดลเสร็จ</p>
+              <div class="mapping-foot"><span class="status-dot"></span><span id="mappingStatus">พร้อมใช้งาน</span></div>
+              <div class="rule compact"></div>
+              <div class="property"><span>รุ่นรถ</span><strong id="propertyModel">Scania Touring</strong></div>
+              <div class="property"><span>3D Source</span><strong id="propertySource">Illustration</strong></div>
+              <div class="property"><span>Skin file</span><strong id="propertyFile">Demo</strong></div>
+              <div class="property"><span>Target</span><strong id="propertyTarget">ETS2 · Coaches DLC</strong></div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Sticky Bottom Export Dock (ALWAYS VISIBLE!) -->
+        <div class="export-dock">
+          <div class="paint-name-row">
+            <label for="paintNameInput">ชื่อลายในอู่ ETS2</label>
+            <input type="text" id="paintNameInput" maxlength="80" placeholder="เช่น ★ Aurelis 6x4" />
+          </div>
+          <div class="pack-add-row">
+            <button type="button" class="primary-soft-btn" id="addToPackBtn" disabled>+ เพิ่มเข้าแพ็ก</button>
+            <button type="button" class="secondary-btn" id="bulkAddPackBtn" disabled>เพิ่มหลายไฟล์</button>
+          </div>
+          <p id="exportDescription" class="export-desc">ใส่ PNG แล้วกดส่งออกเป็นมอด .scs ได้ทันที</p>
+          <button class="blue-btn full-width" id="exportBtn">Export .scs <span>↗</span></button>
+        </div>
+      </aside>
     </div>
+
     <div class="toast" id="toast" aria-live="polite"></div>
   </div>
   <script type="module" src="/src/main.js"></script>
